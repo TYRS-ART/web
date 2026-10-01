@@ -1,0 +1,51 @@
+{
+  "nav": {
+    "home": "Home",
+    "homeLabel": "TYRŠ — home",
+    "program": "Programme",
+    "events": "Events",
+    "courses": "Courses & classes",
+    "venue": "Venue",
+    "rental": "Rental",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "close": "Close",
+    "closeMenu": "Close menu",
+    "mainMenu": "Main menu",
+    "language": "Language",
+    "switchTo": "Čeština",
+    "skipToContent": "Skip to content"
+  },
+  "playlist": {
+    "label": "{month} · playlist",
+    "open": "Playlist of the month — play",
+    "card": "Spotify player — playlist of the month",
+    "ofMonth": "Playlist of the month",
+    "tracks": "{count, plural, one {# track} other {# tracks}}",
+    "save": "Open in Spotify",
+    "preview": "Preview"
+  },
+  "footer": {
+    "menu": "Menu",
+    "follow": "Follow us",
+    "where": "Where",
+    "write": "Write to us",
+    "newsletter": "Newsletter",
+    "privacy": "Privacy"
+  },
+  "menu": {
+    "today": "Today",
+    "tickets": "Tickets",
+    "map": "Map"
+  },
+  "common": {
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+  "notFound": {
+    "title": "This page isn’t here.",
+    "text": "It may have moved, or the event is over. Here’s what’s on:",
+    "program": "Programme",
+    "home": "Home"
+  }
+}

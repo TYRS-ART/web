@@ -1,0 +1,65 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+
+import { AlternatesProvider } from "@/components/layout/AlternateLinks";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { getPathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+import { pragueDay, pragueDayRange } from "@/lib/dates";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { LAYOUT_QUERY } from "@/sanity/lib/queries";
+
+import { clash, generalSans, hedvig } from "../fonts";
+import "../globals.css";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tyrs.art"),
+  title: { default: "TYRŠ", template: "%s · TYRŠ" },
+  description: "Nosticova 634/2, Malá Strana, Praha 1",
+};
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function LocaleLayout({ children, params }: LayoutProps<"/[locale]">) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  setRequestLocale(locale);
+
+  const today = pragueDay(new Date());
+  const [data, tr] = await Promise.all([
+    sanityFetch({
+      query: LAYOUT_QUERY,
+      params: { month: today.slice(0, 7), ...pragueDayRange(today) },
+      tags: ["settings", "playlist", "event"],
+    }),
+    getTranslations({ locale, namespace: "nav" }),
+  ]);
+  const newsletterHref = `${getPathname({ href: "/program", locale })}#newsletter`;
+
+  return (
+    <html lang={locale} className={`${clash.variable} ${generalSans.variable} ${hedvig.variable}`}>
+      <body className="flex min-h-dvh flex-col">
+        <NextIntlClientProvider>
+          <AlternatesProvider>
+            <a
+              href="#obsah"
+              className="sr-only z-50 rounded-full bg-black px-5 py-3 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+            >
+              {tr("skipToContent")}
+            </a>
+            <Header data={data} newsletterHref={newsletterHref} />
+            <main id="obsah" className="flex-1">
+              {children}
+            </main>
+            <Footer settings={data.settings} newsletterHref={newsletterHref} />
+          </AlternatesProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}
