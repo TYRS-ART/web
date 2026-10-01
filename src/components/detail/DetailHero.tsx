@@ -3,6 +3,12 @@ import type { ReactNode } from "react";
 import { SanityImage, type SanityImageValue } from "@/components/ui/SanityImage";
 import { nbsp } from "@/lib/typography";
 
+/** Event pages use the larger hero; course pages a slightly smaller one (per design). */
+const heroSizes = {
+  event: { box: "h-[520px] lg:h-[800px]", title: "text-[72px] leading-[64px] lg:text-[180px] lg:leading-[150px]" },
+  course: { box: "h-[480px] lg:h-[720px]", title: "text-[56px] leading-[52px] lg:text-[140px] lg:leading-[120px]" },
+} as const;
+
 /**
  * Large photo header of event and course pages: feathered photo, scrim, hall badge
  * + chips top-left, huge title bottom-left. Without a photo: category-colour tile.
@@ -13,6 +19,7 @@ export function DetailHero({
   badges,
   fallbackClass,
   label,
+  size = "event",
 }: {
   image?: SanityImageValue | null;
   title: string;
@@ -20,12 +27,13 @@ export function DetailHero({
   /** e.g. "cl cl-hudba" for the typographic tile */
   fallbackClass: string;
   label: string;
+  size?: keyof typeof heroSizes;
 }) {
   const hasImage = Boolean(image?.asset);
   return (
     <section
       aria-label={label}
-      className="tile relative mx-3 h-[520px] overflow-hidden rounded-[14px] bg-sunken lg:mx-6 lg:h-[800px] lg:rounded-[20px]"
+      className={`tile relative mx-3 overflow-hidden rounded-[14px] bg-sunken lg:mx-6 lg:rounded-[20px] ${heroSizes[size].box}`}
     >
       {hasImage ? (
         <>
@@ -44,7 +52,7 @@ export function DetailHero({
       )}
       <span className="absolute top-3 left-3 flex flex-wrap gap-1.5 lg:top-6 lg:left-6 lg:gap-2">{badges}</span>
       <h1
-        className={`absolute right-4 bottom-3.5 left-4 m-0 font-display text-[72px] leading-[64px] lg:right-8 lg:bottom-6 lg:left-8 lg:text-[180px] lg:leading-[150px] ${
+        className={`absolute right-4 bottom-3.5 left-4 m-0 font-display lg:right-8 lg:bottom-6 lg:left-8 ${heroSizes[size].title} ${
           hasImage ? "text-white" : "text-black"
         }`}
       >
