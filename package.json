@@ -8,13 +8,17 @@
     "start": "next start",
     "lint": "eslint",
     "type-check": "next typegen && tsc --noEmit",
-    "seed": "sanity exec scripts/seed.ts --with-user-token"
+    "seed": "sanity exec scripts/seed.ts --with-user-token",
+    "typegen": "sanity schema extract --path src/sanity/extract.json --enforce-required-fields --force && sanity typegen generate"
   },
   "dependencies": {
+    "@portabletext/react": "^8.0.1",
+    "@sanity/client": "^8.9.0",
     "@sanity/icons": "^5.2.3",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.17.0",
     "next": "16.3.8",
+    "next-intl": "^4.14.8",
     "next-sanity": "^13.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",

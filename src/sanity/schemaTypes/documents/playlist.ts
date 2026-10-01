@@ -17,6 +17,7 @@ export const playlist = defineType({
     }),
     defineField({ name: "title", title: "Název", type: "localeString" }),
     defineField({ name: "spotifyUrl", title: "Odkaz na Spotify", type: "url", validation: (rule) => rule.required() }),
+    defineField({ name: "trackCount", title: "Počet skladeb", description: "Nepovinné. Zobrazí se jako „20 skladeb“.", type: "number", validation: (rule) => rule.integer().positive() }),
     photoField("cover", "Obal"),
     defineField({
       name: "tracks",

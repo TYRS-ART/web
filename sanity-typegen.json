@@ -1,0 +1,6 @@
+{
+  "path": "./src/**/*.{ts,tsx}",
+  "schema": "./src/sanity/extract.json",
+  "generates": "./src/sanity/types.ts",
+  "overloadClientMethods": true
+}

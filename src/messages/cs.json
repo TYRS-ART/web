@@ -1,0 +1,51 @@
+{
+  "nav": {
+    "home": "Homepage",
+    "homeLabel": "TYRŠ — úvod",
+    "program": "Program",
+    "events": "Akce",
+    "courses": "Kurzy & lekce",
+    "venue": "Venue",
+    "rental": "Pronájem",
+    "menu": "Menu",
+    "openMenu": "Otevřít menu",
+    "close": "Zavřít",
+    "closeMenu": "Zavřít menu",
+    "mainMenu": "Hlavní menu",
+    "language": "Jazyk",
+    "switchTo": "English",
+    "skipToContent": "Přeskočit na obsah"
+  },
+  "playlist": {
+    "label": "{month} · playlist",
+    "open": "Playlist měsíce — přehrát",
+    "card": "Spotify přehrávač — playlist měsíce",
+    "ofMonth": "Playlist měsíce",
+    "tracks": "{count, plural, one {# skladba} few {# skladby} other {# skladeb}}",
+    "save": "Otevřít ve Spotify",
+    "preview": "Náhled"
+  },
+  "footer": {
+    "menu": "Menu",
+    "follow": "Sleduj nás",
+    "where": "Kde",
+    "write": "Napiš nám",
+    "newsletter": "Newsletter",
+    "privacy": "Ochrana soukromí"
+  },
+  "menu": {
+    "today": "Dnes",
+    "tickets": "Vstupenky",
+    "map": "Mapa"
+  },
+  "common": {
+    "today": "Dnes",
+    "tomorrow": "Zítra"
+  },
+  "notFound": {
+    "title": "Tahle stránka tu není.",
+    "text": "Možná se přesunula, nebo akce už proběhla. Program najdeš tady:",
+    "program": "Program",
+    "home": "Na úvod"
+  }
+}
