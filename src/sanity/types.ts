@@ -869,6 +869,59 @@ export type SITEMAP_QUERY_RESULT = {
   }>;
 };
 
+// Source: src/sanity/queries/venue.ts
+// Variable: VENUE_QUERY
+// Query: {  "page": *[_type == "venuePage" && _id == "venuePage"][0]{    statement, intro, motto,    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },    infoCards[]{ _key, title, headline, body, link, highlight }  },  "settings": *[_type == "settings" && _id == "settings"][0]{    address, email,    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  }}
+export type VENUE_QUERY_RESULT = {
+  page: {
+    statement: LocaleText | null;
+    intro: LocaleBlockContent | null;
+    motto: LocaleString | null;
+    founders: Array<{
+      _id: string;
+      name: string;
+      role: LocaleString | null;
+      photo: {
+        asset: SanityImageAssetReference | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+        alt: LocaleString | null;
+        lqip: string | null;
+        dimensions: SanityImageDimensions | null;
+      } | null;
+    }> | null;
+    infoCards: Array<{
+      _key: string;
+      title: LocaleString | null;
+      headline: LocaleString | null;
+      body: LocaleText | null;
+      link: {
+        label?: LocaleString;
+        href?: string;
+      } | null;
+      highlight: boolean | null;
+    }> | null;
+  } | null;
+  settings: {
+    address: {
+      street?: string;
+      district?: string;
+      postalCode?: string;
+      city?: string;
+      googleMapsUrl?: string;
+    } | null;
+    email: string | null;
+    mapImage: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    } | null;
+  } | null;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -880,6 +933,7 @@ declare global {
     '*[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n}': RENTAL_SPACES_QUERY_RESULT;
     '{\n  "page": *[_type == "rentalPage" && _id == "rentalPage"][0]{\n    headline, intro, formIntro, quote,\n    included[]{ _key, title, body }\n  },\n  "spaces": *[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n},\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': RENTAL_QUERY_RESULT;
     '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
+    '{\n  "page": *[_type == "venuePage" && _id == "venuePage"][0]{\n    statement, intro, motto,\n    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    infoCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "settings": *[_type == "settings" && _id == "settings"][0]{\n    address, email,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  }\n}': VENUE_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

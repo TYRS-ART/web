@@ -1,0 +1,12 @@
+{
+  "venue": {
+    "title": "Venue",
+    "sections": "Page sections",
+    "who": "Who",
+    "where": "Where",
+    "how": "How",
+    "founders": "Founders",
+    "motto": "Motto",
+    "address": "Address"
+  }
+}

@@ -9,6 +9,7 @@ import csLayout from "./cs/layout.json";
 import csNewsletter from "./cs/newsletter.json";
 import csPrivacy from "./cs/privacy.json";
 import csRental from "./cs/rental.json";
+import csVenue from "./cs/venue.json";
 import enCommon from "./en/common.json";
 import enCourses from "./en/courses.json";
 import enDetail from "./en/detail.json";
@@ -17,10 +18,11 @@ import enLayout from "./en/layout.json";
 import enNewsletter from "./en/newsletter.json";
 import enPrivacy from "./en/privacy.json";
 import enRental from "./en/rental.json";
+import enVenue from "./en/venue.json";
 
 export const messages = {
-  cs: { ...csCommon, ...csLayout, ...csHome, ...csDetail, ...csNewsletter, ...csPrivacy, ...csCourses, ...csRental },
-  en: { ...enCommon, ...enLayout, ...enHome, ...enDetail, ...enNewsletter, ...enPrivacy, ...enCourses, ...enRental },
+  cs: { ...csCommon, ...csLayout, ...csHome, ...csDetail, ...csNewsletter, ...csPrivacy, ...csCourses, ...csRental, ...csVenue },
+  en: { ...enCommon, ...enLayout, ...enHome, ...enDetail, ...enNewsletter, ...enPrivacy, ...enCourses, ...enRental, ...enVenue },
 } satisfies Record<Locale, object>;
 
 export type Messages = (typeof messages)["cs"];
