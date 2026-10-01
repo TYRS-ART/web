@@ -799,6 +799,62 @@ export type LAYOUT_QUERY_RESULT = {
   } | null;
 };
 
+// Source: src/sanity/queries/rental.ts
+// Variable: RENTAL_SPACES_QUERY
+// Query: *[_type == "space" && rentable == true] | order(order asc, name.cs asc){  _id, name, capacity, area, features,  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }}
+export type RENTAL_SPACES_QUERY_RESULT = Array<{
+  _id: string;
+  name: LocaleString | null;
+  capacity: number | null;
+  area: number | null;
+  features: LocaleString | null;
+  photo: {
+    asset: SanityImageAssetReference | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    alt: LocaleString | null;
+    lqip: string | null;
+    dimensions: SanityImageDimensions | null;
+  } | null;
+}>;
+
+// Source: src/sanity/queries/rental.ts
+// Variable: RENTAL_QUERY
+// Query: {  "page": *[_type == "rentalPage" && _id == "rentalPage"][0]{    headline, intro, formIntro, quote,    included[]{ _key, title, body }  },  "spaces": *[_type == "space" && rentable == true] | order(order asc, name.cs asc){  _id, name, capacity, area, features,  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }},  "email": *[_type == "settings" && _id == "settings"][0].email}
+export type RENTAL_QUERY_RESULT = {
+  page: {
+    headline: LocaleString | null;
+    intro: LocaleText | null;
+    formIntro: LocaleText | null;
+    quote: {
+      text?: LocaleText;
+      author?: string;
+      organisation?: string;
+    } | null;
+    included: Array<{
+      _key: string;
+      title: LocaleString | null;
+      body: LocaleText | null;
+    }> | null;
+  } | null;
+  spaces: Array<{
+    _id: string;
+    name: LocaleString | null;
+    capacity: number | null;
+    area: number | null;
+    features: LocaleString | null;
+    photo: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    } | null;
+  }>;
+  email: string | null;
+};
+
 // Source: src/sanity/queries/sitemap.ts
 // Variable: SITEMAP_QUERY
 // Query: {  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }}
@@ -821,6 +877,8 @@ declare global {
     '\n  *[_type == "course" && defined(slug.cs.current)]{ "cs": slug.cs.current, "en": slug.en.current }\n': COURSE_SLUGS_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course"\n    && (!defined(runStart) || runStart <= $weekEnd)\n    && (!defined(runEnd) || runEnd >= $weekStart)\n  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }\n}': HOME_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
+    '*[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n}': RENTAL_SPACES_QUERY_RESULT;
+    '{\n  "page": *[_type == "rentalPage" && _id == "rentalPage"][0]{\n    headline, intro, formIntro, quote,\n    included[]{ _key, title, body }\n  },\n  "spaces": *[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n},\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': RENTAL_QUERY_RESULT;
     '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
   }
 }
