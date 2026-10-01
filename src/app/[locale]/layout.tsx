@@ -10,7 +10,7 @@ import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { pragueDay, pragueDayRange } from "@/lib/dates";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { LAYOUT_QUERY } from "@/sanity/lib/queries";
+import { LAYOUT_QUERY } from "@/sanity/queries/layout";
 
 import { clash, generalSans, hedvig } from "../fonts";
 import "../globals.css";

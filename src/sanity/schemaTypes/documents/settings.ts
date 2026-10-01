@@ -72,7 +72,6 @@ export const settings = defineType({
         defineField({ name: "whatsapp", title: "WhatsApp kanál", type: "url" }),
       ],
     }),
-    defineField({ name: "mailchimpListId", title: "Mailchimp – ID seznamu (audience)", type: "string", group: "socials" }),
   ],
   preview: { prepare: () => ({ title: "Nastavení webu" }) },
 });

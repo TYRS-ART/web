@@ -1,0 +1,11 @@
+{
+  "common": {
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+  "focus": {
+    "tanec": "Dance",
+    "hudba": "Music",
+    "pohyb": "Movement"
+  }
+}

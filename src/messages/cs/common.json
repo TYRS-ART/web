@@ -1,0 +1,11 @@
+{
+  "common": {
+    "today": "Dnes",
+    "tomorrow": "Zítra"
+  },
+  "focus": {
+    "tanec": "Tanec",
+    "hudba": "Hudba",
+    "pohyb": "Pohyb"
+  }
+}
