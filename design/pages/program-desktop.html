@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<title>TYRŠ — program</title>
+
+</head>
+<body>
+
+
+<style>
+@font-face{font-family:"Clash Grotesk Variable";src:url("../../public/fonts/ClashGrotesk-Variable.woff2") format("woff2");font-weight:200 700;font-style:normal;font-display:swap}
+@font-face{font-family:"General Sans";src:url("../../public/fonts/GeneralSans-Variable.woff2") format("woff2");font-weight:200 700;font-style:normal;font-display:swap}
+body{margin:0;background:#f3f1ea;font-family:"General Sans",system-ui,sans-serif;color:#000}
+a{color:#000}a:hover{color:#204f25}
+.d{font-family:"Clash Grotesk Variable",system-ui,sans-serif;font-weight:500;letter-spacing:-0.03em}
+.navlink{position:relative;display:inline-flex;align-items:center;min-height:48px;padding:0 4px;color:#000;text-decoration:none;font-family:"Clash Grotesk Variable",system-ui,sans-serif;font-weight:500;letter-spacing:-0.02em;font-size:26px;line-height:30px}
+.navlink:hover{color:#000}
+.navlink .rl{display:block;height:30px;overflow:hidden}
+.navlink .rl i{display:block;font-style:normal;transition:transform 480ms cubic-bezier(.7,0,.2,1)}
+.navlink .rl i::after{content:attr(data-t);display:block;color:#000}
+.navlink:hover .rl i{transform:translateY(-30px)}
+.navlink::after{content:"";position:absolute;left:4px;right:4px;bottom:0;height:4px;border-radius:2px;background:#000;transform:scaleX(0);transform-origin:right center;transition:transform 480ms cubic-bezier(.7,0,.2,1),background-color 200ms linear}
+.navlink:hover::after{transform:scaleX(1);transform-origin:left center}
+.navlink.on::after{transform:scaleX(1);transform-origin:left center;animation:navin 700ms 200ms cubic-bezier(.7,0,.2,1) both}
+@keyframes navin{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: reduce){.navlink .rl i,.navlink::after{transition:none;animation:none}}
+.navlink.on{color:#000}
+.chip{display:inline-flex;align-items:center;min-height:56px;padding:0 24px;border-radius:999px;border:2px solid #000;background:#fff;color:#000;font-size:18px;line-height:24px;font-weight:500;text-decoration:none}
+.chip.on{background:#000;color:#fff}
+.chip{cursor:pointer;font-family:inherit;transition:box-shadow 120ms linear,opacity 120ms linear}
+.chip.cat{position:relative}
+.chip.cat.cl-hudba.sel{box-shadow:0 0 0 3px #4f6fd6}.chip.cat.cl-divadlo.sel{box-shadow:0 0 0 3px #d0613a}.chip.cat.cl-tanec.sel{box-shadow:0 0 0 3px #94b23a}.chip.cat.cl-lekce.sel{box-shadow:0 0 0 3px #4b9466}
+.chip.cat.sel::after{content:"✓";margin-left:10px;font-weight:700}
+.chip.cat.dim{opacity:0.45}
+.filtered .dayc:not(.off),.filtered .row{opacity:0.22;transition:opacity 160ms linear}
+.filtered.f-hudba .dayc.c-hudba,.filtered.f-divadlo .dayc.c-divadlo,.filtered.f-tanec .dayc.c-tanec,.filtered.f-lekce .dayc.c-lekce,.filtered.f-hudba .row.c-hudba,.filtered.f-divadlo .row.c-divadlo,.filtered.f-tanec .row.c-tanec,.filtered.f-lekce .row.c-lekce{opacity:1}
+.tag{display:inline-flex;align-items:center;padding:8px 16px;border-radius:999px;font-size:16px;line-height:20px;font-weight:500}
+.soft{-webkit-mask-image:linear-gradient(to right,rgba(0,0,0,0) 0px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.14) 6px,rgba(0,0,0,0.32) 9px,rgba(0,0,0,0.54) 12px,rgba(0,0,0,0.74) 15px,rgba(0,0,0,0.9) 19px,rgba(0,0,0,1) 22px,rgba(0,0,0,1) calc(100% - 22px),rgba(0,0,0,0.9) calc(100% - 19px),rgba(0,0,0,0.74) calc(100% - 15px),rgba(0,0,0,0.54) calc(100% - 12px),rgba(0,0,0,0.32) calc(100% - 9px),rgba(0,0,0,0.14) calc(100% - 6px),rgba(0,0,0,0.04) calc(100% - 3px),rgba(0,0,0,0) calc(100% - 0px)),linear-gradient(to bottom,rgba(0,0,0,0) 0px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.14) 6px,rgba(0,0,0,0.32) 9px,rgba(0,0,0,0.54) 12px,rgba(0,0,0,0.74) 15px,rgba(0,0,0,0.9) 19px,rgba(0,0,0,1) 22px,rgba(0,0,0,1) calc(100% - 22px),rgba(0,0,0,0.9) calc(100% - 19px),rgba(0,0,0,0.74) calc(100% - 15px),rgba(0,0,0,0.54) calc(100% - 12px),rgba(0,0,0,0.32) calc(100% - 9px),rgba(0,0,0,0.14) calc(100% - 6px),rgba(0,0,0,0.04) calc(100% - 3px),rgba(0,0,0,0) calc(100% - 0px));-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,rgba(0,0,0,0) 0px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.14) 6px,rgba(0,0,0,0.32) 9px,rgba(0,0,0,0.54) 12px,rgba(0,0,0,0.74) 15px,rgba(0,0,0,0.9) 19px,rgba(0,0,0,1) 22px,rgba(0,0,0,1) calc(100% - 22px),rgba(0,0,0,0.9) calc(100% - 19px),rgba(0,0,0,0.74) calc(100% - 15px),rgba(0,0,0,0.54) calc(100% - 12px),rgba(0,0,0,0.32) calc(100% - 9px),rgba(0,0,0,0.14) calc(100% - 6px),rgba(0,0,0,0.04) calc(100% - 3px),rgba(0,0,0,0) calc(100% - 0px)),linear-gradient(to bottom,rgba(0,0,0,0) 0px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.14) 6px,rgba(0,0,0,0.32) 9px,rgba(0,0,0,0.54) 12px,rgba(0,0,0,0.74) 15px,rgba(0,0,0,0.9) 19px,rgba(0,0,0,1) 22px,rgba(0,0,0,1) calc(100% - 22px),rgba(0,0,0,0.9) calc(100% - 19px),rgba(0,0,0,0.74) calc(100% - 15px),rgba(0,0,0,0.54) calc(100% - 12px),rgba(0,0,0,0.32) calc(100% - 9px),rgba(0,0,0,0.14) calc(100% - 6px),rgba(0,0,0,0.04) calc(100% - 3px),rgba(0,0,0,0) calc(100% - 0px));mask-composite:intersect}
+.dayc{position:relative;display:block;height:200px;border-radius:14px;overflow:hidden;background:#ece9e0;text-decoration:none;color:#fff}
+.dayc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 250ms ease}
+.dayc:hover img{transform:scale(1.04)}
+.dayc .sc{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 60%)}
+.dayc .n{position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;background:#fff;color:#000;font-size:16px;line-height:20px;font-weight:500}
+.dayc .h{position:absolute;top:12px;right:12px;padding:6px 10px;border-radius:999px;font-size:14px;line-height:18px;font-weight:500}
+.dayc .t{position:absolute;left:14px;right:14px;bottom:12px;font-family:"Clash Grotesk Variable",system-ui,sans-serif;font-size:30px;line-height:30px;font-weight:500;letter-spacing:-0.02em;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dayc.off{color:#5c5c5c}.dayc.off .n{background:transparent;padding:0;top:14px;left:14px;color:#5c5c5c;font-size:20px}
+.dayc.past{background:#f3f1ea}.dayc.past .n{color:#b3b3b3}
+.dayc.today{outline:3px solid #000;outline-offset:-3px}.dayc.today .n{background:#000;color:#fff}
+.dayc.today .n::before{content:"";width:10px;height:10px;border-radius:999px;background:#79cb6f}
+.row{display:grid;grid-template-columns:160px 1fr auto 160px;align-items:center;gap:32px;padding:28px 0;border-top:2px solid #000;text-decoration:none;color:#000}
+
+.nowcard{opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity 140ms linear,transform 140ms ease}
+.now:hover .nowcard,.now:focus-within .nowcard{opacity:1;pointer-events:auto;transform:none}
+.now::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
+.cl{background-size:300% 300% !important;animation:drift 10s ease-in-out infinite alternate}
+.cl-hudba{background-image:linear-gradient(115deg,#a3b8f2 0%,#7b97e8 45%,#b6c6f5 100%) !important}
+.cl-divadlo{background-image:linear-gradient(115deg,#f5a888 0%,#ee8460 45%,#f8bba1 100%) !important;animation-duration:12s}
+.cl-tanec{background-image:linear-gradient(115deg,#d4e58f 0%,#bdd463 45%,#e0ecaa 100%) !important;animation-duration:9s}
+.cl-lekce{background-image:linear-gradient(115deg,#9fcfb0 0%,#8cc4a0 45%,#b2dac0 100%) !important;animation-duration:13s}
+@keyframes drift{0%{background-position:0% 50%}50%{background-position:100% 30%}100%{background-position:30% 100%}}
+@media (prefers-reduced-motion: reduce){.cl{animation:none}}
+a:focus-visible,button:focus-visible{outline:2px solid #204f25;outline-offset:2px}
+.lg g{cursor:default}.lg g path{fill:#000;stroke:#000;stroke-width:0;transition:fill 160ms linear,stroke-width 160ms linear}.lg g rect{fill:#000;opacity:0;transition:opacity 160ms linear}.lg g:hover path{fill:#f3f1ea;stroke-width:1.2}.lg g:hover rect{opacity:1}
+.tab{display:inline-flex;align-items:center;min-height:64px;padding:0 32px;border-radius:999px;font-size:24px;line-height:28px;font-weight:500;text-decoration:none;color:#5c5c5c;border:2px solid transparent}
+.tab.on{background:#000;color:#fff}
+.tab:hover{color:#000;border-color:#000}
+.tab.on:hover{color:#fff;border-color:#000}
+.tile:has(img.soft){background:transparent}
+.row:hover{color:#000}
+</style>
+
+<div style="width: 1440px; height: 4140px; box-sizing: border-box; padding: 0; background: #f3f1ea; display: flex; flex-direction: column; overflow: hidden">
+
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 64px">
+<a href="homepage-desktop.html" aria-label="TYRŠ — úvod" style="display: inline-flex"><img src="../../public/logos/logo-primary.svg" alt="TYRŠ" style="height: 44px; width: auto; display: block"></a>
+<nav style="display: flex; align-items: center; gap: 44px">
+<a href="program-desktop.html" class="navlink on" aria-current="page"><span class="rl"><i data-t="Program">Program</i></span></a>
+<a href="venue-desktop.html" class="navlink"><span class="rl"><i data-t="Venue">Venue</i></span></a>
+<a href="pronajem-desktop.html" class="navlink"><span class="rl"><i data-t="Pronájem">Pronájem</i></span></a>
+<a href="#" class="navlink"><span class="rl"><i data-t="EN">EN</i></span></a>
+</nav>
+<div class="now" style="position: relative">
+<button type="button" aria-label="Playlist měsíce — přehrát" style="display: inline-flex; align-items: center; gap: 12px; padding: 6px 20px 6px 6px; border-radius: 999px; border: 0; background: #000; color: #fff; font-family: inherit; cursor: pointer">
+<span style="width: 40px; height: 40px; border-radius: 999px; background: #79cb6f; display: inline-flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="#000"></path></svg></span>
+<span style="display: flex; flex-direction: column; text-align: left"><span style="font-size: 12px; line-height: 14px; opacity: 0.7">Říjen 26 · playlist</span><span style="font-size: 16px; line-height: 20px; font-weight: 500">[Dijon, Brian Eno…]</span></span>
+</button>
+<aside aria-label="Spotify přehrávač — playlist měsíce" class="nowcard" style="position: absolute; top: calc(100% + 8px); right: 0; z-index: 3; width: 352px; box-sizing: border-box; padding: 16px; border-radius: 12px; background: #204f25; color: #ffffff; display: flex; flex-direction: column; gap: 12px; font-family: 'General Sans', system-ui, sans-serif">
+<div style="display: flex; gap: 14px; align-items: center">
+<div style="width: 80px; height: 80px; flex-shrink: 0; border-radius: 6px; background: #163a1a; display: flex; align-items: flex-end; padding: 8px; box-sizing: border-box"><span class="d" style="font-size: 14px; line-height: 14px; color: #fff">Říjen<br>v Tyrši</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0; flex-grow: 1"><span style="font-size: 18px; line-height: 22px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Říjen v Tyrši</span><span style="font-size: 13px; line-height: 16px; opacity: 0.8">TYRŠ · 20 skladeb</span><span style="margin-top: 6px; font-size: 12px; line-height: 14px; opacity: 0.6">Uložit na Spotify</span></div>
+<span style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 999px; background: #fff; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="#000"></path></svg></span>
+</div>
+<div style="display: flex; flex-direction: column">
+<div style="display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14)"><span style="font-size: 13px; opacity: 0.6">1</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; line-height: 18px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">[Skladba]</span><span style="font-size: 13px; line-height: 16px; opacity: 0.7">[Interpret]</span></span><span style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em">NÁHLED</span></div>
+<div style="display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14)"><span style="font-size: 13px; opacity: 0.6">2</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; line-height: 18px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">[Skladba]</span><span style="font-size: 13px; line-height: 16px; opacity: 0.7">[Interpret]</span></span><span style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em">NÁHLED</span></div>
+<div style="display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14)"><span style="font-size: 13px; opacity: 0.6">3</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; line-height: 18px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">[Skladba]</span><span style="font-size: 13px; line-height: 16px; opacity: 0.7">[Interpret]</span></span><span style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em">NÁHLED</span></div>
+<div style="display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14)"><span style="font-size: 13px; opacity: 0.6">4</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; line-height: 18px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">[Skladba]</span><span style="font-size: 13px; line-height: 16px; opacity: 0.7">[Interpret]</span></span><span style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em">NÁHLED</span></div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding-top: 4px; font-size: 12px; line-height: 14px; opacity: 0.7"><span>Playlist měsíce</span><span style="font-weight: 600; letter-spacing: 0.02em">Spotify</span></div>
+</aside>
+</div>
+</header>
+
+<section style="padding: 64px 64px 0; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px">
+<h1 class="d" style="margin: 0; font-size: 200px; line-height: 180px">Říjen</h1>
+<div style="display: flex; align-items: center; gap: 24px; padding-bottom: 20px">
+<span style="font-size: 20px; line-height: 24px; color: #5c5c5c">Program · říjen 2026 · 21 akcí</span>
+<a href="#" aria-label="Předchozí měsíc" style="width: 64px; height: 64px; border-radius: 999px; border: 2px solid #000; background: #fff; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px">←</a>
+<a href="#" style="display: inline-flex; align-items: center; min-height: 64px; padding: 0 32px; border-radius: 999px; background: #000; color: #fff; text-decoration: none; font-size: 20px; line-height: 24px; font-weight: 500">Listopad →</a>
+</div>
+</div>
+<div style="display: flex; gap: 8px" role="tablist" aria-label="Typ programu">
+<a href="program-desktop.html" class="tab on" role="tab" aria-selected="true">Akce</a>
+<a href="kurzy-desktop.html" class="tab" role="tab">Kurzy &amp; lekce</a>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap">
+<div style="display: flex; flex-wrap: wrap; gap: 10px" role="group" aria-label="Kategorie">
+<button type="button" class="chip on">Vše</button>
+<button type="button" class="chip cat cl cl-hudba" style="background: #8fa8ee; border-color: #8fa8ee; color: #000000" aria-pressed="false">Hudba</button><button type="button" class="chip cat cl cl-divadlo" style="background: #f29572; border-color: #f29572; color: #000000" aria-pressed="false">Divadlo</button><button type="button" class="chip cat cl cl-tanec" style="background: #c9de78; border-color: #c9de78; color: #000000" aria-pressed="false">Tanec</button><button type="button" class="chip cat cl cl-lekce" style="background: #8cc4a0; border-color: #8cc4a0; color: #000000" aria-pressed="false">Lekce</button>
+<span style="align-self: center; font-size: 16px; line-height: 20px; color: #5c5c5c; margin-left: 8px"></span>
+</div>
+<div style="display: flex; gap: 8px" role="group" aria-label="Zobrazení">
+<a href="#kalendar" class="chip on">Kalendář</a>
+<a href="#seznam" class="chip">Seznam</a>
+</div>
+</div>
+</section>
+
+<section id="kalendar" aria-label="Kalendář" style="margin: 40px 24px 0; padding: 32px; border-radius: 24px; background: #fff; display: flex; flex-direction: column; gap: 16px">
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; font-size: 16px; line-height: 20px; font-weight: 500; color: #5c5c5c; padding: 0 14px">
+<span>Po</span><span>Út</span><span>St</span><span>Čt</span><span>Pá</span><span>So</span><span>Ne</span>
+</div>
+<div class="cal " style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px">
+<div class="dayc off past"><span class="n">28</span></div>
+<div class="dayc off past"><span class="n">29</span></div>
+<div class="dayc off past"><span class="n">30</span></div>
+<div class="dayc off past"><span class="n">1</span></div>
+<a href="akce-detail-desktop.html" class="dayc c-hudba"><img src="../img/placeholder-img_dijon.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">2</span><span class="h cl cl-hudba" style="background: #8fa8ee; color: #000">20:00</span><span class="t">[Koncert]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-divadlo"><img src="../img/placeholder-img_paint.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">3</span><span class="h cl cl-divadlo" style="background: #f29572; color: #000000">19:30</span><span class="t">[Divadlo]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-lekce"><img src="../img/placeholder-img_eno.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">4</span><span class="h cl cl-lekce" style="background: #8cc4a0; color: #000">10:00</span><span class="t">[Workshop]</span></a>
+<div class="dayc off past"><span class="n">5</span></div>
+<a href="akce-detail-desktop.html" class="dayc c-tanec"><img src="../img/placeholder-img_poster.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">6</span><span class="h cl cl-tanec" style="background: #c9de78; color: #000000">18:00</span><span class="t">[Tanec]</span></a>
+<div class="dayc off past"><span class="n">7</span></div>
+<a href="akce-detail-desktop.html" class="dayc c-hudba"><img src="../img/placeholder-img_dijon.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">8</span><span class="h cl cl-hudba" style="background: #8fa8ee; color: #000">20:00</span><span class="t">[Koncert]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-hudba"><img src="../img/placeholder-img_dijon.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">9</span><span class="h cl cl-hudba" style="background: #8fa8ee; color: #000">21:00</span><span class="t">[DJ set]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-divadlo"><img src="../img/placeholder-img_paint.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">10</span><span class="h cl cl-divadlo" style="background: #f29572; color: #000000">19:30</span><span class="t">[Divadlo]</span></a>
+<div class="dayc off past"><span class="n">11</span></div>
+<div class="dayc off past"><span class="n">12</span></div>
+<a href="akce-detail-desktop.html" class="dayc c-tanec"><img src="../img/placeholder-img_poster.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">13</span><span class="h cl cl-tanec" style="background: #c9de78; color: #000000">18:00</span><span class="t">[Tanec]</span></a>
+<a href="akce-detail-desktop.html" class="dayc today"><img src="../img/placeholder-img_dijon.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">14 · Dnes</span><span class="h cl cl-hudba" style="background: #8fa8ee; color: #000">19:30</span><span class="t">[Název akce]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-tanec"><img src="../img/placeholder-img_poster.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">15</span><span class="h cl cl-tanec" style="background: #c9de78; color: #000000">18:00</span><span class="t">[Název akce]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-hudba"><img src="../img/placeholder-img_dijon.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">16</span><span class="h cl cl-hudba" style="background: #8fa8ee; color: #000">20:00</span><span class="t">[Koncert]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-divadlo"><img src="../img/placeholder-img_paint.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">17</span><span class="h cl cl-divadlo" style="background: #f29572; color: #000000">19:30</span><span class="t">[Divadelní představení]</span></a>
+<div class="dayc off"><span class="n">18</span></div>
+<div class="dayc off"><span class="n">19</span></div>
+<div class="dayc off"><span class="n">20</span></div>
+<a href="akce-detail-desktop.html" class="dayc c-tanec"><img src="../img/placeholder-img_poster.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">21</span><span class="h cl cl-tanec" style="background: #c9de78; color: #000000">20:00</span><span class="t">[Taneční večer]</span></a>
+<div class="dayc off"><span class="n">22</span></div>
+<a href="akce-detail-desktop.html" class="dayc c-hudba"><img src="../img/placeholder-img_dijon.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">23</span><span class="h cl cl-hudba" style="background: #8fa8ee; color: #000">20:00 +1</span><span class="t">[Koncert] a afterparty</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-divadlo"><img src="../img/placeholder-img_paint.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">24</span><span class="h cl cl-divadlo" style="background: #f29572; color: #000000">19:30</span><span class="t">[Divadlo]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-lekce"><img src="../img/placeholder-img_eno.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">25</span><span class="h cl cl-lekce" style="background: #8cc4a0; color: #000">10:00</span><span class="t">[Workshop]</span></a>
+<div class="dayc off"><span class="n">26</span></div>
+<a href="akce-detail-desktop.html" class="dayc c-tanec"><img src="../img/placeholder-img_poster.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">27</span><span class="h cl cl-tanec" style="background: #c9de78; color: #000000">18:00</span><span class="t">[Tanec]</span></a>
+<div class="dayc off"><span class="n">28</span></div>
+<a href="akce-detail-desktop.html" class="dayc c-hudba"><img src="../img/placeholder-img_dijon.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">29</span><span class="h cl cl-hudba" style="background: #8fa8ee; color: #000">20:00</span><span class="t">[Koncert]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-divadlo"><img src="../img/placeholder-img_paint.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">30</span><span class="h cl cl-divadlo" style="background: #f29572; color: #000000">19:30</span><span class="t">[Divadlo]</span></a>
+<a href="akce-detail-desktop.html" class="dayc c-lekce"><img src="../img/placeholder-img_eno.jpg" alt="" class="soft"><span class="sc soft"></span><span class="n">31</span><span class="h cl cl-lekce" style="background: #8cc4a0; color: #000">15:00</span><span class="t">[Taneční lekce]</span></a>
+<div class="dayc off" style="background: #fff; border: 2px dashed #cfcfcf"><span class="n">1. 11.</span></div>
+</div>
+</section>
+
+<section id="seznam" style="margin: 96px 24px 0; padding: 40px; border-radius: 24px; background: #fff; display: flex; flex-direction: column">
+<h2 class="d" style="margin: 0 0 32px; font-size: 96px; line-height: 88px">Tento týden</h2>
+<div class="cal " style="display: flex; flex-direction: column">
+<a href="akce-detail-desktop.html" class="row c-hudba"><span style="font-size: 20px; color: #5c5c5c">Dnes</span><span style="display: flex; align-items: center; gap: 16px"><span class="rt d" style="font-size: 56px; line-height: 56px">[Název akce]</span><span class="tag cl cl-hudba" style="background: #8fa8ee; color: #000">Hudba</span></span><span style="font-size: 32px; font-variant-numeric: tabular-nums">19:30</span><img src="../img/placeholder-img_dijon.jpg" alt="" style="width: 160px; height: 100px; border-radius: 8px; object-fit: cover; object-position: center top; display: block"></a>
+<a href="akce-detail-desktop.html" class="row c-tanec"><span style="font-size: 20px; color: #5c5c5c">Čt 15. 10.</span><span style="display: flex; align-items: center; gap: 16px"><span class="rt d" style="font-size: 56px; line-height: 56px">[Název akce]</span><span class="tag cl cl-tanec" style="background: #c9de78; color: #000000">Tanec</span></span><span style="font-size: 32px; font-variant-numeric: tabular-nums">18:00</span><img src="../img/placeholder-img_poster.jpg" alt="" style="width: 160px; height: 100px; border-radius: 8px; object-fit: cover; display: block"></a>
+<a href="akce-detail-desktop.html" class="row c-hudba"><span style="font-size: 20px; color: #5c5c5c">Pá 16. 10.</span><span style="display: flex; align-items: center; gap: 16px"><span class="rt d" style="font-size: 56px; line-height: 56px">[Koncert]</span><span class="tag cl cl-hudba" style="background: #8fa8ee; color: #000">Hudba</span></span><span style="font-size: 32px; font-variant-numeric: tabular-nums">20:00</span><img src="../img/placeholder-img_dijon.jpg" alt="" style="width: 160px; height: 100px; border-radius: 8px; object-fit: cover; object-position: center top; display: block"></a>
+<a href="akce-detail-desktop.html" class="row c-divadlo" style="border-bottom: 2px solid #000"><span style="font-size: 20px; color: #5c5c5c">So 17. 10.</span><span style="display: flex; align-items: center; gap: 16px"><span class="rt d" style="font-size: 56px; line-height: 56px">[Divadelní představení]</span><span class="tag cl cl-divadlo" style="background: #f29572; color: #000000">Divadlo</span></span><span style="font-size: 32px; font-variant-numeric: tabular-nums">19:30</span><img src="../img/placeholder-img_paint.jpg" alt="" style="width: 160px; height: 100px; border-radius: 8px; object-fit: cover; display: block"></a>
+</div>
+</section>
+
+<section aria-label="Newsletter" style="margin-top: 112px; padding: 80px 64px; background: #000; color: #fff; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 32px; align-items: center">
+<h2 class="d" style="grid-column: span 5; margin: 0; font-size: 96px; line-height: 88px">Nechceš nic propásnout?</h2>
+<div style="grid-column: span 7; display: flex; flex-direction: column; gap: 20px">
+<span style="font-size: 20px; line-height: 28px; opacity: 0.8">Vyber si kanál. Program posíláme tam, kde jsi.</span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px"><a href="#" style="display: flex; align-items: center; justify-content: space-between; min-height: 88px; padding: 0px 28px; border-radius: 20px; border: 2px solid rgba(255, 255, 255, 0.5); color: rgb(255, 255, 255); text-decoration: none"><span style="display: flex; flex-direction: column"><span class="d" style="font-size: 32px; line-height: 34px">Instagram</span><span style="font-size: 14px; line-height: 18px; opacity: 0.7">@tyrs.art · fotky, stories</span></span><span style="font-size: 28px">→</span></a><a href="#" style="display: flex; align-items: center; justify-content: space-between; min-height: 88px; padding: 0px 28px; border-radius: 20px; border: 2px solid rgba(255, 255, 255, 0.5); color: rgb(255, 255, 255); text-decoration: none"><span style="display: flex; flex-direction: column"><span class="d" style="font-size: 32px; line-height: 34px">WhatsApp kanál</span><span style="font-size: 14px; line-height: 18px; opacity: 0.7">produkce a organizátoři</span></span><span style="font-size: 28px">→</span></a><a href="#" style="display: flex; align-items: center; justify-content: space-between; min-height: 88px; padding: 0px 28px; border-radius: 20px; border: 2px solid rgba(255, 255, 255, 0.5); color: rgb(255, 255, 255); text-decoration: none"><span style="display: flex; flex-direction: column"><span class="d" style="font-size: 32px; line-height: 34px">Spotify</span><span style="font-size: 14px; line-height: 18px; opacity: 0.7">playlist měsíce + kdo u nás hraje</span></span><span style="font-size: 28px">→</span></a><a href="#" style="display: flex; align-items: center; justify-content: space-between; min-height: 88px; padding: 0px 28px; border-radius: 20px; border: 2px solid rgba(255, 255, 255, 0.5); color: rgb(255, 255, 255); text-decoration: none"><span style="display: flex; flex-direction: column"><span class="d" style="font-size: 32px; line-height: 34px">Kalendář</span><span style="font-size: 14px; line-height: 18px; opacity: 0.7">přidej si TYRŠ do Google / Apple kalendáře</span></span><span style="font-size: 28px">→</span></a></div>
+<form style="margin: 0; display: flex; gap: 8px; align-items: center">
+<label for="nl-email" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">E-mail</label>
+<span style="font-size: 16px; line-height: 20px; opacity: 0.7; white-space: nowrap">Nebo postaru:</span>
+<input id="nl-email" type="email" placeholder="tvuj@email.cz" style="flex-grow: 1; height: 56px; box-sizing: border-box; padding: 0 20px; border-radius: 999px; border: 0; background: #fff; font-family: inherit; font-size: 18px">
+<button type="submit" style="height: 56px; padding: 0 28px; border-radius: 999px; border: 0; background: #79cb6f; color: #000; font-family: inherit; font-size: 18px; font-weight: 500">Odebírat</button>
+</form>
+</div>
+</section>
+
+<footer style="margin-top: 96px; padding: 48px 64px 40px; display: flex; flex-direction: column; gap: 40px; border-top: 2px solid #000">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #5c5c5c; margin-bottom: 6px">Menu</span><a href="homepage-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Homepage</a><a href="program-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Program</a><a href="venue-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Venue</a><a href="pronajem-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Pronájem</a></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #5c5c5c; margin-bottom: 6px">Sleduj nás</span><a href="https://www.instagram.com/tyrs.art/" target="_blank" rel="noopener" style="font-size: 22px; line-height: 32px; text-decoration: none">Instagram</a><a href="#" style="font-size: 22px; line-height: 32px; text-decoration: none">Spotify</a><a href="#seznam" style="font-size: 22px; line-height: 32px; text-decoration: none">Newsletter</a></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #5c5c5c; margin-bottom: 6px">Kde</span><span style="font-size: 22px; line-height: 32px">Nosticova 634/2</span><span style="font-size: 22px; line-height: 32px">Malá Strana</span><span style="font-size: 22px; line-height: 32px">118 00 Praha 1</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #5c5c5c; margin-bottom: 6px">Napiš nám</span><a href="mailto:booking@tyrs.art" style="font-size: 22px; line-height: 32px; text-decoration: none">booking@tyrs.art</a></div>
+</div>
+<svg class="lg" xmlns="http://www.w3.org/2000/svg" viewBox="260 1375 331.5 85.5" role="img" aria-label="TYRŠ" style="width: 100%; height: auto; display: block"><g><rect x="265.6" y="1380.31" width="74.663" height="74.6599999999999" rx="7"/><path d="M330.942 1379.71C332.727 1379.71 333.619 1379.71 334.362 1379.85C337.585 1380.46 340.106 1382.99 340.721 1386.21C340.862 1386.95 340.863 1387.84 340.863 1389.63V1445.65C340.863 1447.43 340.862 1448.33 340.721 1449.07C340.106 1452.29 337.585 1454.81 334.362 1455.43C333.619 1455.57 332.727 1455.57 330.942 1455.57H306.695V1415.82H322.884V1408.93H282.91V1415.82H299.099V1455.57H274.92C273.136 1455.57 272.244 1455.57 271.501 1455.43C268.278 1454.81 265.757 1452.29 265.142 1449.07C265 1448.33 265 1447.43 265 1445.65V1389.63C265 1387.84 265 1386.95 265.142 1386.21C265.756 1382.99 268.278 1380.46 271.501 1379.85C272.244 1379.71 273.136 1379.71 274.92 1379.71H330.942Z"></path></g><g><rect x="347.463" y="1380.31" width="74.66399999999997" height="74.6599999999999" rx="7"/><path d="M412.806 1379.71C414.59 1379.71 415.483 1379.71 416.226 1379.85C419.449 1380.46 421.969 1382.99 422.584 1386.21C422.726 1386.95 422.727 1387.84 422.727 1389.63V1445.65C422.727 1447.43 422.726 1448.33 422.584 1449.07C421.969 1452.29 419.449 1454.81 416.226 1455.43C415.483 1455.57 414.59 1455.57 412.806 1455.57H386.746V1438.96L405.277 1408.93H396.615L387.67 1423.63L383.339 1431.08H382.842L378.439 1423.63L369.423 1408.93H360.689L379.149 1438.82V1455.57H356.783C354.999 1455.57 354.107 1455.57 353.364 1455.43C350.141 1454.81 347.62 1452.29 347.005 1449.07C346.863 1448.33 346.863 1447.43 346.863 1445.65V1389.63C346.863 1387.84 346.863 1386.95 347.005 1386.21C347.62 1382.99 350.141 1380.46 353.364 1379.85C354.107 1379.71 354.999 1379.71 356.783 1379.71H412.806Z"></path></g><g><rect x="429.327" y="1380.31" width="74.663" height="74.6599999999999" rx="7"/><path d="M494.669 1379.71C496.453 1379.71 497.346 1379.71 498.089 1379.85C501.312 1380.46 503.832 1382.99 504.447 1386.21C504.589 1386.95 504.59 1387.84 504.59 1389.63V1445.65C504.59 1447.43 504.589 1448.33 504.447 1449.07C503.832 1452.29 501.312 1454.81 498.089 1455.43C497.346 1455.57 496.453 1455.57 494.669 1455.57H485.805L478.935 1442.79C477.16 1439.53 475.101 1437.4 471.622 1436.26V1435.69C480 1435.27 484.828 1430.51 484.828 1422.63C484.828 1413.61 478.225 1408.43 467.717 1408.43H447.269V1455.57H438.646C436.862 1455.57 435.97 1455.57 435.228 1455.43C432.004 1454.81 429.483 1452.29 428.868 1449.07C428.726 1448.33 428.727 1447.43 428.727 1445.65V1389.63C428.727 1387.84 428.726 1386.95 428.868 1386.21C429.483 1382.99 432.004 1380.46 435.228 1379.85C435.97 1379.71 436.862 1379.71 438.646 1379.71H494.669Z"></path><path d="M460.546 1437.68C466.226 1437.68 468.214 1439.6 470.415 1443.72L476.925 1455.57H454.937V1437.68H460.546Z"></path><path d="M468.64 1415.32C474.817 1415.32 477.16 1417.73 477.16 1423.34C477.16 1429.09 474.817 1431.36 468.64 1431.36H454.937V1415.32H468.64Z"></path></g><g><rect x="511.19" y="1380.31" width="74.663" height="74.6599999999999" rx="7"/><path fill-rule="evenodd" clip-rule="evenodd" d="M576.532 1379.71C578.316 1379.71 579.209 1379.71 579.952 1379.85C583.175 1380.46 585.696 1382.99 586.311 1386.21C586.452 1386.95 586.453 1387.84 586.453 1389.63V1445.65C586.453 1447.43 586.452 1448.33 586.311 1449.07C585.696 1452.29 583.175 1454.81 579.952 1455.43C579.209 1455.57 578.316 1455.57 576.532 1455.57H559.128C564.706 1453.25 567.273 1448.72 567.273 1443.58C567.273 1436.41 563.369 1431.93 554.423 1430.09L546.328 1428.38C539.796 1426.96 537.88 1425.76 537.88 1421.42C537.88 1417.24 540.72 1415.25 547.748 1415.25C556.268 1415.25 558.824 1418.3 558.824 1424.12V1424.9H566.351V1424.05C566.35 1415.6 561.096 1408.22 547.962 1408.22C535.679 1408.22 530.212 1414.75 530.212 1421.78C530.212 1429.31 534.614 1433.28 542.778 1434.84L550.872 1436.48C558.185 1437.97 559.605 1439.53 559.605 1443.86C559.605 1448.26 557.049 1450.18 550.021 1450.18C540.081 1450.18 537.596 1447.2 537.596 1441.3V1440.52H530.069V1441.73C530.069 1448.12 532.974 1453.13 539.383 1455.57H520.51C518.726 1455.57 517.834 1455.57 517.091 1455.43C513.868 1454.81 511.346 1452.29 510.731 1449.07C510.59 1448.33 510.59 1447.43 510.59 1445.65V1389.63C510.59 1387.84 510.59 1386.95 510.731 1386.21C511.346 1382.99 513.867 1380.46 517.091 1379.85C517.834 1379.71 518.726 1379.71 520.51 1379.71H576.532ZM562.28 1398.88L568.248 1401.13L577.741 1394.07L572.163 1391.96L566.325 1396.52L564.185 1388.95L558.606 1386.84L562.28 1398.88Z"></path></g></svg>
+</footer>
+
+</div>
+
+
+</body>
+</html>

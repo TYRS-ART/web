@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<title>TYRŠ — venue</title>
+
+</head>
+<body>
+
+
+<style>
+@font-face{font-family:"Clash Grotesk Variable";src:url("../../public/fonts/ClashGrotesk-Variable.woff2") format("woff2");font-weight:200 700;font-style:normal;font-display:swap}
+@font-face{font-family:"General Sans";src:url("../../public/fonts/GeneralSans-Variable.woff2") format("woff2");font-weight:200 700;font-style:normal;font-display:swap}
+@font-face{font-family:"Hedvig Letters Serif";src:url("../../public/fonts/HedvigLettersSerif-Variable.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+body{margin:0;background:#f3f1ea;font-family:"General Sans",system-ui,sans-serif;color:#000}
+a{color:#000}a:hover{color:#204f25}
+.d{font-family:"Clash Grotesk Variable",system-ui,sans-serif;font-weight:500;letter-spacing:-0.03em}
+.navlink{position:relative;display:inline-flex;align-items:center;min-height:48px;padding:0 4px;color:#000;text-decoration:none;font-family:"Clash Grotesk Variable",system-ui,sans-serif;font-weight:500;letter-spacing:-0.02em;font-size:26px;line-height:30px}
+.navlink:hover{color:#000}
+.navlink .rl{display:block;height:30px;overflow:hidden}
+.navlink .rl i{display:block;font-style:normal;transition:transform 480ms cubic-bezier(.7,0,.2,1)}
+.navlink .rl i::after{content:attr(data-t);display:block;color:#000}
+.navlink:hover .rl i{transform:translateY(-30px)}
+.navlink::after{content:"";position:absolute;left:4px;right:4px;bottom:0;height:4px;border-radius:2px;background:#000;transform:scaleX(0);transform-origin:right center;transition:transform 480ms cubic-bezier(.7,0,.2,1),background-color 200ms linear}
+.navlink:hover::after{transform:scaleX(1);transform-origin:left center}
+.navlink.on::after{transform:scaleX(1);transform-origin:left center;animation:navin 700ms 200ms cubic-bezier(.7,0,.2,1) both}
+@keyframes navin{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: reduce){.navlink .rl i,.navlink::after{transition:none;animation:none}}
+.navlink.on{color:#000}
+.soft{-webkit-mask-image:linear-gradient(to right,rgba(0,0,0,0) 0px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.14) 6px,rgba(0,0,0,0.32) 9px,rgba(0,0,0,0.54) 12px,rgba(0,0,0,0.74) 15px,rgba(0,0,0,0.9) 19px,rgba(0,0,0,1) 22px,rgba(0,0,0,1) calc(100% - 22px),rgba(0,0,0,0.9) calc(100% - 19px),rgba(0,0,0,0.74) calc(100% - 15px),rgba(0,0,0,0.54) calc(100% - 12px),rgba(0,0,0,0.32) calc(100% - 9px),rgba(0,0,0,0.14) calc(100% - 6px),rgba(0,0,0,0.04) calc(100% - 3px),rgba(0,0,0,0) calc(100% - 0px)),linear-gradient(to bottom,rgba(0,0,0,0) 0px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.14) 6px,rgba(0,0,0,0.32) 9px,rgba(0,0,0,0.54) 12px,rgba(0,0,0,0.74) 15px,rgba(0,0,0,0.9) 19px,rgba(0,0,0,1) 22px,rgba(0,0,0,1) calc(100% - 22px),rgba(0,0,0,0.9) calc(100% - 19px),rgba(0,0,0,0.74) calc(100% - 15px),rgba(0,0,0,0.54) calc(100% - 12px),rgba(0,0,0,0.32) calc(100% - 9px),rgba(0,0,0,0.14) calc(100% - 6px),rgba(0,0,0,0.04) calc(100% - 3px),rgba(0,0,0,0) calc(100% - 0px));-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,rgba(0,0,0,0) 0px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.14) 6px,rgba(0,0,0,0.32) 9px,rgba(0,0,0,0.54) 12px,rgba(0,0,0,0.74) 15px,rgba(0,0,0,0.9) 19px,rgba(0,0,0,1) 22px,rgba(0,0,0,1) calc(100% - 22px),rgba(0,0,0,0.9) calc(100% - 19px),rgba(0,0,0,0.74) calc(100% - 15px),rgba(0,0,0,0.54) calc(100% - 12px),rgba(0,0,0,0.32) calc(100% - 9px),rgba(0,0,0,0.14) calc(100% - 6px),rgba(0,0,0,0.04) calc(100% - 3px),rgba(0,0,0,0) calc(100% - 0px)),linear-gradient(to bottom,rgba(0,0,0,0) 0px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.14) 6px,rgba(0,0,0,0.32) 9px,rgba(0,0,0,0.54) 12px,rgba(0,0,0,0.74) 15px,rgba(0,0,0,0.9) 19px,rgba(0,0,0,1) 22px,rgba(0,0,0,1) calc(100% - 22px),rgba(0,0,0,0.9) calc(100% - 19px),rgba(0,0,0,0.74) calc(100% - 15px),rgba(0,0,0,0.54) calc(100% - 12px),rgba(0,0,0,0.32) calc(100% - 9px),rgba(0,0,0,0.14) calc(100% - 6px),rgba(0,0,0,0.04) calc(100% - 3px),rgba(0,0,0,0) calc(100% - 0px));mask-composite:intersect}
+.tile{position:relative;display:block;overflow:hidden;border-radius:16px;background:#e7e3d8}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.tile .sc{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 55%)}
+.lbl{font-size:18px;line-height:24px;color:#5c5c5c}
+.t3{box-sizing:border-box;padding:32px;border-radius:20px;background:#fff;display:flex;flex-direction:column;gap:10px;min-height:220px}
+.sec{padding:112px 64px 0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:32px}
+.k{grid-column:span 2;font-family:"Clash Grotesk Variable",system-ui,sans-serif;font-weight:500;letter-spacing:-0.03em;font-size:96px;line-height:88px}
+.nowcard{opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity 140ms linear,transform 140ms ease}
+.now:hover .nowcard,.now:focus-within .nowcard{opacity:1;pointer-events:auto;transform:none}
+.now::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
+a:focus-visible,button:focus-visible{outline:2px solid #204f25;outline-offset:2px}
+.lg g{cursor:default}.lg g path{fill:#000;stroke:#000;stroke-width:0;transition:fill 160ms linear,stroke-width 160ms linear}.lg g rect{fill:#000;opacity:0;transition:opacity 160ms linear}.lg g:hover path{fill:#f3f1ea;stroke-width:1.2}.lg g:hover rect{opacity:1}
+.tile:has(img.soft){background:transparent}
+</style>
+
+<div style="width: 1440px; height: 3930px; box-sizing: border-box; padding: 0; background: #f3f1ea; display: flex; flex-direction: column; overflow: hidden">
+
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 64px">
+<a href="homepage-desktop.html" aria-label="TYRŠ — úvod" style="display: inline-flex"><img src="../../public/logos/logo-primary.svg" alt="TYRŠ" style="height: 44px; width: auto; display: block"></a>
+<nav style="display: flex; align-items: center; gap: 44px">
+<a href="program-desktop.html" class="navlink"><span class="rl"><i data-t="Program">Program</i></span></a>
+<a href="venue-desktop.html" class="navlink on" aria-current="page"><span class="rl"><i data-t="Venue">Venue</i></span></a>
+<a href="pronajem-desktop.html" class="navlink"><span class="rl"><i data-t="Pronájem">Pronájem</i></span></a>
+<a href="#" class="navlink"><span class="rl"><i data-t="EN">EN</i></span></a>
+</nav>
+<div class="now" style="position: relative">
+<button type="button" aria-label="Playlist měsíce — přehrát" style="display: inline-flex; align-items: center; gap: 12px; padding: 6px 20px 6px 6px; border-radius: 999px; border: 0; background: #000; color: #fff; font-family: inherit; cursor: pointer">
+<span style="width: 40px; height: 40px; border-radius: 999px; background: #79cb6f; display: inline-flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="#000"></path></svg></span>
+<span style="display: flex; flex-direction: column; text-align: left"><span style="font-size: 12px; line-height: 14px; opacity: 0.7">Říjen 26 · playlist</span><span style="font-size: 16px; line-height: 20px; font-weight: 500">[Dijon, Brian Eno…]</span></span>
+</button>
+<aside aria-label="Spotify přehrávač — playlist měsíce" class="nowcard" style="position: absolute; top: calc(100% + 8px); right: 0; z-index: 3; width: 352px; box-sizing: border-box; padding: 16px; border-radius: 12px; background: #204f25; color: #ffffff; display: flex; flex-direction: column; gap: 12px; font-family: 'General Sans', system-ui, sans-serif">
+<div style="display: flex; gap: 14px; align-items: center">
+<div style="width: 80px; height: 80px; flex-shrink: 0; border-radius: 6px; background: #163a1a; display: flex; align-items: flex-end; padding: 8px; box-sizing: border-box"><span class="d" style="font-size: 14px; line-height: 14px; color: #fff">Říjen<br>v Tyrši</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0; flex-grow: 1"><span style="font-size: 18px; line-height: 22px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Říjen v Tyrši</span><span style="font-size: 13px; line-height: 16px; opacity: 0.8">TYRŠ · 20 skladeb</span><span style="margin-top: 6px; font-size: 12px; line-height: 14px; opacity: 0.6">Uložit na Spotify</span></div>
+<span style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 999px; background: #fff; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="#000"></path></svg></span>
+</div>
+<div style="display: flex; flex-direction: column">
+<div style="display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14)"><span style="font-size: 13px; opacity: 0.6">1</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; line-height: 18px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">[Skladba]</span><span style="font-size: 13px; line-height: 16px; opacity: 0.7">[Interpret]</span></span><span style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em">NÁHLED</span></div>
+<div style="display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14)"><span style="font-size: 13px; opacity: 0.6">2</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; line-height: 18px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">[Skladba]</span><span style="font-size: 13px; line-height: 16px; opacity: 0.7">[Interpret]</span></span><span style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em">NÁHLED</span></div>
+<div style="display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14)"><span style="font-size: 13px; opacity: 0.6">3</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; line-height: 18px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">[Skladba]</span><span style="font-size: 13px; line-height: 16px; opacity: 0.7">[Interpret]</span></span><span style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em">NÁHLED</span></div>
+<div style="display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14)"><span style="font-size: 13px; opacity: 0.6">4</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; line-height: 18px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">[Skladba]</span><span style="font-size: 13px; line-height: 16px; opacity: 0.7">[Interpret]</span></span><span style="padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em">NÁHLED</span></div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding-top: 4px; font-size: 12px; line-height: 14px; opacity: 0.7"><span>Playlist měsíce</span><span style="font-weight: 600; letter-spacing: 0.02em">Spotify</span></div>
+</aside>
+</div>
+</header>
+
+<section id="kdo" class="sec" style="padding-top: 48px">
+<div class="k">Kdo</div>
+<div style="grid-column: span 10; display: flex; flex-direction: column; gap: 48px">
+<h1 class="d" style="margin: 0; font-size: 112px; line-height: 100px">Dům na Malé Straně, kde se během jednoho dne vystřídá jóga, zkouška kapely a večerní představení.</h1>
+<p style="margin: 0; max-width: 900px; font-size: 24px; line-height: 36px; color: #5c5c5c">[Dva odstavce o tom, kdo TYRŠ zakládá, proč a co má být jinak. Historie domu, vztah k sokolovně, k Malé Straně. Text dodají zakladatelé.]</p>
+<div style="padding: 24px; border-radius: 24px; background: #fff; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<span style="grid-column: span 3; font-size: 18px; line-height: 24px; font-weight: 500; color: #5c5c5c">Zakladatelé</span>
+<div class="tile" style="height: 520px"><img src="../img/placeholder-img_dijon.jpg" alt="" class="soft" style="object-position: center top"><span class="sc soft"></span><span style="position: absolute; left: 24px; right: 24px; bottom: 20px; color: #fff; display: flex; flex-direction: column; gap: 4px"><span class="d" style="font-size: 48px; line-height: 48px">[Jméno]</span><span style="font-size: 18px; line-height: 24px; opacity: 0.85">[Role — dramaturgie, provoz, produkce]</span></span></div>
+<div class="tile" style="height: 520px"><img src="../img/placeholder-img_paint.jpg" alt="" class="soft"><span class="sc soft"></span><span style="position: absolute; left: 24px; right: 24px; bottom: 20px; color: #fff; display: flex; flex-direction: column; gap: 4px"><span class="d" style="font-size: 48px; line-height: 48px">[Jméno]</span><span style="font-size: 18px; line-height: 24px; opacity: 0.85">[Role]</span></span></div>
+<div class="tile" style="height: 520px"><img src="../img/placeholder-img_eno.jpg" alt="" class="soft" style="object-position: center top"><span class="sc soft"></span><span style="position: absolute; left: 24px; right: 24px; bottom: 20px; color: #fff; display: flex; flex-direction: column; gap: 4px"><span class="d" style="font-size: 48px; line-height: 48px">[Jméno]</span><span style="font-size: 18px; line-height: 24px; opacity: 0.85">[Role]</span></span></div>
+</div>
+</div>
+</section>
+
+<section aria-label="Motto" style="margin-top: 112px; padding: 96px 64px; background: #f2dd6e; color: #000">
+<blockquote style="margin: 0; max-width: 1100px; font-family: 'Hedvig Letters Serif', Georgia, serif; font-size: 64px; line-height: 76px">„[Jedna věta, která říká, proč to děláme.]“</blockquote>
+</section>
+
+<section id="kde" aria-label="Kde" style="position: relative; height: 720px; overflow: hidden; background: #e7e3d8">
+<img src="../../public/images/map-mala-strana.jpg" alt="Mapa Malé Strany s fotkou domu TYRŠ u Čertovky" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 35% 45%; display: block">
+<div class="d" style="position: absolute; left: 64px; top: 48px; font-size: 96px; line-height: 88px">Kde</div>
+<div style="position: absolute; right: 48px; bottom: 48px; width: 520px; box-sizing: border-box; padding: 40px; border-radius: 24px; background: #fff; display: flex; flex-direction: column; gap: 20px; align-items: flex-start">
+<span style="font-size: 18px; line-height: 24px; font-weight: 500; color: #5c5c5c">Adresa</span>
+<span class="d" style="font-size: 64px; line-height: 60px; color: #000">Nosticova 634/2<br>118 00 Praha 1</span>
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Nosticova+634%2F2%2C+118+00+Praha+1" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 56px; padding: 0 28px; border-radius: 999px; background: #000; color: #fff; font-size: 18px; font-weight: 500; text-decoration: none">Otevřít v Google Maps →</a>
+</div>
+</section>
+
+
+<section id="jak" class="sec">
+<div class="k">Jak</div>
+<div style="grid-column: span 10; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div class="t3"><span class="lbl">Otevírací doba</span><span class="d" style="font-size: 32px; line-height: 34px">Bar a foyer denně [16:00–24:00]</span><span style="font-size: 16px; line-height: 24px; color: #5c5c5c">Sál podle programu, dveře hodinu před začátkem.</span></div>
+<div class="t3"><span class="lbl">Vstupenky</span><span class="d" style="font-size: 32px; line-height: 34px">Online nebo na baru</span><span style="font-size: 16px; line-height: 24px; color: #5c5c5c">Platba kartou i hotově.</span></div>
+<div class="t3"><span class="lbl">Bezbariérovost</span><span class="d" style="font-size: 32px; line-height: 34px">Sál, bar i toalety bez schodů</span><span style="font-size: 16px; line-height: 24px; color: #5c5c5c">Napište nám předem a připravíme místo.</span></div>
+<div class="t3"><span class="lbl">Děti</span><span class="d" style="font-size: 32px; line-height: 34px">Vítané</span><span style="font-size: 16px; line-height: 24px; color: #5c5c5c">Věková hranice je vždy u akce. Přebalovací pult na toaletách.</span></div>
+<div class="t3"><span class="lbl">Umělci a pořadatelé</span><span class="d" style="font-size: 32px; line-height: 34px">Chceš u nás hrát?</span><a href="pronajem-desktop.html" style="font-size: 16px; line-height: 24px; font-weight: 500">Pronájem prostor →</a></div>
+<div class="t3" style="background: #f2dd6e; color: #000"><span class="lbl">Kontakt</span><a href="mailto:booking@tyrs.art" class="d" style="font-size: 32px; line-height: 34px; color: #000; text-decoration: none">booking@tyrs.art</a><span style="font-size: 16px; line-height: 24px; color: #5c5c5c">Program, pronájem i dotazy.</span></div>
+</div>
+</section>
+
+<footer style="margin-top: 96px; padding: 48px 64px 40px; display: flex; flex-direction: column; gap: 40px; border-top: 2px solid #000">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #5c5c5c; margin-bottom: 6px">Menu</span><a href="homepage-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Homepage</a><a href="program-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Program</a><a href="venue-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Venue</a><a href="pronajem-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Pronájem</a></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #5c5c5c; margin-bottom: 6px">Sleduj nás</span><a href="https://www.instagram.com/tyrs.art/" target="_blank" rel="noopener" style="font-size: 22px; line-height: 32px; text-decoration: none">Instagram</a><a href="#" style="font-size: 22px; line-height: 32px; text-decoration: none">Spotify</a><a href="program-desktop.html" style="font-size: 22px; line-height: 32px; text-decoration: none">Newsletter</a></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #5c5c5c; margin-bottom: 6px">Kde</span><span style="font-size: 22px; line-height: 32px">Nosticova 634/2</span><span style="font-size: 22px; line-height: 32px">Malá Strana</span><span style="font-size: 22px; line-height: 32px">118 00 Praha 1</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #5c5c5c; margin-bottom: 6px">Napiš nám</span><a href="mailto:booking@tyrs.art" style="font-size: 22px; line-height: 32px; text-decoration: none">booking@tyrs.art</a></div>
+</div>
+<svg class="lg" xmlns="http://www.w3.org/2000/svg" viewBox="260 1375 331.5 85.5" role="img" aria-label="TYRŠ" style="width: 100%; height: auto; display: block"><g><rect x="265.6" y="1380.31" width="74.663" height="74.6599999999999" rx="7"/><path d="M330.942 1379.71C332.727 1379.71 333.619 1379.71 334.362 1379.85C337.585 1380.46 340.106 1382.99 340.721 1386.21C340.862 1386.95 340.863 1387.84 340.863 1389.63V1445.65C340.863 1447.43 340.862 1448.33 340.721 1449.07C340.106 1452.29 337.585 1454.81 334.362 1455.43C333.619 1455.57 332.727 1455.57 330.942 1455.57H306.695V1415.82H322.884V1408.93H282.91V1415.82H299.099V1455.57H274.92C273.136 1455.57 272.244 1455.57 271.501 1455.43C268.278 1454.81 265.757 1452.29 265.142 1449.07C265 1448.33 265 1447.43 265 1445.65V1389.63C265 1387.84 265 1386.95 265.142 1386.21C265.756 1382.99 268.278 1380.46 271.501 1379.85C272.244 1379.71 273.136 1379.71 274.92 1379.71H330.942Z"></path></g><g><rect x="347.463" y="1380.31" width="74.66399999999997" height="74.6599999999999" rx="7"/><path d="M412.806 1379.71C414.59 1379.71 415.483 1379.71 416.226 1379.85C419.449 1380.46 421.969 1382.99 422.584 1386.21C422.726 1386.95 422.727 1387.84 422.727 1389.63V1445.65C422.727 1447.43 422.726 1448.33 422.584 1449.07C421.969 1452.29 419.449 1454.81 416.226 1455.43C415.483 1455.57 414.59 1455.57 412.806 1455.57H386.746V1438.96L405.277 1408.93H396.615L387.67 1423.63L383.339 1431.08H382.842L378.439 1423.63L369.423 1408.93H360.689L379.149 1438.82V1455.57H356.783C354.999 1455.57 354.107 1455.57 353.364 1455.43C350.141 1454.81 347.62 1452.29 347.005 1449.07C346.863 1448.33 346.863 1447.43 346.863 1445.65V1389.63C346.863 1387.84 346.863 1386.95 347.005 1386.21C347.62 1382.99 350.141 1380.46 353.364 1379.85C354.107 1379.71 354.999 1379.71 356.783 1379.71H412.806Z"></path></g><g><rect x="429.327" y="1380.31" width="74.663" height="74.6599999999999" rx="7"/><path d="M494.669 1379.71C496.453 1379.71 497.346 1379.71 498.089 1379.85C501.312 1380.46 503.832 1382.99 504.447 1386.21C504.589 1386.95 504.59 1387.84 504.59 1389.63V1445.65C504.59 1447.43 504.589 1448.33 504.447 1449.07C503.832 1452.29 501.312 1454.81 498.089 1455.43C497.346 1455.57 496.453 1455.57 494.669 1455.57H485.805L478.935 1442.79C477.16 1439.53 475.101 1437.4 471.622 1436.26V1435.69C480 1435.27 484.828 1430.51 484.828 1422.63C484.828 1413.61 478.225 1408.43 467.717 1408.43H447.269V1455.57H438.646C436.862 1455.57 435.97 1455.57 435.228 1455.43C432.004 1454.81 429.483 1452.29 428.868 1449.07C428.726 1448.33 428.727 1447.43 428.727 1445.65V1389.63C428.727 1387.84 428.726 1386.95 428.868 1386.21C429.483 1382.99 432.004 1380.46 435.228 1379.85C435.97 1379.71 436.862 1379.71 438.646 1379.71H494.669Z"></path><path d="M460.546 1437.68C466.226 1437.68 468.214 1439.6 470.415 1443.72L476.925 1455.57H454.937V1437.68H460.546Z"></path><path d="M468.64 1415.32C474.817 1415.32 477.16 1417.73 477.16 1423.34C477.16 1429.09 474.817 1431.36 468.64 1431.36H454.937V1415.32H468.64Z"></path></g><g><rect x="511.19" y="1380.31" width="74.663" height="74.6599999999999" rx="7"/><path fill-rule="evenodd" clip-rule="evenodd" d="M576.532 1379.71C578.316 1379.71 579.209 1379.71 579.952 1379.85C583.175 1380.46 585.696 1382.99 586.311 1386.21C586.452 1386.95 586.453 1387.84 586.453 1389.63V1445.65C586.453 1447.43 586.452 1448.33 586.311 1449.07C585.696 1452.29 583.175 1454.81 579.952 1455.43C579.209 1455.57 578.316 1455.57 576.532 1455.57H559.128C564.706 1453.25 567.273 1448.72 567.273 1443.58C567.273 1436.41 563.369 1431.93 554.423 1430.09L546.328 1428.38C539.796 1426.96 537.88 1425.76 537.88 1421.42C537.88 1417.24 540.72 1415.25 547.748 1415.25C556.268 1415.25 558.824 1418.3 558.824 1424.12V1424.9H566.351V1424.05C566.35 1415.6 561.096 1408.22 547.962 1408.22C535.679 1408.22 530.212 1414.75 530.212 1421.78C530.212 1429.31 534.614 1433.28 542.778 1434.84L550.872 1436.48C558.185 1437.97 559.605 1439.53 559.605 1443.86C559.605 1448.26 557.049 1450.18 550.021 1450.18C540.081 1450.18 537.596 1447.2 537.596 1441.3V1440.52H530.069V1441.73C530.069 1448.12 532.974 1453.13 539.383 1455.57H520.51C518.726 1455.57 517.834 1455.57 517.091 1455.43C513.868 1454.81 511.346 1452.29 510.731 1449.07C510.59 1448.33 510.59 1447.43 510.59 1445.65V1389.63C510.59 1387.84 510.59 1386.95 510.731 1386.21C511.346 1382.99 513.867 1380.46 517.091 1379.85C517.834 1379.71 518.726 1379.71 520.51 1379.71H576.532ZM562.28 1398.88L568.248 1401.13L577.741 1394.07L572.163 1391.96L566.325 1396.52L564.185 1388.95L558.606 1386.84L562.28 1398.88Z"></path></g></svg>
+</footer>
+
+</div>
+
+
+</body>
+</html>

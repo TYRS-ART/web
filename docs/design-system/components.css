@@ -1,0 +1,166 @@
+/* TYRŠ design system — component stylesheet (web, Oct 2026).
+   Loaded after tokens.css; values resolve to tokens. */
+
+.tyrs-btn:focus-visible, .tyrs-tag:focus-visible, .tyrs-pill:focus-visible,
+.tyrs-card:focus-visible, .tyrs-row:focus-visible, .tyrs-nav__link:focus-visible,
+.tyrs-nav__now:focus-visible, .tyrs-footer a:focus-visible {
+  outline: 2px solid var(--focus-ring); outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- Button */
+.tyrs-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 56px; padding: 0 28px; border: 2px solid transparent; border-radius: var(--radius-pill);
+  font-family: var(--font-sans); font-size: 18px; line-height: 24px; font-weight: 500;
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color 150ms linear, color 150ms linear, border-color 150ms linear;
+}
+.tyrs-btn--primary { background: var(--surface-inverse); color: var(--ink-inverse); }
+.tyrs-btn--primary:hover { background: var(--green-deep); color: var(--constant-white); }
+.tyrs-btn--secondary { background: transparent; color: var(--ink); border-color: var(--line); }
+.tyrs-btn--secondary:hover { background: var(--surface-inverse); color: var(--ink-inverse); }
+.tyrs-btn--commit { background: var(--green-live); color: var(--constant-black); }
+.tyrs-btn--commit:hover { border-color: var(--constant-black); }
+.tyrs-btn--listen { background: var(--green-deep); color: var(--constant-white); }
+.tyrs-btn--small { min-height: 44px; padding: 0 18px; font-size: 15px; line-height: 20px; }
+.tyrs-btn__icon { width: 16px; height: 16px; display: block; fill: currentColor; }
+
+/* ------------------------------------------------- Category colour + drift */
+.tyrs-cat { background-size: 300% 300%; animation: tyrs-drift 10s ease-in-out infinite alternate; color: var(--constant-black); }
+.tyrs-cat--hudba   { background-color: var(--cat-hudba);   background-image: linear-gradient(115deg, var(--cat-hudba-tint) 0%, var(--cat-hudba-shade) 45%, var(--cat-hudba-tint) 100%); }
+.tyrs-cat--divadlo { background-color: var(--cat-divadlo); background-image: linear-gradient(115deg, var(--cat-divadlo-tint) 0%, var(--cat-divadlo-shade) 45%, var(--cat-divadlo-tint) 100%); animation-duration: 12s; }
+.tyrs-cat--tanec   { background-color: var(--cat-tanec);   background-image: linear-gradient(115deg, var(--cat-tanec-tint) 0%, var(--cat-tanec-shade) 45%, var(--cat-tanec-tint) 100%); animation-duration: 9s; }
+.tyrs-cat--lekce   { background-color: var(--cat-lekce);   background-image: linear-gradient(115deg, var(--cat-lekce-tint) 0%, var(--cat-lekce-shade) 45%, var(--cat-lekce-tint) 100%); animation-duration: 13s; }
+.tyrs-cat--pohyb   { background: var(--butter); animation: none; }
+.tyrs-cat--neutral { background: var(--surface-sunken); animation: none; }
+@keyframes tyrs-drift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 30%; } 100% { background-position: 30% 100%; } }
+@media (prefers-reduced-motion: reduce) { .tyrs-cat { animation: none; } }
+
+/* ------------------------------------------------------------------- Tag */
+.tyrs-tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+  border: 3px solid transparent; border-radius: var(--radius-pill);
+  font-family: var(--font-sans); font-size: 14px; line-height: 16px; font-weight: 500;
+  white-space: nowrap; text-decoration: none; cursor: default;
+}
+a.tyrs-tag, button.tyrs-tag { cursor: pointer; font-family: var(--font-sans); }
+.tyrs-tag--hudba:hover,   .tyrs-tag--hudba[aria-pressed="true"]   { border-color: var(--cat-hudba-edge); }
+.tyrs-tag--divadlo:hover, .tyrs-tag--divadlo[aria-pressed="true"] { border-color: var(--cat-divadlo-edge); }
+.tyrs-tag--tanec:hover,   .tyrs-tag--tanec[aria-pressed="true"]   { border-color: var(--cat-tanec-edge); }
+.tyrs-tag--lekce:hover,   .tyrs-tag--lekce[aria-pressed="true"]   { border-color: var(--cat-lekce-edge); }
+span.tyrs-tag:hover { border-color: transparent; }
+.tyrs-tag[aria-pressed="true"]::after { content: "\2713"; margin-left: 4px; font-weight: 700; }
+.tyrs-tag[data-dim="true"] { opacity: 0.4; }
+.tyrs-tag--focus { background: var(--constant-white); color: var(--constant-black); padding: 2px 8px; font-size: 12px; border-width: 0; animation: none; }
+.tyrs-tag__dot { width: 7px; height: 7px; border-radius: 99px; display: inline-block; }
+
+/* ------------------------------------------------------- Highlight pill */
+.tyrs-pill {
+  display: inline-flex; align-items: center; vertical-align: middle; position: relative; top: -0.06em;
+  margin: 0 0.08em; padding: 0.08em 0.4em; line-height: 1; font-size: 0.72em;
+  border: 3px solid transparent; border-radius: var(--radius-pill); text-decoration: none;
+  font-family: inherit; font-weight: inherit; letter-spacing: inherit; cursor: pointer;
+}
+.tyrs-pill.tyrs-cat--hudba:hover   { border-color: var(--cat-hudba-edge); }
+.tyrs-pill.tyrs-cat--divadlo:hover { border-color: var(--cat-divadlo-edge); }
+.tyrs-pill.tyrs-cat--tanec:hover   { border-color: var(--cat-tanec-edge); }
+.tyrs-pill.tyrs-cat--lekce:hover   { border-color: var(--cat-lekce-edge); }
+
+/* ------------------------------------------------- Feather + duotone */
+.tyrs-feather {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%), linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%), linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%);
+  mask-composite: intersect;
+}
+.tyrs-duo { position: absolute; inset: 0; pointer-events: none; }
+.tyrs-duo::before, .tyrs-duo::after { content: ""; position: absolute; inset: 0; transition: opacity 450ms ease; }
+.tyrs-duo::before { background: var(--duotone-shadow); mix-blend-mode: lighten; }
+.tyrs-duo::after  { background: var(--duotone-light);  mix-blend-mode: multiply; }
+/* Mask the blend layers themselves: a mask on .tyrs-duo would isolate the blending. */
+.tyrs-card .tyrs-duo::before, .tyrs-card .tyrs-duo::after { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%), linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%), linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%); mask-composite: intersect; }
+.tyrs-is-duo img { filter: grayscale(1) contrast(1.08); transition: filter 450ms ease, transform 300ms ease; }
+.tyrs-is-duo:hover img, .tyrs-is-duo[data-reveal="true"] img { filter: none; }
+.tyrs-is-duo:hover .tyrs-duo::before, .tyrs-is-duo:hover .tyrs-duo::after,
+.tyrs-is-duo[data-reveal="true"] .tyrs-duo::before, .tyrs-is-duo[data-reveal="true"] .tyrs-duo::after { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .tyrs-duo::before, .tyrs-duo::after, .tyrs-is-duo img { transition: none; } }
+
+/* -------------------------------------------------------------- Event card */
+.tyrs-card {
+  position: relative; display: block; overflow: hidden; min-height: 280px;
+  border-radius: var(--radius-lg); color: var(--constant-white); text-decoration: none;
+}
+.tyrs-card__media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.tyrs-card:hover .tyrs-card__media { transform: scale(1.03); }
+.tyrs-card__scrim { position: absolute; inset: 0; background: linear-gradient(to top, var(--scrim) 0%, rgba(0,0,0,0) 55%); }
+.tyrs-card__meta { position: absolute; top: 20px; left: 20px; display: inline-flex; gap: 8px; z-index: 1; }
+.tyrs-card__badge {
+  display: inline-flex; align-items: center; padding: 8px 14px; border-radius: var(--radius-xs);
+  background: var(--constant-white); color: var(--constant-black);
+  font-family: var(--font-sans); font-size: 16px; line-height: 20px; font-weight: 500;
+}
+.tyrs-card__title {
+  position: absolute; left: 28px; right: 28px; bottom: 24px; z-index: 1;
+  font-family: var(--font-display); font-weight: 500; letter-spacing: -0.03em;
+  font-size: 72px; line-height: 66px; color: var(--constant-white);
+}
+.tyrs-card:has(img) { background: transparent; }
+.tyrs-card--type { display: flex; align-items: flex-end; padding: 28px; color: var(--constant-black); }
+.tyrs-card--type .tyrs-card__title { position: static; color: var(--constant-black); }
+
+/* ------------------------------------------------------------ Program row */
+.tyrs-row {
+  display: grid; grid-template-columns: 160px 1fr auto 160px; align-items: center; gap: 32px;
+  padding: 28px 0; border-top: 2px solid var(--line); text-decoration: none; color: var(--ink);
+}
+.tyrs-row:hover { color: var(--ink); }
+.tyrs-row__day { font-family: var(--font-sans); font-size: 20px; line-height: 24px; color: var(--ink-muted); }
+.tyrs-row__main { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.tyrs-row__title { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.03em; font-size: 56px; line-height: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tyrs-row__time { font-family: var(--font-sans); font-size: 32px; line-height: 36px; font-variant-numeric: tabular-nums; }
+.tyrs-row__thumb { position: relative; width: 160px; height: 100px; border-radius: var(--radius-sm); overflow: hidden; background: var(--surface-sunken); }
+.tyrs-row__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ------------------------------------------------------------------- Nav */
+.tyrs-nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 0; font-family: var(--font-sans); }
+.tyrs-nav__home { display: inline-flex; text-decoration: none; }
+.tyrs-nav__mark { display: block; height: 44px; width: auto; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 500; color: var(--ink); }
+.tyrs-nav__links { display: flex; align-items: center; gap: 44px; }
+.tyrs-nav__link {
+  position: relative; display: inline-flex; align-items: center; min-height: 48px; padding: 0 4px;
+  font-family: var(--font-display); font-size: 26px; line-height: 30px; font-weight: 500; letter-spacing: -0.02em;
+  color: var(--ink); text-decoration: none;
+}
+.tyrs-nav__link:hover { color: var(--ink); }
+.tyrs-nav__roll { display: block; height: 30px; overflow: hidden; }
+.tyrs-nav__roll i { display: block; font-style: normal; transition: transform 480ms cubic-bezier(.7,0,.2,1); }
+.tyrs-nav__roll i::after { content: attr(data-t); display: block; }
+.tyrs-nav__link:hover .tyrs-nav__roll i { transform: translateY(-30px); }
+.tyrs-nav__link::after {
+  content: ""; position: absolute; left: 4px; right: 4px; bottom: 0; height: 4px; border-radius: 2px;
+  background: var(--ink); transform: scaleX(0); transform-origin: right center; transition: transform 480ms cubic-bezier(.7,0,.2,1);
+}
+.tyrs-nav__link:hover::after, .tyrs-nav__link[aria-current="page"]::after { transform: scaleX(1); transform-origin: left center; }
+.tyrs-nav__link[aria-current="page"]::after { animation: tyrs-navin 700ms 200ms cubic-bezier(.7,0,.2,1) both; }
+@keyframes tyrs-navin { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.tyrs-nav__now {
+  display: inline-flex; align-items: center; gap: 12px; padding: 6px 20px 6px 6px;
+  border-radius: var(--radius-pill); background: var(--surface-inverse); color: var(--ink-inverse); text-decoration: none;
+}
+.tyrs-nav__disc { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex: none; border-radius: var(--radius-pill); background: var(--green-live); }
+.tyrs-nav__disc svg { width: 13px; height: 13px; fill: var(--constant-black); display: block; }
+.tyrs-nav__now-label { display: block; font-size: 12px; line-height: 14px; opacity: 0.7; }
+.tyrs-nav__now-title { display: block; font-size: 16px; line-height: 20px; font-weight: 500; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .tyrs-nav__roll i, .tyrs-nav__link::after { transition: none; animation: none; } }
+
+/* ---------------------------------------------------------------- Footer */
+.tyrs-footer { display: flex; flex-direction: column; gap: 40px; padding: 48px 0 40px; border-top: 2px solid var(--line); font-family: var(--font-sans); }
+.tyrs-footer__cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 32px; }
+.tyrs-footer__col { display: flex; flex-direction: column; gap: 6px; }
+.tyrs-footer__head { margin-bottom: 6px; font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); }
+.tyrs-footer__item { font-size: 22px; line-height: 32px; color: var(--ink); text-decoration: none; }
+.tyrs-footer__logo { width: 100%; height: auto; display: block; }
+.tyrs-footer__logo g path { fill: var(--ink); stroke: var(--ink); stroke-width: 0; transition: fill 160ms linear, stroke-width 160ms linear; }
+.tyrs-footer__logo g rect { fill: var(--ink); opacity: 0; transition: opacity 160ms linear; }
+.tyrs-footer__logo g:hover path { fill: var(--surface); stroke-width: 1.2; }
+.tyrs-footer__logo g:hover rect { opacity: 1; }
