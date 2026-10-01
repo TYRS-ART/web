@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/check-placeholders.mjs",
     "start": "next start",
     "lint": "eslint",
     "type-check": "next typegen && tsc --noEmit",
     "seed": "sanity exec scripts/seed.ts --with-user-token",
-    "typegen": "sanity schema extract --path src/sanity/extract.json --enforce-required-fields --force && sanity typegen generate"
+    "typegen": "sanity schema extract --path src/sanity/extract.json --enforce-required-fields --force && sanity typegen generate",
+    "check:placeholders": "node scripts/check-placeholders.mjs --force"
   },
   "dependencies": {
     "@portabletext/react": "^8.0.1",

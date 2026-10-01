@@ -1,0 +1,45 @@
+{
+  "privacy": {
+    "title": "Privacy",
+    "updated": "Effective 1 October 2026",
+    "sections": [
+      {
+        "h": "Who processes your data",
+        "p": [
+          "The website tyrs.art is run by TYRŠ, Nosticova 634/2, 118 00 Prague 1. For anything about personal data, write to {email}."
+        ]
+      },
+      {
+        "h": "Rental enquiries",
+        "p": [
+          "When you fill in the form on the Rental page we receive your name, email, phone and, if you give them, your organisation and details of the event. We use them only to handle your enquiry and arrange the event. We keep them while we talk and then for at most three years in case of future events, unless you ask us to delete them sooner.",
+          "The form is sent by email through the Resend service."
+        ]
+      },
+      {
+        "h": "Newsletter",
+        "p": [
+          "If you subscribe, we store your email address in Mailchimp and send you the programme. You confirm the subscription by email and can unsubscribe at any time with the link in every newsletter."
+        ]
+      },
+      {
+        "h": "Visitor statistics",
+        "p": [
+          "We measure visits with Plausible Analytics, which uses no cookies and stores nothing that could identify you. That is why we don’t ask for cookie consent."
+        ]
+      },
+      {
+        "h": "Tickets and sign-ups",
+        "p": [
+          "Tickets and course sign-ups are handled by external services we link to. They process the details you enter there under their own terms."
+        ]
+      },
+      {
+        "h": "Your rights",
+        "p": [
+          "You have the right to know what data we hold about you, to have it corrected or deleted, to restrict processing and to object. Just write to {email}. If we can’t agree, you can contact the Czech data protection authority (uoou.gov.cz)."
+        ]
+      }
+    ]
+  }
+}

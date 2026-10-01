@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { EventMosaic } from "@/components/events/EventMosaic";
@@ -9,9 +10,16 @@ import { Ticker } from "@/components/home/Ticker";
 import { MapSection } from "@/components/MapSection";
 import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";
+import { alternates } from "@/lib/metadata";
 import { addDays, dayOffset, pragueDay, pragueDayRange } from "@/lib/dates";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { HOME_QUERY } from "@/sanity/queries/home";
+
+export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
+  const locale = (await params).locale as Locale;
+  const tr = await getTranslations({ locale, namespace: "home" });
+  return { title: { absolute: "TYRŠ" }, description: tr("metaDescription"), alternates: alternates("/", locale) };
+}
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const locale = (await params).locale as Locale;

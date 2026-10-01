@@ -59,6 +59,7 @@ export async function Footer({
           <Column title={tr("footer.write")}>
             {settings.email && <a href={`mailto:${settings.email}`} className={item}>{settings.email}</a>}
             {settings.phone && <a href={`tel:${settings.phone.replace(/\s/g, "")}`} className={item}>{settings.phone}</a>}
+            <Link href="/ochrana-soukromi" className={`${item} text-muted`}>{tr("footer.privacy")}</Link>
           </Column>
         )}
       </div>
