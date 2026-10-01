@@ -657,11 +657,26 @@ export type LAYOUT_QUERY_RESULT = {
   } | null;
 };
 
+// Source: src/sanity/queries/sitemap.ts
+// Variable: SITEMAP_QUERY
+// Query: {  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }}
+export type SITEMAP_QUERY_RESULT = {
+  events: Array<{
+    slug: LocaleSlug;
+    _updatedAt: string;
+  }>;
+  courses: Array<{
+    slug: LocaleSlug;
+    _updatedAt: string;
+  }>;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course"\n    && (!defined(runStart) || runStart <= $weekEnd)\n    && (!defined(runEnd) || runEnd >= $weekStart)\n  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }\n}': HOME_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
+    '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

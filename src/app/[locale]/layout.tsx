@@ -12,6 +12,8 @@ import { pragueDay, pragueDayRange } from "@/lib/dates";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { LAYOUT_QUERY } from "@/sanity/queries/layout";
 
+import Script from "next/script";
+
 import { clash, generalSans, hedvig } from "../fonts";
 import "../globals.css";
 
@@ -44,6 +46,14 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   return (
     <html lang={locale} className={`${clash.variable} ${generalSans.variable} ${hedvig.variable}`}>
       <body className="flex min-h-dvh flex-col">
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <Script
+            defer
+            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+            src="https://plausible.io/js/script.outbound-links.js"
+            strategy="afterInteractive"
+          />
+        )}
         <NextIntlClientProvider>
           <AlternatesProvider>
             <a

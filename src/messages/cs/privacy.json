@@ -1,0 +1,45 @@
+{
+  "privacy": {
+    "title": "Ochrana soukromí",
+    "updated": "Platné od 1. 10. 2026",
+    "sections": [
+      {
+        "h": "Kdo údaje zpracovává",
+        "p": [
+          "Web tyrs.art provozuje TYRŠ, Nosticova 634/2, 118 00 Praha 1. S čímkoli kolem osobních údajů nám napiš na {email}."
+        ]
+      },
+      {
+        "h": "Poptávka pronájmu",
+        "p": [
+          "Když vyplníš formulář na stránce Pronájem, dostaneme jméno, e-mail, telefon, případně organizaci a podrobnosti o akci. Použijeme je jen k vyřízení poptávky a k domluvě akce. Uchováváme je po dobu jednání a pak nejvýše tři roky kvůli případným dalším akcím, pokud nás nepožádáš o dřívější smazání.",
+          "Formulář odesíláme e-mailem přes službu Resend."
+        ]
+      },
+      {
+        "h": "Newsletter",
+        "p": [
+          "Pokud se přihlásíš k odběru, ukládáme tvůj e-mail ve službě Mailchimp a posíláme ti program. Odběr musíš potvrdit v e-mailu a odhlásit se můžeš kdykoli odkazem v každém newsletteru."
+        ]
+      },
+      {
+        "h": "Statistiky návštěvnosti",
+        "p": [
+          "Návštěvnost měříme službou Plausible Analytics, která nepoužívá cookies a neukládá žádné údaje, podle kterých by tě šlo identifikovat. Proto po tobě nechceme souhlas s cookies."
+        ]
+      },
+      {
+        "h": "Vstupenky a přihlášky",
+        "p": [
+          "Vstupenky a přihlášky na kurzy vyřizují externí služby, na které z webu odkazujeme. Údaje, které tam zadáš, zpracovávají podle svých vlastních pravidel."
+        ]
+      },
+      {
+        "h": "Tvoje práva",
+        "p": [
+          "Máš právo vědět, jaké údaje o tobě máme, nechat je opravit nebo smazat, omezit jejich zpracování a vznést námitku. Stačí napsat na {email}. Pokud by ses s námi nedohodl(a), můžeš se obrátit na Úřad pro ochranu osobních údajů (uoou.gov.cz)."
+        ]
+      }
+    ]
+  }
+}

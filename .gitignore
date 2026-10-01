@@ -43,3 +43,6 @@ next-env.d.ts
 
 # sanity
 /src/sanity/extract.json
+
+# agent worktrees
+/.claude/worktrees/
