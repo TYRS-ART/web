@@ -530,6 +530,148 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
   | Geopoint;
 
+// Source: src/sanity/queries/courses.ts
+// Variable: COURSES_PAGE_QUERY
+// Query: *[_type == "course" && (!defined(runEnd) || runEnd >= $from)] | order(runStart asc){   _id, title, slug, focus, audienceTags, level, allowSingleLesson,  "lecturer": lecturer->name,  slots[]{ _key, weekday, startTime, endTime },  runStart, runEnd, lessonsCount,  "lessonDates": lessonDates[].date,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } }
+export type COURSES_PAGE_QUERY_RESULT = Array<{
+  _id: string;
+  title: LocaleString | null;
+  slug: LocaleSlug;
+  focus: "hudba" | "pohyb" | "tanec" | null;
+  audienceTags: Array<string> | null;
+  level: LocaleString | null;
+  allowSingleLesson: boolean | null;
+  lecturer: string | null;
+  slots: Array<{
+    _key: string;
+    weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+    startTime: string;
+    endTime: string;
+  }>;
+  runStart: string | null;
+  runEnd: string | null;
+  lessonsCount: number | null;
+  lessonDates: Array<string> | null;
+  heroImage: {
+    asset: SanityImageAssetReference | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    alt: LocaleString | null;
+    lqip: string | null;
+    dimensions: SanityImageDimensions | null;
+  } | null;
+}>;
+
+// Source: src/sanity/queries/courses.ts
+// Variable: COURSE_QUERY
+// Query: {  "course": *[_type == "course" && (    slug[$locale].current == $slug || (!defined(slug[$locale].current) && slug.cs.current == $slug)  )][0]{    _id, title, slug, focus, audienceTags, level,    slots[]{ _key, weekday, startTime, endTime },    runStart, runEnd, lessonsCount,    lessonDates[]{ _key, date, isTrial },    coursePrice, allowSingleLesson, singleLessonPrice, trialPrice,    bookingUrl, singleLessonBookingUrl, capacity, placesLeft,    description, forWhom, whatToBring, goodToKnow,    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions },    lecturer->{ name, role, bio, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },    space->{ name }  },  "others": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)] | order(runStart asc){   _id, title, slug, focus, audienceTags, level, allowSingleLesson,  "lecturer": lecturer->name,  slots[]{ _key, weekday, startTime, endTime },  runStart, runEnd, lessonsCount,  "lessonDates": lessonDates[].date,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },  "address": *[_id == "settings"][0].address{ street, district, postalCode, city }}
+export type COURSE_QUERY_RESULT = {
+  course: {
+    _id: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    focus: "hudba" | "pohyb" | "tanec" | null;
+    audienceTags: Array<string> | null;
+    level: LocaleString | null;
+    slots: Array<{
+      _key: string;
+      weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+      startTime: string;
+      endTime: string;
+    }>;
+    runStart: string | null;
+    runEnd: string | null;
+    lessonsCount: number | null;
+    lessonDates: Array<{
+      _key: string;
+      date: string;
+      isTrial: boolean | null;
+    }> | null;
+    coursePrice: number | null;
+    allowSingleLesson: boolean | null;
+    singleLessonPrice: number | null;
+    trialPrice: number | null;
+    bookingUrl: string;
+    singleLessonBookingUrl: string | null;
+    capacity: number | null;
+    placesLeft: number | null;
+    description: LocaleBlockContent | null;
+    forWhom: LocaleText | null;
+    whatToBring: LocaleText | null;
+    goodToKnow: Array<
+      {
+        _key: string;
+      } & LocaleString
+    > | null;
+    heroImage: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    } | null;
+    lecturer: {
+      name: string;
+      role: LocaleString | null;
+      bio: LocaleText | null;
+      photo: {
+        asset: SanityImageAssetReference | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+        alt: LocaleString | null;
+        lqip: string | null;
+        dimensions: SanityImageDimensions | null;
+      } | null;
+    } | null;
+    space: {
+      name: LocaleString | null;
+    } | null;
+  } | null;
+  others: Array<{
+    _id: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    focus: "hudba" | "pohyb" | "tanec" | null;
+    audienceTags: Array<string> | null;
+    level: LocaleString | null;
+    allowSingleLesson: boolean | null;
+    lecturer: string | null;
+    slots: Array<{
+      _key: string;
+      weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+      startTime: string;
+      endTime: string;
+    }>;
+    runStart: string | null;
+    runEnd: string | null;
+    lessonsCount: number | null;
+    lessonDates: Array<string> | null;
+    heroImage: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    } | null;
+  }>;
+  address: null | {
+    street: string | null;
+    district: string | null;
+    postalCode: string | null;
+    city: string | null;
+  };
+};
+
+// Source: src/sanity/queries/courses.ts
+// Variable: COURSE_SLUGS_QUERY
+// Query: *[_type == "course" && defined(slug.cs.current)]{ "cs": slug.cs.current, "en": slug.en.current }
+export type COURSE_SLUGS_QUERY_RESULT = Array<{
+  cs: string | null;
+  en: string | null;
+}>;
+
 // Source: src/sanity/queries/home.ts
 // Variable: HOME_QUERY
 // Query: {  "settings": *[_id == "settings"][0]{    heroSentence, rentalBand, address,    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  },  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{   _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,  "hall": hall->name,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },  "courses": *[_type == "course"    && (!defined(runStart) || runStart <= $weekEnd)    && (!defined(runEnd) || runEnd >= $weekStart)  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }}
@@ -674,6 +816,9 @@ export type SITEMAP_QUERY_RESULT = {
 // Query TypeMap
 declare global {
   interface SanityQueries {
+    '\n  *[_type == "course" && (!defined(runEnd) || runEnd >= $from)] | order(runStart asc){ \n  _id, title, slug, focus, audienceTags, level, allowSingleLesson,\n  "lecturer": lecturer->name,\n  slots[]{ _key, weekday, startTime, endTime },\n  runStart, runEnd, lessonsCount,\n  "lessonDates": lessonDates[].date,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n }\n': COURSES_PAGE_QUERY_RESULT;
+    '{\n  "course": *[_type == "course" && (\n    slug[$locale].current == $slug || (!defined(slug[$locale].current) && slug.cs.current == $slug)\n  )][0]{\n    _id, title, slug, focus, audienceTags, level,\n    slots[]{ _key, weekday, startTime, endTime },\n    runStart, runEnd, lessonsCount,\n    lessonDates[]{ _key, date, isTrial },\n    coursePrice, allowSingleLesson, singleLessonPrice, trialPrice,\n    bookingUrl, singleLessonBookingUrl, capacity, placesLeft,\n    description, forWhom, whatToBring, goodToKnow,\n    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions },\n    lecturer->{ name, role, bio, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    space->{ name }\n  },\n  "others": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)] | order(runStart asc){ \n  _id, title, slug, focus, audienceTags, level, allowSingleLesson,\n  "lecturer": lecturer->name,\n  slots[]{ _key, weekday, startTime, endTime },\n  runStart, runEnd, lessonsCount,\n  "lessonDates": lessonDates[].date,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "address": *[_id == "settings"][0].address{ street, district, postalCode, city }\n}': COURSE_QUERY_RESULT;
+    '\n  *[_type == "course" && defined(slug.cs.current)]{ "cs": slug.cs.current, "en": slug.en.current }\n': COURSE_SLUGS_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course"\n    && (!defined(runStart) || runStart <= $weekEnd)\n    && (!defined(runEnd) || runEnd >= $weekStart)\n  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }\n}': HOME_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
     '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
