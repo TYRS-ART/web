@@ -799,6 +799,212 @@ export type LAYOUT_QUERY_RESULT = {
   } | null;
 };
 
+// Source: src/sanity/queries/program.ts
+// Variable: PROGRAM_QUERY
+// Query: {  "settings": *[_id == "settings"][0]{ socials },  "month": *[_type == "event" && startsAt >= $monthStart && startsAt < $monthEnd] | order(startsAt asc){      _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,  "hall": hall->name,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }, endsAt  },  "week": *[_type == "event" && startsAt >= $weekStart && startsAt < $weekEnd] | order(startsAt asc){      _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,  "hall": hall->name,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }, endsAt  }}
+export type PROGRAM_QUERY_RESULT = {
+  settings:
+    | {
+        socials: null;
+      }
+    | {
+        socials: {
+          instagram?: string;
+          spotify?: string;
+          whatsapp?: string;
+        } | null;
+      }
+    | null;
+  month: Array<{
+    _id: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    startsAt: string;
+    categories: Array<string>;
+    featured: boolean | null;
+    priceText: LocaleString | null;
+    tickerText: LocaleString | null;
+    ticketUrl: string | null;
+    hall: LocaleString | null;
+    heroImage: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    };
+    endsAt: string | null;
+  }>;
+  week: Array<{
+    _id: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    startsAt: string;
+    categories: Array<string>;
+    featured: boolean | null;
+    priceText: LocaleString | null;
+    tickerText: LocaleString | null;
+    ticketUrl: string | null;
+    hall: LocaleString | null;
+    heroImage: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    };
+    endsAt: string | null;
+  }>;
+};
+
+// Source: src/sanity/queries/program.ts
+// Variable: EVENT_QUERY
+// Query: {  "event": *[_type == "event" && (    ($locale == "cs" && slug.cs.current == $slug)    || ($locale == "en" && coalesce(slug.en.current, slug.cs.current) == $slug)  )][0]{    _id, title, slug, startsAt, doorsAt, endsAt, categories, lead, body, goodToKnow,    priceText, ticketUrl, capacityNote, links,    "hall": hall->name,    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  },  "settings": *[_id == "settings"][0]{ address }}
+export type EVENT_QUERY_RESULT = {
+  event: {
+    _id: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    startsAt: string;
+    doorsAt: string | null;
+    endsAt: string | null;
+    categories: Array<string>;
+    lead: LocaleText | null;
+    body: LocaleBlockContent | null;
+    goodToKnow: Array<
+      {
+        _key: string;
+      } & LocaleString
+    > | null;
+    priceText: LocaleString | null;
+    ticketUrl: string | null;
+    capacityNote: LocaleString | null;
+    links: {
+      spotify?: string;
+      website?: string;
+    } | null;
+    hall: LocaleString | null;
+    heroImage: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    };
+  } | null;
+  settings:
+    | {
+        address: null;
+      }
+    | {
+        address: {
+          street?: string;
+          district?: string;
+          postalCode?: string;
+          city?: string;
+          googleMapsUrl?: string;
+        } | null;
+      }
+    | null;
+};
+
+// Source: src/sanity/queries/program.ts
+// Variable: RELATED_EVENTS_QUERY
+// Query: *[_type == "event" && _id != $id && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...24]{   _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,  "hall": hall->name,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } }
+export type RELATED_EVENTS_QUERY_RESULT = Array<{
+  _id: string;
+  title: LocaleString | null;
+  slug: LocaleSlug;
+  startsAt: string;
+  categories: Array<string>;
+  featured: boolean | null;
+  priceText: LocaleString | null;
+  tickerText: LocaleString | null;
+  ticketUrl: string | null;
+  hall: LocaleString | null;
+  heroImage: {
+    asset: SanityImageAssetReference | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    alt: LocaleString | null;
+    lqip: string | null;
+    dimensions: SanityImageDimensions | null;
+  };
+}>;
+
+// Source: src/sanity/queries/program.ts
+// Variable: EVENT_SLUGS_QUERY
+// Query: *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))]{ "cs": slug.cs.current, "en": coalesce(slug.en.current, slug.cs.current) }
+export type EVENT_SLUGS_QUERY_RESULT = Array<{
+  cs: string | null;
+  en: string | null;
+}>;
+
+// Source: src/sanity/queries/program.ts
+// Variable: ICS_FEED_QUERY
+// Query: {  "settings": *[_id == "settings"][0]{ address },  "events": *[_type == "event" && startsAt >= $since] | order(startsAt asc){   _id, _updatedAt, title, slug, startsAt, endsAt, lead, ticketUrl, "hall": hall->name }}
+export type ICS_FEED_QUERY_RESULT = {
+  settings:
+    | {
+        address: null;
+      }
+    | {
+        address: {
+          street?: string;
+          district?: string;
+          postalCode?: string;
+          city?: string;
+          googleMapsUrl?: string;
+        } | null;
+      }
+    | null;
+  events: Array<{
+    _id: string;
+    _updatedAt: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    startsAt: string;
+    endsAt: string | null;
+    lead: LocaleText | null;
+    ticketUrl: string | null;
+    hall: LocaleString | null;
+  }>;
+};
+
+// Source: src/sanity/queries/program.ts
+// Variable: ICS_EVENT_QUERY
+// Query: {  "settings": *[_id == "settings"][0]{ address },  "event": *[_type == "event" && (    ($locale == "cs" && slug.cs.current == $slug)    || ($locale == "en" && coalesce(slug.en.current, slug.cs.current) == $slug)  )][0]{   _id, _updatedAt, title, slug, startsAt, endsAt, lead, ticketUrl, "hall": hall->name }}
+export type ICS_EVENT_QUERY_RESULT = {
+  settings:
+    | {
+        address: null;
+      }
+    | {
+        address: {
+          street?: string;
+          district?: string;
+          postalCode?: string;
+          city?: string;
+          googleMapsUrl?: string;
+        } | null;
+      }
+    | null;
+  event: {
+    _id: string;
+    _updatedAt: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    startsAt: string;
+    endsAt: string | null;
+    lead: LocaleText | null;
+    ticketUrl: string | null;
+    hall: LocaleString | null;
+  } | null;
+};
+
 // Source: src/sanity/queries/rental.ts
 // Variable: RENTAL_SPACES_QUERY
 // Query: *[_type == "space" && rentable == true] | order(order asc, name.cs asc){  _id, name, capacity, area, features,  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }}
@@ -930,6 +1136,12 @@ declare global {
     '\n  *[_type == "course" && defined(slug.cs.current)]{ "cs": slug.cs.current, "en": slug.en.current }\n': COURSE_SLUGS_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course"\n    && (!defined(runStart) || runStart <= $weekEnd)\n    && (!defined(runEnd) || runEnd >= $weekStart)\n  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }\n}': HOME_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
+    '{\n  "settings": *[_id == "settings"][0]{ socials },\n  "month": *[_type == "event" && startsAt >= $monthStart && startsAt < $monthEnd] | order(startsAt asc){\n    \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n, endsAt\n  },\n  "week": *[_type == "event" && startsAt >= $weekStart && startsAt < $weekEnd] | order(startsAt asc){\n    \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n, endsAt\n  }\n}': PROGRAM_QUERY_RESULT;
+    '{\n  "event": *[_type == "event" && (\n    ($locale == "cs" && slug.cs.current == $slug)\n    || ($locale == "en" && coalesce(slug.en.current, slug.cs.current) == $slug)\n  )][0]{\n    _id, title, slug, startsAt, doorsAt, endsAt, categories, lead, body, goodToKnow,\n    priceText, ticketUrl, capacityNote, links,\n    "hall": hall->name,\n    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "settings": *[_id == "settings"][0]{ address }\n}': EVENT_QUERY_RESULT;
+    '\n  *[_type == "event" && _id != $id && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...24]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n }\n': RELATED_EVENTS_QUERY_RESULT;
+    '\n  *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))]{ "cs": slug.cs.current, "en": coalesce(slug.en.current, slug.cs.current) }\n': EVENT_SLUGS_QUERY_RESULT;
+    '{\n  "settings": *[_id == "settings"][0]{ address },\n  "events": *[_type == "event" && startsAt >= $since] | order(startsAt asc){ \n  _id, _updatedAt, title, slug, startsAt, endsAt, lead, ticketUrl, "hall": hall->name\n }\n}': ICS_FEED_QUERY_RESULT;
+    '{\n  "settings": *[_id == "settings"][0]{ address },\n  "event": *[_type == "event" && (\n    ($locale == "cs" && slug.cs.current == $slug)\n    || ($locale == "en" && coalesce(slug.en.current, slug.cs.current) == $slug)\n  )][0]{ \n  _id, _updatedAt, title, slug, startsAt, endsAt, lead, ticketUrl, "hall": hall->name\n }\n}': ICS_EVENT_QUERY_RESULT;
     '*[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n}': RENTAL_SPACES_QUERY_RESULT;
     '{\n  "page": *[_type == "rentalPage" && _id == "rentalPage"][0]{\n    headline, intro, formIntro, quote,\n    included[]{ _key, title, body }\n  },\n  "spaces": *[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n},\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': RENTAL_QUERY_RESULT;
     '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
