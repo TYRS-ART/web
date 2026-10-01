@@ -165,7 +165,6 @@ export type Settings = {
     spotify?: string;
     whatsapp?: string;
   };
-  mailchimpListId?: string;
 };
 
 export type SanityImageCrop = {
@@ -531,66 +530,7 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
   | Geopoint;
 
-// Source: src/sanity/lib/queries.ts
-// Variable: LAYOUT_QUERY
-// Query: {  "settings": *[_id == "settings"][0]{    address, email, phone, socials, openingHours  },  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  },  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{    title, slug, startsAt, ticketUrl, "hall": hall->name  }}
-export type LAYOUT_QUERY_RESULT = {
-  settings:
-    | {
-        address: null;
-        email: null;
-        phone: null;
-        socials: null;
-        openingHours: null;
-      }
-    | {
-        address: {
-          street?: string;
-          district?: string;
-          postalCode?: string;
-          city?: string;
-          googleMapsUrl?: string;
-        } | null;
-        email: string | null;
-        phone: string | null;
-        socials: {
-          instagram?: string;
-          spotify?: string;
-          whatsapp?: string;
-        } | null;
-        openingHours: LocaleText | null;
-      }
-    | null;
-  playlist: {
-    month: string;
-    title: LocaleString | null;
-    spotifyUrl: string;
-    trackCount: number | null;
-    tracks: Array<{
-      _key: string;
-      title: string;
-      artist: string;
-      url: string | null;
-    }> | null;
-    cover: {
-      asset: SanityImageAssetReference | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-      alt: LocaleString | null;
-      lqip: string | null;
-      dimensions: SanityImageDimensions | null;
-    } | null;
-  } | null;
-  today: {
-    title: LocaleString | null;
-    slug: LocaleSlug;
-    startsAt: string;
-    ticketUrl: string | null;
-    hall: LocaleString | null;
-  } | null;
-};
-
-// Source: src/sanity/lib/queries.ts
+// Source: src/sanity/queries/home.ts
 // Variable: HOME_QUERY
 // Query: {  "settings": *[_id == "settings"][0]{    heroSentence, rentalBand, address,    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  },  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{   _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,  "hall": hall->name,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },  "courses": *[_type == "course"    && (!defined(runStart) || runStart <= $weekEnd)    && (!defined(runEnd) || runEnd >= $weekStart)  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }}
 export type HOME_QUERY_RESULT = {
@@ -658,11 +598,70 @@ export type HOME_QUERY_RESULT = {
   }>;
 };
 
+// Source: src/sanity/queries/layout.ts
+// Variable: LAYOUT_QUERY
+// Query: {  "settings": *[_id == "settings"][0]{    address, email, phone, socials, openingHours  },  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  },  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{    title, slug, startsAt, ticketUrl, "hall": hall->name  }}
+export type LAYOUT_QUERY_RESULT = {
+  settings:
+    | {
+        address: null;
+        email: null;
+        phone: null;
+        socials: null;
+        openingHours: null;
+      }
+    | {
+        address: {
+          street?: string;
+          district?: string;
+          postalCode?: string;
+          city?: string;
+          googleMapsUrl?: string;
+        } | null;
+        email: string | null;
+        phone: string | null;
+        socials: {
+          instagram?: string;
+          spotify?: string;
+          whatsapp?: string;
+        } | null;
+        openingHours: LocaleText | null;
+      }
+    | null;
+  playlist: {
+    month: string;
+    title: LocaleString | null;
+    spotifyUrl: string;
+    trackCount: number | null;
+    tracks: Array<{
+      _key: string;
+      title: string;
+      artist: string;
+      url: string | null;
+    }> | null;
+    cover: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    } | null;
+  } | null;
+  today: {
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    startsAt: string;
+    ticketUrl: string | null;
+    hall: LocaleString | null;
+  } | null;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course"\n    && (!defined(runStart) || runStart <= $weekEnd)\n    && (!defined(runEnd) || runEnd >= $weekStart)\n  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }\n}': HOME_QUERY_RESULT;
+    '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

@@ -1,0 +1,12 @@
+{
+  "newsletter": {
+    "label": "E-mail",
+    "placeholder": "tvuj@email.cz",
+    "submit": "Odebírat",
+    "sending": "Odesílám…",
+    "success": "Díky! Potvrď prosím odběr v e-mailu, který jsme ti poslali.",
+    "already": "Tenhle e-mail už odběr má. Díky!",
+    "invalid": "Zkontroluj prosím e-mailovou adresu.",
+    "error": "Něco se pokazilo. Zkus to znovu, nebo nám napiš."
+  }
+}

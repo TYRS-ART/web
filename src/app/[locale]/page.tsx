@@ -11,7 +11,7 @@ import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";
 import { addDays, dayOffset, pragueDay, pragueDayRange } from "@/lib/dates";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { HOME_QUERY } from "@/sanity/lib/queries";
+import { HOME_QUERY } from "@/sanity/queries/home";
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const locale = (await params).locale as Locale;

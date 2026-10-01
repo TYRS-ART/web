@@ -1,0 +1,12 @@
+{
+  "newsletter": {
+    "label": "Email",
+    "placeholder": "you@email.com",
+    "submit": "Subscribe",
+    "sending": "Sending…",
+    "success": "Thanks! Please confirm your subscription in the email we just sent you.",
+    "already": "This address is already subscribed. Thanks!",
+    "invalid": "Please check the email address.",
+    "error": "Something went wrong. Try again, or write to us."
+  }
+}

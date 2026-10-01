@@ -1,0 +1,16 @@
+{
+  "common": {
+    "today": "Dnes",
+    "tomorrow": "Zítra"
+  },
+  "focus": {
+    "tanec": "Tanec",
+    "hudba": "Hudba",
+    "pohyb": "Pohyb"
+  },
+  "programTabs": {
+    "label": "Typ programu",
+    "events": "Akce",
+    "courses": "Kurzy & lekce"
+  }
+}
