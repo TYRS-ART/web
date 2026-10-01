@@ -7,5 +7,10 @@
     "tanec": "Tanec",
     "hudba": "Hudba",
     "pohyb": "Pohyb"
+  },
+  "programTabs": {
+    "label": "Typ programu",
+    "events": "Akce",
+    "courses": "Kurzy & lekce"
   }
 }

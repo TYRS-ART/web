@@ -7,5 +7,10 @@
     "tanec": "Dance",
     "hudba": "Music",
     "pohyb": "Movement"
+  },
+  "programTabs": {
+    "label": "Programme type",
+    "events": "Events",
+    "courses": "Courses & classes"
   }
 }
