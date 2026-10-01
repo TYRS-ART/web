@@ -590,10 +590,79 @@ export type LAYOUT_QUERY_RESULT = {
   } | null;
 };
 
+// Source: src/sanity/lib/queries.ts
+// Variable: HOME_QUERY
+// Query: {  "settings": *[_id == "settings"][0]{    heroSentence, rentalBand, address,    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  },  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{   _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,  "hall": hall->name,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },  "courses": *[_type == "course"    && (!defined(runStart) || runStart <= $weekEnd)    && (!defined(runEnd) || runEnd >= $weekStart)  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }}
+export type HOME_QUERY_RESULT = {
+  settings:
+    | {
+        heroSentence: null;
+        rentalBand: null;
+        address: null;
+        mapImage: null;
+      }
+    | {
+        heroSentence: LocaleHeroSentence | null;
+        rentalBand: {
+          title?: LocaleString;
+          text?: LocaleText;
+        } | null;
+        address: {
+          street?: string;
+          district?: string;
+          postalCode?: string;
+          city?: string;
+          googleMapsUrl?: string;
+        } | null;
+        mapImage: {
+          asset: SanityImageAssetReference | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          alt: LocaleString | null;
+          lqip: string | null;
+          dimensions: SanityImageDimensions | null;
+        } | null;
+      }
+    | null;
+  upcoming: Array<{
+    _id: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    startsAt: string;
+    categories: Array<string>;
+    featured: boolean | null;
+    priceText: LocaleString | null;
+    tickerText: LocaleString | null;
+    ticketUrl: string | null;
+    hall: LocaleString | null;
+    heroImage: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    };
+  }>;
+  courses: Array<{
+    _id: string;
+    title: LocaleString | null;
+    slug: LocaleSlug;
+    focus: "hudba" | "pohyb" | "tanec" | null;
+    slots: Array<{
+      _key: string;
+      weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+      startTime: string;
+      endTime: string;
+    }>;
+  }>;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
+    '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course"\n    && (!defined(runStart) || runStart <= $weekEnd)\n    && (!defined(runEnd) || runEnd >= $weekStart)\n  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }\n}': HOME_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

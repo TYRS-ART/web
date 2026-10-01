@@ -47,5 +47,24 @@
     "text": "Možná se přesunula, nebo akce už proběhla. Program najdeš tady:",
     "program": "Program",
     "home": "Na úvod"
+  },
+  "home": {
+    "upcoming": "Nejbližší události",
+    "allProgram": "Celý program",
+    "thisWeekCourses": "Tenhle týden v kurzech",
+    "fullTimetable": "Celý rozvrh",
+    "timetable": "Rozvrh",
+    "enquire": "Poptat termín",
+    "spaces": "Prostory",
+    "findUs": "Kde nás najdete",
+    "openMaps": "Otevřít v Google Maps",
+    "tickets": "Vstupenky",
+    "mapAlt": "Mapa Malé Strany s domem TYRŠ",
+    "tickerLabel": "Dnes a zítra v TYRŠi"
+  },
+  "focus": {
+    "tanec": "Tanec",
+    "hudba": "Hudba",
+    "pohyb": "Pohyb"
   }
 }
