@@ -1,0 +1,55 @@
+{
+  "rental": {
+    "title": "Pronájem prostor",
+    "enquire": "Poptat termín",
+    "spaces": "Prostory",
+    "spacesHint": "Kliknutím na prostor rovnou poptáte termín",
+    "capacity": "{count, plural, one {# místo} few {# místa} other {# míst}}",
+    "area": "{area} m²",
+    "included": "Co je v ceně",
+    "orDirect": "Nebo rovnou",
+    "orDirectInline": "Nebo rovnou na <email></email>.",
+    "reference": "Reference"
+  },
+  "enquiry": {
+    "form": "Poptávka pronájmu",
+    "name": "Jméno a příjmení",
+    "organisation": "Organizace (nepovinné)",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "space": "Prostor",
+    "spaceUnknown": "Ještě nevím",
+    "type": "Typ akce",
+    "types": {
+      "koncert": "Koncert",
+      "divadlo-tanec": "Divadlo / tanec",
+      "workshop": "Workshop / kurz",
+      "firemni": "Firemní akce",
+      "nataceni": "Natáčení",
+      "oslava": "Soukromá oslava",
+      "jine": "Jiné"
+    },
+    "date": "Termín",
+    "people": "Očekávaný počet lidí",
+    "message": "Co chystáte?",
+    "consent": "Souhlasím se <link>zpracováním údajů</link> pro účely vyřízení poptávky.",
+    "honeypot": "Toto pole nevyplňujte",
+    "submit": "Odeslat poptávku",
+    "sending": "Odesílám…",
+    "replyPromise": "Odpovíme do dvou pracovních dnů.",
+    "success": "Díky, ozveme se do dvou pracovních dnů.",
+    "invalid": "Některá pole nejsou vyplněná správně. Zkontrolujte je prosím.",
+    "failed": "Poptávku se teď nepodařilo odeslat. Napište nám prosím přímo na <email></email>.",
+    "errors": {
+      "required": "Vyplňte prosím toto pole.",
+      "tooLong": "Text je příliš dlouhý.",
+      "email": "Zadejte platný e-mail, např. jana@example.cz.",
+      "phone": "Zadejte telefonní číslo, např. +420 777 123 456.",
+      "date": "Vyberte datum akce.",
+      "past": "Termín nemůže být v minulosti.",
+      "people": "Zadejte počet lidí jako celé číslo.",
+      "choice": "Vyberte jednu z možností.",
+      "consent": "Bez souhlasu nemůžeme poptávku zpracovat."
+    }
+  }
+}

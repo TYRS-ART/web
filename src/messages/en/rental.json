@@ -1,0 +1,55 @@
+{
+  "rental": {
+    "title": "Space rental",
+    "enquire": "Enquire about a date",
+    "spaces": "Spaces",
+    "spacesHint": "Click a space to enquire about it straight away",
+    "capacity": "{count, plural, one {# person} other {# people}}",
+    "area": "{area} m²",
+    "included": "What's included",
+    "orDirect": "Or write straight to",
+    "orDirectInline": "Or write straight to <email></email>.",
+    "reference": "Testimonial"
+  },
+  "enquiry": {
+    "form": "Rental enquiry",
+    "name": "Full name",
+    "organisation": "Organisation (optional)",
+    "email": "Email",
+    "phone": "Phone",
+    "space": "Space",
+    "spaceUnknown": "Not sure yet",
+    "type": "Type of event",
+    "types": {
+      "koncert": "Concert",
+      "divadlo-tanec": "Theatre / dance",
+      "workshop": "Workshop / course",
+      "firemni": "Corporate event",
+      "nataceni": "Film or photo shoot",
+      "oslava": "Private party",
+      "jine": "Other"
+    },
+    "date": "Date",
+    "people": "Expected number of people",
+    "message": "What are you planning?",
+    "consent": "I agree to the <link>processing of my details</link> for the purpose of handling this enquiry.",
+    "honeypot": "Leave this field empty",
+    "submit": "Send enquiry",
+    "sending": "Sending…",
+    "replyPromise": "We reply within two working days.",
+    "success": "Thanks, we'll get back to you within two working days.",
+    "invalid": "Some fields aren't filled in correctly. Please check them.",
+    "failed": "We couldn't send your enquiry just now. Please email us directly at <email></email>.",
+    "errors": {
+      "required": "Please fill this in.",
+      "tooLong": "This text is too long.",
+      "email": "Enter a valid email, e.g. jana@example.com.",
+      "phone": "Enter a phone number, e.g. +420 777 123 456.",
+      "date": "Choose the date of the event.",
+      "past": "The date can't be in the past.",
+      "people": "Enter the number of people as a whole number.",
+      "choice": "Choose one of the options.",
+      "consent": "We can't process the enquiry without your consent."
+    }
+  }
+}

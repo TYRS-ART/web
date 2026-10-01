@@ -1,0 +1,12 @@
+{
+  "venue": {
+    "title": "Venue",
+    "sections": "Sekce stránky",
+    "who": "Kdo",
+    "where": "Kde",
+    "how": "Jak",
+    "founders": "Zakladatelé",
+    "motto": "Motto",
+    "address": "Adresa"
+  }
+}
