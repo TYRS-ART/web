@@ -18,9 +18,16 @@ export async function FocusChip({ focus, className = "" }: { focus: string; clas
   );
 }
 
-/** Solid focus colours (mobile slot tags, legend, filter chips). */
+/** Solid focus colours (the small dots in the month calendar). */
 export const focusFill: Record<string, string> = {
   tanec: "bg-tanec",
   hudba: "bg-hudba",
+  pohyb: "bg-pohyb",
+};
+
+/** Focus tags: Tanec / Hudba drift like every category chip, Pohyb is plain butter. */
+export const focusTag: Record<string, string> = {
+  tanec: "cl cl-tanec",
+  hudba: "cl cl-hudba",
   pohyb: "bg-pohyb",
 };

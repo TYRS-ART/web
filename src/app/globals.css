@@ -84,36 +84,59 @@
 
 /* -------------------------------------------------- Category colour + drift */
 
+/* From docs/design-system (components.css .tyrs-cat + tokens.json): each category
+   chip is a 115° tint → shade → tint gradient, three times its size, drifting
+   slowly so it reads as a soft cloud within one hue. Durations differ so the
+   chips never move in sync. Only background-position animates; the base colour
+   stays as the fallback and the text stays black. */
+:root {
+  --cat-hudba: #8fa8ee;
+  --cat-hudba-tint: #b6c6f5;
+  --cat-hudba-shade: #7b97e8;
+  --cat-divadlo: #f29572;
+  --cat-divadlo-tint: #f8bba1;
+  --cat-divadlo-shade: #ee8460;
+  --cat-tanec: #c9de78;
+  --cat-tanec-tint: #e0ecaa;
+  --cat-tanec-shade: #bdd463;
+  --cat-lekce: #8cc4a0;
+  --cat-lekce-tint: #b2dac0;
+  --cat-lekce-shade: #78b78e;
+  /* Umění isn't in the design tokens yet; same recipe with its own hue. */
+  --cat-umeni: #c3a6ec;
+  --cat-umeni-tint: #dfcff7;
+  --cat-umeni-shade: #b194e6;
+}
 .cl {
   color: var(--color-black);
   background-size: 300% 300%;
-  animation: drift 10s ease-in-out infinite alternate;
+  animation: tyrs-drift 10s ease-in-out infinite alternate;
 }
 .cl-hudba {
-  background-color: var(--color-hudba);
-  background-image: linear-gradient(115deg, #a3b8f2 0%, #7b97e8 45%, #b6c6f5 100%);
+  background-color: var(--cat-hudba);
+  background-image: linear-gradient(115deg, var(--cat-hudba-tint) 0%, var(--cat-hudba-shade) 45%, var(--cat-hudba-tint) 100%);
 }
 .cl-divadlo {
-  background-color: var(--color-divadlo);
-  background-image: linear-gradient(115deg, #f5a888 0%, #ee8460 45%, #f8bba1 100%);
+  background-color: var(--cat-divadlo);
+  background-image: linear-gradient(115deg, var(--cat-divadlo-tint) 0%, var(--cat-divadlo-shade) 45%, var(--cat-divadlo-tint) 100%);
   animation-duration: 12s;
 }
 .cl-tanec {
-  background-color: var(--color-tanec);
-  background-image: linear-gradient(115deg, #d4e58f 0%, #bdd463 45%, #e0ecaa 100%);
+  background-color: var(--cat-tanec);
+  background-image: linear-gradient(115deg, var(--cat-tanec-tint) 0%, var(--cat-tanec-shade) 45%, var(--cat-tanec-tint) 100%);
   animation-duration: 9s;
 }
 .cl-lekce {
-  background-color: var(--color-lekce);
-  background-image: linear-gradient(115deg, #9fcfb0 0%, #8cc4a0 45%, #b2dac0 100%);
+  background-color: var(--cat-lekce);
+  background-image: linear-gradient(115deg, var(--cat-lekce-tint) 0%, var(--cat-lekce-shade) 45%, var(--cat-lekce-tint) 100%);
   animation-duration: 13s;
 }
 .cl-umeni {
-  background-color: var(--color-umeni);
-  background-image: linear-gradient(115deg, #d2bcf2 0%, #b194e6 45%, #dfcff7 100%);
+  background-color: var(--cat-umeni);
+  background-image: linear-gradient(115deg, var(--cat-umeni-tint) 0%, var(--cat-umeni-shade) 45%, var(--cat-umeni-tint) 100%);
   animation-duration: 11s;
 }
-@keyframes drift {
+@keyframes tyrs-drift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 30%; }
   100% { background-position: 30% 100%; }

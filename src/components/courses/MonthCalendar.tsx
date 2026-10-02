@@ -9,7 +9,7 @@ import { calendarDays, dayMonthLabel, dayNumber } from "@/lib/program";
 import { isoWeekday } from "@/lib/timetable";
 import { nbsp } from "@/lib/typography";
 
-import { focusFill } from "./FocusChip";
+import { focusFill, focusTag } from "./FocusChip";
 import { href, meta, type TimetableLesson } from "./Timetable";
 
 /** How many lessons a desktop day cell lists before "+N". */
@@ -84,7 +84,7 @@ export async function MonthCalendar({
                     <>
                       <span className="flex items-center gap-1.5 text-xs leading-4 font-medium tabular-nums">
                         {focus && (
-                          <span aria-hidden="true" className={`size-2 shrink-0 rounded-full${focusFill[focus]}`} />
+                          <span aria-hidden="true" className={`size-2 shrink-0 rounded-full ${focusFill[focus]}`} />
                         )}
                         {shortTime(lesson.start)}–{shortTime(lesson.end)}
                       </span>
@@ -177,7 +177,7 @@ export async function MonthList({
                     </span>
                     <span className="text-[13px] leading-[17px] opacity-85 lg:text-[15px] lg:leading-5">{meta(lesson, locale)}</span>
                     {focus && (
-                      <span className={`mt-1 self-start rounded-full px-2 py-0.5 text-[11px] leading-[14px] font-medium text-black ${focusFill[focus]}`}>
+                      <span className={`mt-1 self-start rounded-full px-2 py-0.5 text-[11px] leading-[14px] font-medium text-black ${focusTag[focus]}`}>
                         {tr(`focus.${focus}`)}
                       </span>
                     )}
