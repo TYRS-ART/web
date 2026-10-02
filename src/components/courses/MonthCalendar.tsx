@@ -1,3 +1,4 @@
+import NextLink from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import type { Locale } from "@/i18n/locales";
@@ -5,7 +6,8 @@ import { Link } from "@/i18n/navigation";
 import { shortTime, weekdayLong, weekdayShort } from "@/lib/courses";
 import { t } from "@/lib/localize";
 import { calendarDays, dayMonthLabel, dayNumber } from "@/lib/program";
-import { isoWeekday, mondayOf } from "@/lib/timetable";
+import { dayAnchor } from "@/lib/program";
+import { isoWeekday } from "@/lib/timetable";
 import { nbsp } from "@/lib/typography";
 
 import { focusFill } from "./FocusChip";
@@ -17,21 +19,22 @@ const PER_DAY = 3;
 /**
  * Month overview of the course timetable, like the Program calendar: Monday-first
  * grid on a white card, today ringed, past days quiet, the next month dashed.
- * Each day lists its lessons as small sage slots; "+N" opens that week's timetable.
+ * Each day lists its lessons as small sage slots; "+N" opens that day in the list.
  */
 export async function MonthCalendar({
   lessons,
   monthKey,
   today,
   locale,
-  weekHref,
+  dayHref,
   label,
 }: {
   lessons: TimetableLesson[];
   monthKey: string;
   today: string;
   locale: Locale;
-  weekHref: (monday: string) => { pathname: "/kurzy"; query: Record<string, string> };
+  /** The day in the list view (a localized URL with its #anchor). */
+  dayHref: (day: string) => string;
   label: string;
 }) {
   const tr = await getTranslations();
@@ -108,13 +111,12 @@ export async function MonthCalendar({
                 })}
               </ul>
               {dayLessons.length > PER_DAY && (
-                <Link
-                  href={weekHref(mondayOf(day))}
-                  scroll={false}
+                <NextLink
+                  href={dayHref(day)}
                   className="mt-auto self-start rounded-full bg-white px-2.5 py-1 text-xs leading-4 font-medium no-underline hover:bg-black hover:text-white"
                 >
                   {tr("courses.moreLessons", { count: dayLessons.length - PER_DAY })}
-                </Link>
+                </NextLink>
               )}
             </div>
           );
@@ -124,45 +126,61 @@ export async function MonthCalendar({
   );
 }
 
-/** Mobile month view: every day of the month that has lessons, in order. */
+/**
+ * Every day of the month that has lessons, in order. Under the mobile calendar it
+ * starts at today (`fromToday`); as the list view it shows the whole month, each
+ * day with an anchor the calendar links to.
+ */
 export async function MonthList({
   lessons,
   today,
   locale,
+  fromToday = false,
 }: {
   lessons: TimetableLesson[];
   today: string;
   locale: Locale;
+  fromToday?: boolean;
 }) {
   const tr = await getTranslations();
   const allDays = [...new Set(lessons.map((l) => l.day))];
   // In the current month, start at today; a past month is shown whole.
   const upcoming = allDays.filter((day) => day >= today);
-  const days = upcoming.length > 0 ? upcoming : allDays;
+  const days = fromToday && upcoming.length > 0 ? upcoming : allDays;
   return (
-    <div className="flex flex-col lg:hidden">
+    <div className="flex flex-col">
       {days.map((day) => {
         const dayLessons = lessons.filter((l) => l.day === day);
         const isToday = day === today;
         return (
-          <section key={day} aria-label={`${weekdayLong(isoWeekday(day), locale)} ${dayMonthLabel(day, locale)}`}>
-            <div className={`flex items-baseline justify-between border-t-2 border-black pt-5 pb-2.5 ${day < today ? "opacity-60" : ""}`}>
-              <h2 className="m-0 font-display text-[28px] leading-[30px]" {...(isToday ? { "aria-current": "date" as const } : {})}>
+          <section
+            key={day}
+            id={fromToday ? undefined : dayAnchor(day)}
+            aria-label={`${weekdayLong(isoWeekday(day), locale)} ${dayMonthLabel(day, locale)}`}
+            className="scroll-mt-4 [&:first-child>div]:border-t-0"
+          >
+            <div
+              className={`flex items-baseline justify-between border-t-2 border-black pt-5 pb-2.5 lg:pt-8 lg:pb-4 ${day < today ? "opacity-60" : ""}`}
+            >
+              <h2
+                className="m-0 font-display text-[28px] leading-[30px] lg:text-5xl lg:leading-[46px]"
+                {...(isToday ? { "aria-current": "date" as const } : {})}
+              >
                 {weekdayLong(isoWeekday(day), locale)} {dayMonthLabel(day, locale)}
                 {isToday && ` · ${tr("courses.today")}`}
               </h2>
-              <span className="text-[13px] text-muted">{tr("courses.lessonCount", { count: dayLessons.length })}</span>
+              <span className="text-[13px] text-muted lg:text-base">{tr("courses.lessonCount", { count: dayLessons.length })}</span>
             </div>
-            <ul className="m-0 flex list-none flex-col gap-2 p-0 pb-3">
+            <ul className="m-0 flex list-none flex-col gap-2 p-0 pb-3 lg:grid lg:grid-cols-3 lg:gap-3 lg:pb-6">
               {dayLessons.map((lesson) => {
                 const link = href(lesson, locale);
                 const focus = lesson.course.focus;
                 const content = (
                   <>
-                    <span className="font-display text-[22px] leading-[23px] tracking-[-0.02em]">
+                    <span className="font-display text-[22px] leading-[23px] tracking-[-0.02em] lg:text-[28px] lg:leading-[30px]">
                       {nbsp(t(lesson.course.title, locale) ?? "")}
                     </span>
-                    <span className="text-[13px] leading-[17px] opacity-85">{meta(lesson, locale)}</span>
+                    <span className="text-[13px] leading-[17px] opacity-85 lg:text-[15px] lg:leading-5">{meta(lesson, locale)}</span>
                     {focus && (
                       <span className={`mt-1 self-start rounded-full px-2 py-0.5 text-[11px] leading-[14px] font-medium text-black ${focusFill[focus]}`}>
                         {tr(`focus.${focus}`)}
@@ -171,7 +189,7 @@ export async function MonthList({
                   </>
                 );
                 const classes =
-                  "flex flex-col gap-0.5 rounded-md bg-lekce px-3 py-2.5 text-black no-underline transition-colors duration-150 hover:bg-black hover:text-white focus-visible:bg-black focus-visible:text-white motion-reduce:transition-none";
+                  "flex h-full flex-col gap-0.5 rounded-md bg-lekce px-3 py-2.5 text-black lg:px-4 lg:py-3.5 no-underline transition-colors duration-150 hover:bg-black hover:text-white focus-visible:bg-black focus-visible:text-white motion-reduce:transition-none";
                 return (
                   <li key={lesson.key}>
                     {link ? (

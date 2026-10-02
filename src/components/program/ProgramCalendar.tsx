@@ -16,6 +16,8 @@ export type ProgramEvent = PROGRAM_QUERY_RESULT["month"][number];
 export type DayInfo = {
   day: string;
   event?: ProgramEvent;
+  /** Marks the day as busy without an event (Kurzy: the day has lessons). */
+  marked?: boolean;
   more: number;
   dimmed: boolean;
   /** Link for "+N" and the mobile day circles: the day in the list view. */
@@ -227,7 +229,7 @@ export function DayCircles({
           );
         }
         const isToday = info.day === today;
-        const hasEvent = Boolean(info.event) && !info.dimmed;
+        const hasEvent = (info.marked ?? Boolean(info.event)) && !info.dimmed;
         const style = isToday
           ? "bg-black font-medium text-white hover:text-white"
           : hasEvent

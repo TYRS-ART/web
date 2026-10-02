@@ -18,13 +18,6 @@ export async function FocusChip({ focus, className = "" }: { focus: string; clas
   );
 }
 
-/** Dot colours of the small white focus tags in the timetable. */
-export const focusDot: Record<string, string> = {
-  tanec: "before:bg-[#8fae2e]",
-  hudba: "before:bg-[#4f72d6]",
-  pohyb: "before:bg-[#e0c23a]",
-};
-
 /** Solid focus colours (mobile slot tags, legend, filter chips). */
 export const focusFill: Record<string, string> = {
   tanec: "bg-tanec",
