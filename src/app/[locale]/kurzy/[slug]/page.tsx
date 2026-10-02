@@ -349,11 +349,13 @@ export default async function CoursePage({ params }: PageProps<"/[locale]/kurzy/
         items={items}
         actions={
           <>
-            <a href={course.bookingUrl} target="_blank" rel="noopener" className={bandCommitClass}>
-              {tr("course.book")}
-            </a>
-            {course.allowSingleLesson && (
-              <a href={course.singleLessonBookingUrl || course.bookingUrl} target="_blank" rel="noopener" className={bandOutlineClass}>
+            {course.bookingUrl && (
+              <a href={course.bookingUrl} target="_blank" rel="noopener" className={bandCommitClass}>
+                {tr("course.book")}
+              </a>
+            )}
+            {course.allowSingleLesson && (course.singleLessonBookingUrl || course.bookingUrl) && (
+              <a href={course.singleLessonBookingUrl || course.bookingUrl || undefined} target="_blank" rel="noopener" className={bandOutlineClass}>
                 {tr("course.singleLesson")}
                 {singlePrice != null && ` · ${price(singlePrice)}`}
               </a>
@@ -474,15 +476,17 @@ export default async function CoursePage({ params }: PageProps<"/[locale]/kurzy/
         </section>
       )}
 
-      <StickyBar
-        meta={stickyMeta}
-        title={title}
-        action={
-          <a href={course.bookingUrl} target="_blank" rel="noopener" className={stickyActionClass}>
-            {tr("course.bookShort")}
-          </a>
-        }
-      />
+      {course.bookingUrl && (
+        <StickyBar
+          meta={stickyMeta}
+          title={title}
+          action={
+            <a href={course.bookingUrl} target="_blank" rel="noopener" className={stickyActionClass}>
+              {tr("course.bookShort")}
+            </a>
+          }
+        />
+      )}
     </>
   );
 }

@@ -264,13 +264,13 @@ export type Course = {
   _updatedAt: string;
   _rev: string;
   title?: LocaleString;
-  slug: LocaleSlug;
-  focus?: "tanec" | "hudba" | "pohyb";
+  slug?: LocaleSlug;
+  focus: "tanec" | "hudba" | "pohyb";
   audienceTags?: Array<string>;
   level?: LocaleString;
   lecturer?: PersonReference;
   space?: SpaceReference;
-  heroImage?: {
+  heroImage: {
     asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
@@ -295,7 +295,7 @@ export type Course = {
     _key: string;
   }>;
   coursePrice?: number;
-  bookingUrl: string;
+  bookingUrl?: string;
   allowSingleLesson?: boolean;
   singleLessonPrice?: number;
   singleLessonBookingUrl?: string;
@@ -344,7 +344,7 @@ export type Event = {
   _updatedAt: string;
   _rev: string;
   title?: LocaleString;
-  slug: LocaleSlug;
+  slug?: LocaleSlug;
   startsAt: string;
   doorsAt?: string;
   endsAt?: string;
@@ -536,8 +536,8 @@ export type AllSanitySchemaTypes =
 export type COURSES_PAGE_QUERY_RESULT = Array<{
   _id: string;
   title: LocaleString | null;
-  slug: LocaleSlug;
-  focus: "hudba" | "pohyb" | "tanec" | null;
+  slug: LocaleSlug | null;
+  focus: "hudba" | "pohyb" | "tanec";
   audienceTags: Array<string> | null;
   level: LocaleString | null;
   allowSingleLesson: boolean | null;
@@ -559,7 +559,7 @@ export type COURSES_PAGE_QUERY_RESULT = Array<{
     alt: LocaleString | null;
     lqip: string | null;
     dimensions: SanityImageDimensions | null;
-  } | null;
+  };
 }>;
 
 // Source: src/sanity/queries/courses.ts
@@ -569,8 +569,8 @@ export type COURSE_QUERY_RESULT = {
   course: {
     _id: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
-    focus: "hudba" | "pohyb" | "tanec" | null;
+    slug: LocaleSlug | null;
+    focus: "hudba" | "pohyb" | "tanec";
     audienceTags: Array<string> | null;
     level: LocaleString | null;
     slots: Array<{
@@ -591,7 +591,7 @@ export type COURSE_QUERY_RESULT = {
     allowSingleLesson: boolean | null;
     singleLessonPrice: number | null;
     trialPrice: number | null;
-    bookingUrl: string;
+    bookingUrl: string | null;
     singleLessonBookingUrl: string | null;
     capacity: number | null;
     placesLeft: number | null;
@@ -610,7 +610,7 @@ export type COURSE_QUERY_RESULT = {
       alt: LocaleString | null;
       lqip: string | null;
       dimensions: SanityImageDimensions | null;
-    } | null;
+    };
     lecturer: {
       name: string;
       role: LocaleString | null;
@@ -631,8 +631,8 @@ export type COURSE_QUERY_RESULT = {
   others: Array<{
     _id: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
-    focus: "hudba" | "pohyb" | "tanec" | null;
+    slug: LocaleSlug | null;
+    focus: "hudba" | "pohyb" | "tanec";
     audienceTags: Array<string> | null;
     level: LocaleString | null;
     allowSingleLesson: boolean | null;
@@ -654,7 +654,7 @@ export type COURSE_QUERY_RESULT = {
       alt: LocaleString | null;
       lqip: string | null;
       dimensions: SanityImageDimensions | null;
-    } | null;
+    };
   }>;
   address: null | {
     street: string | null;
@@ -709,7 +709,7 @@ export type HOME_QUERY_RESULT = {
   upcoming: Array<{
     _id: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     startsAt: string;
     categories: Array<string>;
     featured: boolean | null;
@@ -729,8 +729,8 @@ export type HOME_QUERY_RESULT = {
   courses: Array<{
     _id: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
-    focus: "hudba" | "pohyb" | "tanec" | null;
+    slug: LocaleSlug | null;
+    focus: "hudba" | "pohyb" | "tanec";
     slots: Array<{
       _key: string;
       weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -792,7 +792,7 @@ export type LAYOUT_QUERY_RESULT = {
   } | null;
   today: {
     title: LocaleString | null;
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     startsAt: string;
     ticketUrl: string | null;
     hall: LocaleString | null;
@@ -818,7 +818,7 @@ export type PROGRAM_QUERY_RESULT = {
   month: Array<{
     _id: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     startsAt: string;
     categories: Array<string>;
     featured: boolean | null;
@@ -839,7 +839,7 @@ export type PROGRAM_QUERY_RESULT = {
   week: Array<{
     _id: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     startsAt: string;
     categories: Array<string>;
     featured: boolean | null;
@@ -866,7 +866,7 @@ export type EVENT_QUERY_RESULT = {
   event: {
     _id: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     startsAt: string;
     doorsAt: string | null;
     endsAt: string | null;
@@ -917,7 +917,7 @@ export type EVENT_QUERY_RESULT = {
 export type RELATED_EVENTS_QUERY_RESULT = Array<{
   _id: string;
   title: LocaleString | null;
-  slug: LocaleSlug;
+  slug: LocaleSlug | null;
   startsAt: string;
   categories: Array<string>;
   featured: boolean | null;
@@ -965,7 +965,7 @@ export type ICS_FEED_QUERY_RESULT = {
     _id: string;
     _updatedAt: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     startsAt: string;
     endsAt: string | null;
     lead: LocaleText | null;
@@ -996,7 +996,7 @@ export type ICS_EVENT_QUERY_RESULT = {
     _id: string;
     _updatedAt: string;
     title: LocaleString | null;
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     startsAt: string;
     endsAt: string | null;
     lead: LocaleText | null;
@@ -1066,11 +1066,11 @@ export type RENTAL_QUERY_RESULT = {
 // Query: {  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }}
 export type SITEMAP_QUERY_RESULT = {
   events: Array<{
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     _updatedAt: string;
   }>;
   courses: Array<{
-    slug: LocaleSlug;
+    slug: LocaleSlug | null;
     _updatedAt: string;
   }>;
 };

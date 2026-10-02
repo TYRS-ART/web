@@ -19,7 +19,13 @@ export const event = defineType({
   ],
   fields: [
     defineField({ name: "title", title: "Název", type: "localeString", group: "main", validation: requiredLocale }),
-    defineField({ name: "slug", title: "Adresa stránky", type: "localeSlug", group: "main", validation: (rule) => rule.required() }),
+    defineField({
+      name: "slug",
+      title: "Adresa stránky",
+      description: "Vyplní se sama při zveřejnění z názvu (a u akcí z data). Změň jen když chceš jinou.",
+      type: "localeSlug",
+      group: "main",
+    }),
     defineField({ name: "startsAt", title: "Začátek", type: "datetime", group: "main", validation: (rule) => rule.required() }),
     defineField({ name: "doorsAt", title: "Otevření dveří", type: "datetime", group: "main" }),
     defineField({
