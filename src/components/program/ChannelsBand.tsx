@@ -4,7 +4,7 @@ import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 
 type Channel = { name: string; note: string; href: string; external: boolean };
 
-/** "@tyrs.art" from "https://www.instagram.com/tyrs.art/" */
+/** "@tyrs.human.lab" from "https://www.instagram.com/tyrs.human.lab/" */
 function instagramHandle(url: string) {
   const handle = url.replace(/^https?:\/\/(www\.)?instagram\.com\//, "").split(/[/?#]/)[0];
   return handle ? `@${handle}` : undefined;

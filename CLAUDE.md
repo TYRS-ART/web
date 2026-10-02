@@ -15,7 +15,7 @@ This is a **brand-new project**. Nothing from earlier TYRŠ code is reused.
 - `design/img/placeholder-*` are design stand-ins only. **Never** use them on the live site.
 - Bracketed texts in the design ("[Název akce]") are placeholders. All real content comes from Sanity; empty sections hide.
 - Real assets are in `public/`: fonts, logos (`logo-primary.svg` in the header, an inline SVG version of `logo-boxed-row.svg` in the footer, built like the footer in `design/pages/*.html`) and the map image.
-- Contact: booking@tyrs.art · Instagram @tyrs.art · domain tyrs.art (Namecheap → Vercel).
+- Contact: booking@tyrs.art · Instagram @tyrs.human.lab (https://www.instagram.com/tyrs.human.lab/) · domain tyrs.art (Namecheap → Vercel).
 - Czech + English from day one.
 
 ## First session
