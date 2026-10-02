@@ -30,13 +30,15 @@ export function CourseTile({
     <>
       {hasImage ? (
         <>
-          <SanityImage
-            image={image!}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 33vw, 100vw"
-            className="soft absolute inset-0 block h-full w-full object-cover zoom-soft group-hover:scale-[1.03] motion-reduce:transition-none"
-          />
+          <span className="soft absolute inset-0 overflow-hidden">
+            <SanityImage
+              image={image!}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              className="absolute inset-0 block h-full w-full object-cover zoom-soft group-hover:scale-[1.04] motion-reduce:transition-none"
+            />
+          </span>
           <span className="soft absolute inset-0 bg-linear-to-t from-black/60 to-black/0 to-55%" />
         </>
       ) : (
