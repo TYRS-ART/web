@@ -55,6 +55,15 @@ export const course = defineType({
     defineField({ name: "space", title: "Sál", type: "reference", to: [{ type: "space" }], group: "main" }),
     { ...photoField("heroImage", "Hlavní fotka", { required: true }), group: "main" },
     defineField({
+      name: "morePhotos",
+      title: "Další fotky",
+      description: "Nepovinné. Na úvodní stránce se u dalších lekcí střídají, aby se stejná fotka neopakovala.",
+      type: "array",
+      group: "main",
+      options: { layout: "grid" },
+      of: [defineArrayMember({ type: "image", options: { hotspot: true } })],
+    }),
+    defineField({
       name: "slots",
       title: "Pravidelné termíny",
       description: "Den a čas v týdnu. Kurz může mít víc termínů (např. Po · St · Pá).",

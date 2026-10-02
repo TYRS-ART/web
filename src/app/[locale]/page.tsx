@@ -12,7 +12,7 @@ import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";
 import { alternates } from "@/lib/metadata";
 import { addDays, dayOffset, pragueDay, pragueDayRange } from "@/lib/dates";
-import { nextLessonCards, pickMosaic } from "@/lib/upcoming";
+import { allLessonCards, nextLessonCards, pickMosaic } from "@/lib/upcoming";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { HOME_QUERY } from "@/sanity/queries/home";
 
@@ -46,8 +46,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   // Ticker: today's and the next events, shown only when something is on today or tomorrow.
   const ticker = upcoming.filter((e) => dayOffset(e.startsAt, now) <= 1).length > 0 ? upcoming.slice(0, 5) : [];
 
-  // Mosaic: events first (no photo twice), lessons fill the rest, in date order.
-  const mosaic = pickMosaic(data.upcoming, lessonCards);
+  // Mosaic: events first, lessons fill the rest, 4–5 tiles in date order (see pickMosaic).
+  const mosaic = pickMosaic(data.upcoming, allLessonCards(data.courses, today, now));
 
   const heroBlocks = data.settings?.heroSentence?.[locale] ?? data.settings?.heroSentence?.cs;
 
