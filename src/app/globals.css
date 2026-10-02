@@ -394,6 +394,11 @@
 
 /* --------------------------------------------------------------- Map fade */
 
+/* A map that ends the page (homepage) sits right on the footer's divider line. */
+main:has(> .map-section:last-child) + footer {
+  margin-top: 0;
+}
+
 /* The canvas map's soft arched edge: the map melts into the paper along the top and the corners. */
 .map-fade {
   -webkit-mask-image: radial-gradient(ellipse 105% 96% at 50% 100%, #000 64%, rgba(0, 0, 0, 0.45) 84%, transparent 99%);
