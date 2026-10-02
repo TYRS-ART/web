@@ -81,7 +81,6 @@ export default async function VenuePage({ params }: PageProps<"/[locale]/venue">
         id="kde"
         variant="venue"
         address={address}
-        mapImage={data.settings?.mapImage}
         locale={locale}
         title={tr("address")}
         heading={tr("where")}

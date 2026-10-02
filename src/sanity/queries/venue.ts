@@ -9,7 +9,6 @@ export const VENUE_QUERY = defineQuery(`{
     infoCards[]{ _key, title, headline, body, link, highlight }
   },
   "settings": *[_type == "settings" && _id == "settings"][0]{
-    address, email,
-    mapImage{ ${imageFields} }
+    address, email
   }
 }`);

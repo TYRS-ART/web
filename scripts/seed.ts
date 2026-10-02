@@ -140,10 +140,6 @@ async function siteDocuments(): Promise<Doc[]> {
         city: "Praha 1",
         googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nosticova+634%2F2%2C+118+00+Praha+1",
       },
-      mapImage: await image("public/images/map-mala-strana.jpg", {
-        cs: "Mapa Malé Strany s vyznačeným domem TYRŠ v Nosticově ulici",
-        en: "Map of Malá Strana with the TYRŠ house on Nosticova street marked",
-      }),
       email: "booking@tyrs.art",
       openingHours: lt(
         "Bar a foyer denně [16:00–24:00]. Sál podle programu, dveře hodinu před začátkem.",

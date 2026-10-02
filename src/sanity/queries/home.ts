@@ -4,8 +4,7 @@ import { eventCard, imageFields, notOver } from "./shared";
 
 export const HOME_QUERY = defineQuery(`{
   "settings": *[_id == "settings"][0]{
-    heroSentence, rentalBand, address,
-    mapImage{ ${imageFields} }
+    heroSentence, rentalBand, address
   },
   "upcoming": *[_type == "event" && ${notOver}] | order(startsAt asc)[0...30]{ ${eventCard} },
   "courses": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)]{

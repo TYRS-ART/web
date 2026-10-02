@@ -124,13 +124,6 @@ export type LocaleBlockContent = {
   }>;
 };
 
-export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-};
-
 export type Settings = {
   _id: string;
   _type: "settings";
@@ -149,14 +142,6 @@ export type Settings = {
     city?: string;
     googleMapsUrl?: string;
   };
-  mapImage?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: LocaleString;
-    _type: "image";
-  };
   email?: string;
   phone?: string;
   openingHours?: LocaleText;
@@ -165,22 +150,6 @@ export type Settings = {
     spotify?: string;
     whatsapp?: string;
   };
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
 };
 
 export type LocaleHeroSentence = {
@@ -223,6 +192,13 @@ export type LocaleHeroSentence = {
   }>;
 };
 
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
 export type Playlist = {
   _id: string;
   _type: "playlist";
@@ -248,6 +224,22 @@ export type Playlist = {
     _type: "track";
     _key: string;
   }>;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
 };
 
 export type SpaceReference = {
@@ -509,12 +501,12 @@ export type AllSanitySchemaTypes =
   | PersonReference
   | VenuePage
   | LocaleBlockContent
-  | SanityImageAssetReference
   | Settings
+  | LocaleHeroSentence
+  | SanityImageAssetReference
+  | Playlist
   | SanityImageCrop
   | SanityImageHotspot
-  | LocaleHeroSentence
-  | Playlist
   | SpaceReference
   | Course
   | Person
@@ -676,14 +668,13 @@ export type COURSE_SLUGS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries/home.ts
 // Variable: HOME_QUERY
-// Query: {  "settings": *[_id == "settings"][0]{    heroSentence, rentalBand, address,    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  },  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{   _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,  "hall": hall->name,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },  "courses": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)]{    _id, title, slug, focus, level,    slots[]{ _key, weekday, startTime, endTime },    runStart, runEnd,    "lessonDates": lessonDates[].date,    "hall": space->name,    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  }}
+// Query: {  "settings": *[_id == "settings"][0]{    heroSentence, rentalBand, address  },  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{   _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,  "hall": hall->name,  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },  "courses": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)]{    _id, title, slug, focus, level,    slots[]{ _key, weekday, startTime, endTime },    runStart, runEnd,    "lessonDates": lessonDates[].date,    "hall": space->name,    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  }}
 export type HOME_QUERY_RESULT = {
   settings:
     | {
         heroSentence: null;
         rentalBand: null;
         address: null;
-        mapImage: null;
       }
     | {
         heroSentence: LocaleHeroSentence | null;
@@ -697,14 +688,6 @@ export type HOME_QUERY_RESULT = {
           postalCode?: string;
           city?: string;
           googleMapsUrl?: string;
-        } | null;
-        mapImage: {
-          asset: SanityImageAssetReference | null;
-          hotspot: SanityImageHotspot | null;
-          crop: SanityImageCrop | null;
-          alt: LocaleString | null;
-          lqip: string | null;
-          dimensions: SanityImageDimensions | null;
         } | null;
       }
     | null;
@@ -1092,7 +1075,7 @@ export type SITEMAP_QUERY_RESULT = {
 
 // Source: src/sanity/queries/venue.ts
 // Variable: VENUE_QUERY
-// Query: {  "page": *[_type == "venuePage" && _id == "venuePage"][0]{    statement, intro, motto,    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },    infoCards[]{ _key, title, headline, body, link, highlight }  },  "settings": *[_type == "settings" && _id == "settings"][0]{    address, email,    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }  }}
+// Query: {  "page": *[_type == "venuePage" && _id == "venuePage"][0]{    statement, intro, motto,    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },    infoCards[]{ _key, title, headline, body, link, highlight }  },  "settings": *[_type == "settings" && _id == "settings"][0]{    address, email  }}
 export type VENUE_QUERY_RESULT = {
   page: {
     statement: LocaleText | null;
@@ -1132,14 +1115,6 @@ export type VENUE_QUERY_RESULT = {
       googleMapsUrl?: string;
     } | null;
     email: string | null;
-    mapImage: {
-      asset: SanityImageAssetReference | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-      alt: LocaleString | null;
-      lqip: string | null;
-      dimensions: SanityImageDimensions | null;
-    } | null;
   } | null;
 };
 
@@ -1149,7 +1124,7 @@ declare global {
     '\n  *[_type == "course" && (!defined(runEnd) || runEnd >= $from)] | order(runStart asc){ \n  _id, title, slug, focus, audienceTags, level, allowSingleLesson,\n  "lecturer": lecturer->name,\n  slots[]{ _key, weekday, startTime, endTime },\n  runStart, runEnd, lessonsCount,\n  "lessonDates": lessonDates[].date,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n }\n': COURSES_PAGE_QUERY_RESULT;
     '{\n  "course": *[_type == "course" && (\n    slug[$locale].current == $slug || (!defined(slug[$locale].current) && slug.cs.current == $slug)\n  )][0]{\n    _id, title, slug, focus, audienceTags, level,\n    slots[]{ _key, weekday, startTime, endTime },\n    runStart, runEnd, lessonsCount,\n    lessonDates[]{ _key, date, isTrial },\n    coursePrice, allowSingleLesson, singleLessonPrice, trialPrice,\n    bookingUrl, singleLessonBookingUrl, capacity, placesLeft,\n    description, forWhom, whatToBring, goodToKnow,\n    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions },\n    lecturer->{ name, role, bio, instagram, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    space->{ name }\n  },\n  "others": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)] | order(runStart asc){ \n  _id, title, slug, focus, audienceTags, level, allowSingleLesson,\n  "lecturer": lecturer->name,\n  slots[]{ _key, weekday, startTime, endTime },\n  runStart, runEnd, lessonsCount,\n  "lessonDates": lessonDates[].date,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "address": *[_id == "settings"][0].address{ street, district, postalCode, city }\n}': COURSE_QUERY_RESULT;
     '\n  *[_type == "course" && defined(slug.cs.current)]{ "cs": slug.cs.current, "en": slug.en.current }\n': COURSE_SLUGS_QUERY_RESULT;
-    '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)]{\n    _id, title, slug, focus, level,\n    slots[]{ _key, weekday, startTime, endTime },\n    runStart, runEnd,\n    "lessonDates": lessonDates[].date,\n    "hall": space->name,\n    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  }\n}': HOME_QUERY_RESULT;
+    '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)]{\n    _id, title, slug, focus, level,\n    slots[]{ _key, weekday, startTime, endTime },\n    runStart, runEnd,\n    "lessonDates": lessonDates[].date,\n    "hall": space->name,\n    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  }\n}': HOME_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{ socials },\n  "month": *[_type == "event" && startsAt >= $monthStart && startsAt < $monthEnd] | order(startsAt asc){\n    \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n, endsAt\n  },\n  "week": *[_type == "event" && startsAt >= $weekStart && startsAt < $weekEnd] | order(startsAt asc){\n    \n  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n, endsAt\n  }\n}': PROGRAM_QUERY_RESULT;
     '{\n  "event": *[_type == "event" && (\n    ($locale == "cs" && slug.cs.current == $slug)\n    || ($locale == "en" && coalesce(slug.en.current, slug.cs.current) == $slug)\n  )][0]{\n    _id, title, slug, startsAt, doorsAt, endsAt, categories, lead, body, goodToKnow,\n    priceText, ticketUrl, capacityNote, links,\n    "hall": hall->name,\n    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "settings": *[_id == "settings"][0]{ address }\n}': EVENT_QUERY_RESULT;
@@ -1160,7 +1135,7 @@ declare global {
     '*[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n}': RENTAL_SPACES_QUERY_RESULT;
     '{\n  "page": *[_type == "rentalPage" && _id == "rentalPage"][0]{\n    headline, intro, formIntro, quote,\n    included[]{ _key, title, body }\n  },\n  "spaces": *[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n},\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': RENTAL_QUERY_RESULT;
     '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
-    '{\n  "page": *[_type == "venuePage" && _id == "venuePage"][0]{\n    statement, intro, motto,\n    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    infoCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "settings": *[_type == "settings" && _id == "settings"][0]{\n    address, email,\n    mapImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  }\n}': VENUE_QUERY_RESULT;
+    '{\n  "page": *[_type == "venuePage" && _id == "venuePage"][0]{\n    statement, intro, motto,\n    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    infoCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "settings": *[_type == "settings" && _id == "settings"][0]{\n    address, email\n  }\n}': VENUE_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
