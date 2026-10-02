@@ -236,7 +236,7 @@ The site must be usable from day one with whatever real content exists, even if 
 
 - **Domain:** tyrs.art. It's registered at **Namecheap**; point DNS to Vercel (A/CNAME records, or switch nameservers to Vercel).
 - **Contact email:** booking@tyrs.art. It's the single address for programme, rental and general questions, used everywhere a contact appears; enquiry form submissions go here too.
-- **Instagram:** @tyrs.art → https://www.instagram.com/tyrs.art/
+- **Instagram:** @tyrs.human.lab → https://www.instagram.com/tyrs.human.lab/ (changed from @tyrs.art on 2 Oct 2026; the link itself is the Instagram field under socials in the Sanity settings document)
 - **Capacity:** 80 people.
 - **Accessibility:** step-free (barrier-free) entry.
 - **Address:** Nosticova 634/2, 118 00 Praha 1 (Malá Strana).
