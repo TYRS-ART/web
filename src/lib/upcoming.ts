@@ -24,7 +24,11 @@ export function upcomingLessons(courses: Course[], today: string, now: Date = ne
 
 type Photo = Course["heroImage"];
 
-function lessonCard(lesson: Lesson<Course>, heroImage: Photo): EventCard {
+/** What a lesson card needs from its course (homepage and /kurzy queries both fit). */
+type LessonCourse = Pick<Course, "_id" | "title" | "slug" | "focus" | "heroImage"> & { hall?: Course["hall"] };
+
+/** A lesson as an event-like card (Lekce + the course's focus when it's also an event category). */
+export function lessonCard(lesson: Lesson<LessonCourse>, heroImage: Photo = lesson.course.heroImage): EventCard {
   const course = lesson.course;
   return {
     _id: `${course._id}-${lesson.day}-${lesson.start}`,
@@ -37,7 +41,7 @@ function lessonCard(lesson: Lesson<Course>, heroImage: Photo): EventCard {
     priceText: null,
     tickerText: null,
     ticketUrl: null,
-    hall: course.hall,
+    hall: course.hall ?? null,
     heroImage,
   };
 }

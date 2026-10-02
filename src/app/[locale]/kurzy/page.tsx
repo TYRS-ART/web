@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { CourseFilters } from "@/components/courses/CourseFilters";
 import { CourseTile } from "@/components/courses/CourseTile";
+import { EventRow } from "@/components/events/EventRow";
 import { MonthCalendar, MonthList } from "@/components/courses/MonthCalendar";
 import { SetAlternates } from "@/components/layout/AlternateLinks";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
@@ -27,6 +28,7 @@ import {
   type CoursesView,
   type FilterId,
 } from "@/lib/timetable";
+import { lessonCard } from "@/lib/upcoming";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { COURSES_PAGE_QUERY } from "@/sanity/queries/courses";
 
@@ -94,6 +96,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
     count: monthLessons.length,
   });
   const nextLabel = formatMonthKey(shiftMonth(monthKey, 1), locale);
+  const words = { today: tr("common.today"), tomorrow: tr("common.tomorrow") };
   const lessonDays = new Set(monthLessons.map((l) => l.day));
   const circles: DayInfo[] = gridDays.map((day) => ({
     day,
@@ -182,16 +185,24 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
           />
           <section aria-label={tr("courses.monthCalendar")} className="mx-3 mt-6 flex flex-col gap-4 rounded-tile bg-white p-4 lg:hidden">
             <DayCircles days={circles} monthKey={monthKey} today={today} locale={locale} label={tr("courses.daysInMonth")} />
-            <MonthList lessons={monthLessons} today={today} locale={locale} fromToday />
+            <MonthList lessons={monthLessons} today={today} locale={locale} />
           </section>
         </>
       ) : (
+        // The same rows as the Akce list: date · course + chips · time · photo.
         <section
           id="seznam"
           aria-label={tr("courses.lessonsList")}
-          className="mx-3 mt-6 flex scroll-mt-4 flex-col rounded-tile bg-white px-4 pt-1 pb-2 lg:mx-6 lg:mt-10 lg:rounded-card lg:px-10 lg:pt-4 lg:pb-6"
+          className="mx-3 mt-6 flex scroll-mt-4 flex-col rounded-tile bg-white p-5 lg:mx-6 lg:mt-10 lg:rounded-card lg:p-10"
         >
-          <MonthList lessons={monthLessons} today={today} locale={locale} />
+          {monthLessons.map((lesson, i) => {
+            const firstOfDay = i === 0 || monthLessons[i - 1].day !== lesson.day;
+            return (
+              <div key={lesson.key} id={firstOfDay ? dayAnchor(lesson.day) : undefined} className="scroll-mt-4">
+                <EventRow event={lessonCard(lesson)} locale={locale} words={words} last={i === monthLessons.length - 1} />
+              </div>
+            );
+          })}
         </section>
       )}
 
