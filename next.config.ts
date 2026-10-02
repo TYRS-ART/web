@@ -4,7 +4,12 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.sanity.io" },
+      // Spotify playlist and album artwork (oEmbed thumbnails).
+      { protocol: "https", hostname: "i.scdn.co" },
+      { protocol: "https", hostname: "**.spotifycdn.com" },
+    ],
   },
 };
 
