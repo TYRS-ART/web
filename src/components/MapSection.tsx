@@ -58,8 +58,9 @@ export async function MapSection({
   // The homepage card shows the house number only ("Nosticova 634"); the footer has the full address.
   const street = full ? address.street : address.street.replace(/\/\d+\w*$/, "");
   const secondLine = (full && [address.postalCode, address.city].filter(Boolean).join(" ")) || address.district;
-  // Keeps the house in view: centred on phones, left of the address card on desktop.
-  const imageClass = "object-cover object-[39%_62%] lg:object-[40%_48%]";
+  // Keeps the house in view: centred on phones; on desktop any extra width is cropped
+  // from the left so the house stays clear of the address card (right side).
+  const imageClass = "object-cover object-[39%_62%] lg:object-[100%_48%]";
 
   return (
     <section
