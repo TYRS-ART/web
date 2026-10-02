@@ -253,8 +253,8 @@ function svgFor(v, layer) {
 <defs>
   ${defs}
   <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="${3 * s}" stdDeviation="${5 * s}" flood-color="#000" flood-opacity=".22"/></filter>
-  <!-- Soft, faded, slightly warm grade so the photo sits in the pastel map. -->
-  <filter id="grade" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.58"/><feComponentTransfer><feFuncR type="linear" slope="0.92" intercept="0.08"/><feFuncG type="linear" slope="0.9" intercept="0.075"/><feFuncB type="linear" slope="0.82" intercept="0.09"/></feComponentTransfer></filter>
+  <!-- Soft, slightly faded grade with a gentle S-curve so the photo sits in the pastel map. -->
+  <filter id="grade" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.7"/><feComponentTransfer><feFuncR type="table" tableValues="0.1 0.5 0.98"/><feFuncG type="table" tableValues="0.09 0.48 0.94"/><feFuncB type="table" tableValues="0.12 0.44 0.86"/></feComponentTransfer></filter>
   <style>
     .street { font: 600 ${9.5 * s}px "General Sans", system-ui, sans-serif; fill: ${C.text}; letter-spacing: .01em; paint-order: stroke; stroke: ${C.halo}; stroke-width: ${2.8 * s}px; stroke-linejoin: round; }
     .park { font: italic 500 ${17 * s}px "General Sans", system-ui, sans-serif; fill: #4f5a55; paint-order: stroke; stroke: ${C.green}; stroke-width: ${3 * s}px; }
