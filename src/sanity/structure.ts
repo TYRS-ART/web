@@ -34,6 +34,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Nadcházející akce")
                     .schemaType("event")
+                    .apiVersion("2026-10-01")
                     .filter('_type == "event" && (!defined(startsAt) || startsAt >= now())')
                     .defaultOrdering([{ field: "startsAt", direction: "asc" }]),
                 ),
@@ -44,6 +45,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Proběhlé akce")
                     .schemaType("event")
+                    .apiVersion("2026-10-01")
                     .filter('_type == "event" && startsAt < now()')
                     .defaultOrdering([{ field: "startsAt", direction: "desc" }]),
                 ),

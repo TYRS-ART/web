@@ -330,8 +330,8 @@ function TableRow({
               onCommit={(value) => value && onEdit({ startsAt: fromLocalInput(value) })}
             />
           </td>
-          <td style={cell}>
-            <Flex gap={1} wrap="wrap">
+          <td style={{ ...cell, minWidth: 290 }}>
+            <Flex gap={1} wrap="nowrap">
               {eventCategories.map((category) => {
                 const current = (doc.categories as string[] | undefined) ?? [];
                 const on = current.includes(category.id);
@@ -376,11 +376,11 @@ function TableRow({
           </td>
         </>
       )}
-      <td style={{ ...cell, whiteSpace: "nowrap" }}>
-        <Stack gap={1}>
+      <td style={{ ...cell, minWidth: 150, maxWidth: 220 }}>
+        <Stack gap={2}>
           <Box>{status}</Box>
           {problems.length > 0 && (
-            <Text size={0} style={{ color: "var(--card-badge-critical-fg-color, #c0392b)" }}>
+            <Text size={0} style={{ color: "var(--card-badge-critical-fg-color, #c0392b)", lineHeight: 1.4 }}>
               Chybí: {problems.join(", ")}
             </Text>
           )}
