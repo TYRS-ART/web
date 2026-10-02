@@ -11,7 +11,7 @@ import type { EventCard } from "@/components/events/types";
 export async function MonthList({ events, locale }: { events: EventCard[]; locale: Locale }) {
   const tr = await getTranslations();
   if (events.length === 0) return null;
-  const words = { today: tr("common.today"), tomorrow: tr("common.tomorrow") };
+  const words = { today: tr("common.today"), tomorrow: tr("common.tomorrow"), until: (date: string) => tr("common.until", { date }) };
   return (
     <section
       id="program"
