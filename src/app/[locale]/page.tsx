@@ -12,7 +12,7 @@ import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";
 import { alternates } from "@/lib/metadata";
 import { addDays, dayOffset, pragueDay, pragueDayRange } from "@/lib/dates";
-import { nextLessonCards } from "@/lib/upcoming";
+import { nextLessonCards, pickMosaic } from "@/lib/upcoming";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { HOME_QUERY } from "@/sanity/queries/home";
 
@@ -40,18 +40,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   const words = { today: tr("common.today"), tomorrow: tr("common.tomorrow") };
   // Events and each course's next lesson, in one timeline.
-  const upcoming = [...data.upcoming, ...nextLessonCards(data.courses, today, now)].sort((a, b) =>
-    a.startsAt.localeCompare(b.startsAt),
-  );
+  const lessonCards = nextLessonCards(data.courses, today, now);
+  const upcoming = [...data.upcoming, ...lessonCards].sort((a, b) => a.startsAt.localeCompare(b.startsAt));
 
   // Ticker: today's and the next events, shown only when something is on today or tomorrow.
   const ticker = upcoming.filter((e) => dayOffset(e.startsAt, now) <= 1).length > 0 ? upcoming.slice(0, 5) : [];
 
-  // Mosaic: featured events first, filled up with the nearest ones, shown in date order.
-  const featured = upcoming.filter((e) => e.featured);
-  const mosaic = [...featured, ...upcoming.filter((e) => !e.featured)]
-    .slice(0, 5)
-    .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+  // Mosaic: events first (no photo twice), lessons fill the rest, in date order.
+  const mosaic = pickMosaic(data.upcoming, lessonCards);
 
   const heroBlocks = data.settings?.heroSentence?.[locale] ?? data.settings?.heroSentence?.cs;
 

@@ -41,6 +41,7 @@
   --radius-card: 24px;
 
   --ease-roll: cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-zoom: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 /* -------------------------------------------------------------------- Base */
@@ -171,7 +172,8 @@
     --feather: 16px;
   }
 }
-.tile:has(img.soft) {
+.tile:has(img.soft),
+.tile:has(.soft img) {
   background: transparent;
 }
 
@@ -187,7 +189,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  transition: opacity 450ms ease;
+  transition: opacity 700ms ease;
 }
 .duo::before { background: #302a25; mix-blend-mode: lighten; }
 .duo::after { background: #efe8d8; mix-blend-mode: multiply; }
@@ -202,7 +204,7 @@
 }
 .duo-host img {
   filter: grayscale(1) contrast(1.08);
-  transition: filter 450ms ease, transform 300ms ease;
+  transition: filter 600ms ease, scale 900ms var(--ease-zoom), transform 900ms var(--ease-zoom);
 }
 
 /* Back to full colour on hover of the tile/row, or of any chip of the same category.
@@ -372,6 +374,18 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .marquee { animation: none; }
+}
+
+/* Slow, eased zoom for photo tiles on hover (no abrupt jump). */
+.zoom-soft {
+  /* Tailwind's scale-* sets the `scale` property, so both are transitioned. */
+  transition: scale 900ms var(--ease-zoom), transform 900ms var(--ease-zoom);
+  will-change: scale;
+}
+@media (prefers-reduced-motion: reduce) {
+  .zoom-soft {
+    transition: none;
+  }
 }
 
 /* --------------------------------------------------------------- Map fade */

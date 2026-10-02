@@ -63,14 +63,17 @@ export function EventTile({
     <>
       {hasImage ? (
         <>
-          <SanityImage
-            image={event.heroImage!}
-            alt=""
-            fill
-            sizes={sizes}
-            className="soft absolute inset-0 block h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-          />
-          <span className="duo" />
+          {/* The feathered edge sits on this fixed frame; only the photo inside zooms. */}
+          <span className="soft absolute inset-0 overflow-hidden">
+            <SanityImage
+              image={event.heroImage!}
+              alt=""
+              fill
+              sizes={sizes}
+              className="zoom-soft absolute inset-0 block h-full w-full object-cover group-hover:scale-[1.04]"
+            />
+            <span className="duo" />
+          </span>
           <span className="soft absolute inset-0 bg-linear-to-t from-black/60 to-black/0 to-55%" />
         </>
       ) : (
