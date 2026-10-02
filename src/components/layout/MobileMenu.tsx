@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import NextLink from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
@@ -128,9 +129,9 @@ export function MobileMenu({ today, settings, newsletterHref }: Props) {
               {socials?.spotify && (
                 <a href={socials.spotify} target="_blank" rel="noopener" className="no-underline">Spotify</a>
               )}
-              <a href={newsletterHref} className="no-underline">
+              <NextLink href={newsletterHref} className="no-underline">
                 {tr("footer.newsletter")}
-              </a>
+              </NextLink>
             </div>
             <div className="flex items-end justify-between gap-3 text-[15px] leading-[22px]">
               {address?.street ? (

@@ -239,9 +239,9 @@ export function DayCircles({
         return (
           <li key={info.day}>
             {href ? (
-              <a href={href} aria-label={formatShortDate(`${info.day}T12:00:00Z`, locale)} className={`${circle} ${style}`}>
+              <NextLink href={href} aria-label={formatShortDate(`${info.day}T12:00:00Z`, locale)} className={`${circle} ${style}`}>
                 {n}
-              </a>
+              </NextLink>
             ) : (
               <span className={`${circle} ${style}`}>{n}</span>
             )}
