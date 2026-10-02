@@ -225,7 +225,7 @@
   :root:has(:is(.pill, .chip).cl-tanec:hover) .duo-host:has(.cl-tanec) .duo::before,
   :root:has(:is(.pill, .chip).cl-tanec:hover) .duo-host:has(.cl-tanec) .duo::after,
   :root:has(:is(.pill, .chip).cl-lekce:hover) .duo-host:has(.cl-lekce) .duo::before,
-  :root:has(:is(.pill, .chip).cl-lekce:hover) .duo-host:has(.cl-lekce) .duo::after ,
+  :root:has(:is(.pill, .chip).cl-lekce:hover) .duo-host:has(.cl-lekce) .duo::after,
   :root:has(:is(.pill, .chip).cl-umeni:hover) .duo-host:has(.cl-umeni) .duo::before,
   :root:has(:is(.pill, .chip).cl-umeni:hover) .duo-host:has(.cl-umeni) .duo::after {
     opacity: 0;
