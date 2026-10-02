@@ -23,7 +23,7 @@ import { getPathname, Link } from "@/i18n/navigation";
 import { minutes, shortTime, weekdayShort } from "@/lib/courses";
 import { cleanMetadata } from "@/lib/metadata";
 import { formatShortDate, pragueDay } from "@/lib/dates";
-import { t, tSlug } from "@/lib/localize";
+import { t, tSlug, instagramHandle } from "@/lib/localize";
 import { formatDay, formatPrice, formatRun, keepDashWithNext, lessonTimes, lessonTotal, slotsBadge } from "@/lib/timetable";
 import { nbsp } from "@/lib/typography";
 import { sanityFetch } from "@/sanity/lib/fetch";
@@ -307,7 +307,7 @@ export default async function CoursePage({ params }: PageProps<"/[locale]/kurzy/
       location,
       ...(runStart ? { startDate: runStart } : {}),
       ...(runEnd ? { endDate: runEnd } : {}),
-      ...(course.lecturer?.name ? { instructor: { "@type": "Person", name: course.lecturer.name } } : {}),
+      ...(course.lecturer?.name ? { instructor: { "@type": "Person", name: course.lecturer.name, ...(course.lecturer.instagram ? { sameAs: [course.lecturer.instagram] } : {}) } } : {}),
       courseSchedule: {
         "@type": "Schedule",
         repeatFrequency: "P1W",
@@ -417,6 +417,16 @@ export default async function CoursePage({ params }: PageProps<"/[locale]/kurzy/
                   <span className="text-[15px] leading-[22px] text-muted lg:text-lg lg:leading-7">
                     {nbsp(t(course.lecturer.bio, locale)!)}
                   </span>
+                )}
+                {instagramHandle(course.lecturer.instagram) && (
+                  <a
+                    href={course.lecturer.instagram!}
+                    target="_blank"
+                    rel="noopener"
+                    className="self-start text-[15px] leading-[22px] font-medium underline underline-offset-4 hover:text-green lg:text-lg lg:leading-7"
+                  >
+                    Instagram {instagramHandle(course.lecturer.instagram)} ↗
+                  </a>
                 )}
               </div>
             </div>
