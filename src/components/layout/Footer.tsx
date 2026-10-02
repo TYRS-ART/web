@@ -1,3 +1,4 @@
+import NextLink from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
@@ -44,7 +45,7 @@ export async function Footer({
           {socials?.spotify && (
             <a href={socials.spotify} target="_blank" rel="noopener" className={item}>Spotify</a>
           )}
-          <a href={newsletterHref} className={item}>{tr("footer.newsletter")}</a>
+          <NextLink href={newsletterHref} className={item}>{tr("footer.newsletter")}</NextLink>
         </Column>
         {address?.street && (
           <Column title={tr("footer.where")}>
