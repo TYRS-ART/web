@@ -18,12 +18,12 @@
   },
   "playlist": {
     "label": "{month} · playlist",
-    "open": "Playlist měsíce — přehrát",
+    "open": "Otevřít playlist měsíce",
     "card": "Spotify přehrávač — playlist měsíce",
     "ofMonth": "Playlist měsíce",
     "tracks": "{count, plural, one {# skladba} few {# skladby} other {# skladeb}}",
     "save": "Otevřít ve Spotify",
-    "preview": "Náhled",
+    "preview": "Přehrát",
     "play": "Přehrát",
     "pause": "Pozastavit",
     "playing": "Hraje"
