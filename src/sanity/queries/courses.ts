@@ -25,7 +25,7 @@ export const COURSE_QUERY = defineQuery(`{
     _id, title, slug, focus, audienceTags, level,
     slots[]{ _key, weekday, startTime, endTime },
     runStart, runEnd, lessonsCount,
-    lessonDates[]{ _key, date, isTrial },
+    lessonDates[]{ _key, date, isTrial, bookingUrl },
     coursePrice, allowSingleLesson, singleLessonPrice, trialPrice,
     bookingUrl, singleLessonBookingUrl, capacity, placesLeft,
     description, forWhom, whatToBring, goodToKnow,

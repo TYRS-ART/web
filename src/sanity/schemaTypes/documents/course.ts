@@ -125,12 +125,18 @@ export const course = defineType({
           fields: [
             defineField({ name: "date", title: "Datum a čas", type: "datetime", validation: (rule) => rule.required() }),
             defineField({ name: "isTrial", title: "Zkušební lekce", type: "boolean", initialValue: false }),
+            defineField({
+              name: "bookingUrl",
+              title: "Odkaz na přihlášku na tuto lekci",
+              description: "Např. akce na Luma. Na stránce kurzu se zobrazí vpravo u termínu jako „Přihlásit se ↗“.",
+              type: "url",
+            }),
           ],
           preview: {
-            select: { date: "date", isTrial: "isTrial" },
-            prepare: ({ date, isTrial }) => ({
+            select: { date: "date", isTrial: "isTrial", bookingUrl: "bookingUrl" },
+            prepare: ({ date, isTrial, bookingUrl }) => ({
               title: date ? new Date(date).toLocaleString("cs-CZ", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Prague" }) : "",
-              subtitle: isTrial ? "zkušební lekce" : undefined,
+              subtitle: [isTrial && "zkušební lekce", bookingUrl && "s odkazem na přihlášku"].filter(Boolean).join(" · ") || undefined,
             }),
           },
         }),

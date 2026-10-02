@@ -228,6 +228,7 @@ export default async function CoursePage({ params }: PageProps<"/[locale]/kurzy/
       shortLabel: `${tr("course.lessonNoShort", { n: i + 1 })} · ${formatShortDate(lesson.date, locale)}`,
       aside: trial?.aside ?? spaceName,
       shortAside: trial?.shortAside ?? times.start,
+      href: lesson.bookingUrl ?? undefined,
       past: new Date(lesson.date) < now,
     };
   });
@@ -436,6 +437,7 @@ export default async function CoursePage({ params }: PageProps<"/[locale]/kurzy/
             <LessonDates
               title={tr("course.dates")}
               rows={rows}
+              linkLabel={tr("course.bookShort")}
               moreLabel={lastDay ? tr("course.moreDates", { count: rows.length - 6, date: formatDay(lastDay, locale) }) : undefined}
             />
           )}

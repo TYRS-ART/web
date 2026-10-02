@@ -12,6 +12,8 @@ export type LessonRow = {
   aside?: string;
   /** "zkušební 195 Kč" / "18:00" */
   shortAside?: string;
+  /** Sign-up for just this lesson (e.g. its Luma event), shown on the right. */
+  href?: string;
   past: boolean;
 };
 
@@ -19,7 +21,18 @@ export type LessonRow = {
 const MOBILE_VISIBLE = 6;
 
 /** "Termíny": every lesson date, past ones dimmed. */
-export function LessonDates({ title, rows, moreLabel }: { title: string; rows: LessonRow[]; moreLabel?: string }) {
+export function LessonDates({
+  title,
+  rows,
+  moreLabel,
+  linkLabel,
+}: {
+  title: string;
+  rows: LessonRow[];
+  moreLabel?: string;
+  /** Text of the per-lesson sign-up link ("Přihlásit se"). */
+  linkLabel: string;
+}) {
   const [open, setOpen] = useState(false);
   const folded = !open && rows.length > MOBILE_VISIBLE;
   return (
@@ -29,14 +42,26 @@ export function LessonDates({ title, rows, moreLabel }: { title: string; rows: L
         {rows.map((row, i) => (
           <li
             key={row.key}
-            className={`flex justify-between gap-4 border-t-2 border-black py-2.5 text-base leading-[22px] lg:py-3.5 lg:text-xl lg:leading-[26px] ${
+            className={`flex items-baseline justify-between gap-4 border-t-2 border-black py-2.5 text-base leading-[22px] lg:py-3.5 lg:text-xl lg:leading-[26px] ${
               row.past ? "opacity-40" : ""
             } ${folded && i >= MOBILE_VISIBLE ? "max-lg:hidden" : ""}`}
           >
             <span className="lg:hidden">{row.shortLabel}</span>
             <span className="max-lg:hidden">{row.label}</span>
-            {row.shortAside && <span className="text-right text-muted lg:hidden">{row.shortAside}</span>}
-            {row.aside && <span className="text-right text-muted max-lg:hidden">{row.aside}</span>}
+            <span className="flex items-baseline gap-4 lg:gap-6">
+              {row.shortAside && <span className="text-right text-muted lg:hidden">{row.shortAside}</span>}
+              {row.aside && <span className="text-right text-muted max-lg:hidden">{row.aside}</span>}
+              {row.href && !row.past && (
+                <a
+                  href={row.href}
+                  target="_blank"
+                  rel="noopener"
+                  className="font-medium whitespace-nowrap underline underline-offset-4 hover:text-green"
+                >
+                  {linkLabel} <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </span>
           </li>
         ))}
         {folded && moreLabel && (
