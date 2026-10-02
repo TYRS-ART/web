@@ -15,7 +15,7 @@ const focusColour: Record<string, string> = { tanec: "bg-tanec", hudba: "bg-hudb
 
 /**
  * Five sage course slots: what's left of this week, or — when nothing is on this
- * week — the next lessons ahead ("Brzy v kurzech"). Different courses first.
+ * week — the next lessons ahead ("Nadcházející lekce"). Different courses first.
  * Hidden when no lessons are planned.
  */
 export async function CoursesThisWeek({
