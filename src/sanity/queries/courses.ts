@@ -30,7 +30,7 @@ export const COURSE_QUERY = defineQuery(`{
     bookingUrl, singleLessonBookingUrl, capacity, placesLeft,
     description, forWhom, whatToBring, goodToKnow,
     heroImage{ ${imageFields} },
-    lecturer->{ name, role, bio, photo{ ${imageFields} } },
+    lecturer->{ name, role, bio, instagram, photo{ ${imageFields} } },
     space->{ name }
   },
   "others": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)] | order(runStart asc){ ${courseCard} },
