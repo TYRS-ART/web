@@ -1,7 +1,8 @@
 {
   "common": {
     "today": "Dnes",
-    "tomorrow": "Zítra"
+    "tomorrow": "Zítra",
+    "until": "do {date}"
   },
   "focus": {
     "tanec": "Tanec",

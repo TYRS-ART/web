@@ -1,7 +1,8 @@
 {
   "common": {
     "today": "Today",
-    "tomorrow": "Tomorrow"
+    "tomorrow": "Tomorrow",
+    "until": "until {date}"
   },
   "focus": {
     "tanec": "Dance",

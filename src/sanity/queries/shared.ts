@@ -4,7 +4,7 @@ export const imageFields = /* groq */ `asset, hotspot, crop, alt, "lqip": asset-
 
 /** Fields every event list needs (tiles, rows, ticker, calendar). */
 export const eventCard = /* groq */ `
-  _id, title, slug, startsAt, categories, featured, priceText, tickerText, ticketUrl,
+  _id, title, slug, startsAt, endsAt, categories, featured, priceText, tickerText, ticketUrl,
   "hall": hall->name,
   heroImage{ ${imageFields} }
 `;

@@ -1,6 +1,5 @@
 import type { Locale } from "@/i18n/locales";
-import { formatTime } from "@/lib/dates";
-import { dayLabel, headlinePrice } from "@/lib/events";
+import { dateTimeLabel, headlinePrice, type DateWords } from "@/lib/events";
 import { t } from "@/lib/localize";
 
 import type { EventCard } from "@/components/events/types";
@@ -14,14 +13,14 @@ export function Ticker({
 }: {
   events: EventCard[];
   locale: Locale;
-  words: { today: string; tomorrow: string; tickets: string };
+  words: DateWords & { tickets: string };
   label: string;
 }) {
   const items = events.flatMap((event) => {
     const title = t(event.tickerText, locale) ?? t(event.title, locale);
     const hall = t(event.hall, locale);
     const price = headlinePrice(t(event.priceText, locale));
-    const line = [`${dayLabel(event.startsAt, locale, words)} ${formatTime(event.startsAt)}`, title, hall].filter(Boolean).join(" — ");
+    const line = [dateTimeLabel(event.startsAt, locale, words, event.endsAt).replace(" · ", " "), title, hall].filter(Boolean).join(" — ");
     return [
       { key: `${event._id}-e`, text: line, dot: true },
       ...(price && event.ticketUrl ? [{ key: `${event._id}-p`, text: `${words.tickets} ${price}`, dot: false }] : []),

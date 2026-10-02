@@ -12,7 +12,7 @@ import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";
 import { alternates } from "@/lib/metadata";
 import { addDays, dayOffset, pragueDay, pragueDayRange } from "@/lib/dates";
-import { allLessonCards, nextLessonCards, pickMosaic } from "@/lib/upcoming";
+import { nextLessonCards, pickMosaic } from "@/lib/upcoming";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { HOME_QUERY } from "@/sanity/queries/home";
 
@@ -38,7 +38,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     getTranslations(),
   ]);
 
-  const words = { today: tr("common.today"), tomorrow: tr("common.tomorrow") };
+  // Events still running (started earlier, end later) show "do 11. 10." instead of their start.
+  const words = { today: tr("common.today"), tomorrow: tr("common.tomorrow"), until: (date: string) => tr("common.until", { date }) };
   // Events and each course's next lesson, in one timeline.
   const lessonCards = nextLessonCards(data.courses, today, now);
   const upcoming = [...data.upcoming, ...lessonCards].sort((a, b) => a.startsAt.localeCompare(b.startsAt));
@@ -46,8 +47,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   // Ticker: today's and the next events, shown only when something is on today or tomorrow.
   const ticker = upcoming.filter((e) => dayOffset(e.startsAt, now) <= 1).length > 0 ? upcoming.slice(0, 5) : [];
 
-  // Mosaic: events first, lessons fill the rest, 4–5 tiles in date order (see pickMosaic).
-  const mosaic = pickMosaic(data.upcoming, allLessonCards(data.courses, today, now));
+  // Mosaic: events first, then each course once (its next lesson), in date order (see pickMosaic).
+  const mosaic = pickMosaic(data.upcoming, lessonCards);
 
   const heroBlocks = data.settings?.heroSentence?.[locale] ?? data.settings?.heroSentence?.cs;
 
