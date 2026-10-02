@@ -325,7 +325,8 @@
 /* The cover disc turns like a record while the player is hovered or open. */
 @keyframes disc-spin { to { rotate: 360deg; } }
 .now:hover .disc-spin,
-.now[data-open="true"] .disc-spin {
+.now[data-open="true"] .disc-spin,
+.now[data-playing="true"] .disc-spin {
   animation: disc-spin 6s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {

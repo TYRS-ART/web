@@ -23,7 +23,10 @@
     "ofMonth": "Playlist of the month",
     "tracks": "{count, plural, one {# track} other {# tracks}}",
     "save": "Open in Spotify",
-    "preview": "Preview"
+    "preview": "Preview",
+    "play": "Play",
+    "pause": "Pause",
+    "playing": "Playing"
   },
   "footer": {
     "menu": "Menu",

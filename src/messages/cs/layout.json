@@ -23,7 +23,10 @@
     "ofMonth": "Playlist měsíce",
     "tracks": "{count, plural, one {# skladba} few {# skladby} other {# skladeb}}",
     "save": "Otevřít ve Spotify",
-    "preview": "Náhled"
+    "preview": "Náhled",
+    "play": "Přehrát",
+    "pause": "Pozastavit",
+    "playing": "Hraje"
   },
   "footer": {
     "menu": "Menu",
