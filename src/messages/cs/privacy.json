@@ -1,7 +1,7 @@
 {
   "privacy": {
     "title": "Ochrana soukromí",
-    "updated": "Platné od 1. 10. 2026",
+    "updated": "Platné od 2. 10. 2026",
     "sections": [
       {
         "h": "Kdo údaje zpracovává",
@@ -26,6 +26,12 @@
         "h": "Statistiky návštěvnosti",
         "p": [
           "Návštěvnost měříme službou Plausible Analytics, která nepoužívá cookies a neukládá žádné údaje, podle kterých by tě šlo identifikovat. Proto po tobě nechceme souhlas s cookies."
+        ]
+      },
+      {
+        "h": "Přehrávač Spotify",
+        "p": [
+          "Playlist měsíce můžeš pustit přímo na webu. Přehrávač služby Spotify se načte až ve chvíli, kdy stiskneš tlačítko přehrát; od té chvíle Spotify zpracovává údaje (včetně cookies) podle svých vlastních pravidel."
         ]
       },
       {

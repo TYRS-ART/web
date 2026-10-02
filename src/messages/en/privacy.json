@@ -1,7 +1,7 @@
 {
   "privacy": {
     "title": "Privacy",
-    "updated": "Effective 1 October 2026",
+    "updated": "Effective 2 October 2026",
     "sections": [
       {
         "h": "Who processes your data",
@@ -26,6 +26,12 @@
         "h": "Visitor statistics",
         "p": [
           "We measure visits with Plausible Analytics, which uses no cookies and stores nothing that could identify you. That is why we don’t ask for cookie consent."
+        ]
+      },
+      {
+        "h": "Spotify player",
+        "p": [
+          "You can play the playlist of the month right on the website. Spotify's player loads only when you press play; from then on Spotify processes data (including cookies) under its own rules."
         ]
       },
       {

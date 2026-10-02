@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
-import { PlayIcon } from "@/components/ui/icons";
+import { PauseIcon, PlayIcon } from "@/components/ui/icons";
 import type { Locale } from "@/i18n/locales";
 import { formatMonthKey } from "@/lib/dates";
 import { t } from "@/lib/localize";
@@ -12,10 +12,12 @@ import type { PlaylistArtwork } from "@/lib/spotify";
 import { urlFor } from "@/sanity/lib/image";
 import type { LAYOUT_QUERY_RESULT } from "@/sanity/types";
 
+import { loadSpotifyApi, spotifyUri, type SpotifyController } from "./spotifyEmbed";
+
 type Playlist = NonNullable<LAYOUT_QUERY_RESULT["playlist"]>;
 
-/** Round cover-art disc with a play mark on top; spins slowly while the player is hovered. */
-function CoverDisc({ src, size, icon }: { src?: string; size: string; icon: number }) {
+/** Round cover-art disc with a play (or pause) mark; spins while hovered or playing. */
+function CoverDisc({ src, size, icon, playing }: { src?: string; size: string; icon: number; playing: boolean }) {
   return (
     <span className={`relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-lime text-black ${size}`}>
       {src && <Image src={src} alt="" fill sizes="48px" className="disc-spin object-cover" />}
@@ -24,7 +26,7 @@ function CoverDisc({ src, size, icon }: { src?: string; size: string; icon: numb
           src ? "size-[55%] bg-white/90 shadow-[0_1px_4px_rgba(0,0,0,0.25)]" : ""
         }`}
       >
-        <PlayIcon size={icon} />
+        {playing ? <PauseIcon size={icon} /> : <PlayIcon size={icon} />}
       </span>
     </span>
   );
@@ -32,7 +34,9 @@ function CoverDisc({ src, size, icon }: { src?: string; size: string; icon: numb
 
 /**
  * Light "now playing" capsule (desktop) or cover disc (mobile) that opens the
- * monthly Spotify card on hover, focus or tap. Artwork comes from Spotify.
+ * monthly Spotify card on hover, focus or tap. Artwork comes from Spotify. The
+ * play buttons play right here in Spotify's embedded player (it appears in the
+ * card and keeps playing while the card is closed and across pages).
  */
 export function NowPlaying({
   playlist,
@@ -47,6 +51,45 @@ export function NowPlaying({
   const tr = useTranslations("playlist");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  // Embedded Spotify player: what it has loaded and whether it's playing.
+  const slot = useRef<HTMLDivElement>(null);
+  const controller = useRef<SpotifyController | null>(null);
+  const [loaded, setLoaded] = useState<string>();
+  const [playing, setPlaying] = useState(false);
+
+  /** Play a playlist/track here; the same one again toggles pause. Falls back to Spotify in a new tab. */
+  const play = async (url: string | null | undefined) => {
+    const uri = spotifyUri(url);
+    if (!url || !uri) return;
+    setOpen(true);
+    if (controller.current) {
+      if (uri === loaded) {
+        controller.current.togglePlay();
+      } else {
+        controller.current.loadUri(uri);
+        controller.current.play();
+        setLoaded(uri);
+      }
+      return;
+    }
+    // First play: load Spotify's player into the card.
+    setLoaded(uri);
+    try {
+      const api = await loadSpotifyApi();
+      if (controller.current || !slot.current) return;
+      const host = document.createElement("div");
+      slot.current.replaceChildren(host);
+      api.createController(host, { uri, width: "100%", height: 80 }, (created) => {
+        controller.current = created;
+        created.addListener("ready", () => created.play());
+        created.addListener("playback_update", (event) => setPlaying(!event.data.isPaused));
+      });
+    } catch {
+      // No player (blocked or offline): open Spotify instead.
+      setLoaded(undefined);
+      window.open(url, "_blank", "noopener");
+    }
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -72,7 +115,7 @@ export function NowPlaying({
   const teaser = artists.length ? `${artists.slice(0, 2).join(", ")}${artists.length > 2 ? "…" : ""}` : title;
 
   return (
-    <div ref={ref} className="now relative" data-open={open}>
+    <div ref={ref} className="now relative" data-open={open} data-playing={playing}>
       {compact ? (
         <button
           type="button"
@@ -81,7 +124,7 @@ export function NowPlaying({
           onClick={() => setOpen((v) => !v)}
           className="inline-flex cursor-pointer rounded-full border-0 bg-white p-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.12)]"
         >
-          <CoverDisc src={cover} size="size-[38px]" icon={10} />
+          <CoverDisc src={cover} size="size-[38px]" icon={10} playing={playing} />
         </button>
       ) : (
         <button
@@ -91,7 +134,7 @@ export function NowPlaying({
           onClick={() => setOpen((v) => !v)}
           className="inline-flex cursor-pointer items-center gap-3 rounded-full border-0 bg-white py-1.5 pr-5 pl-1.5 text-black shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-shadow duration-200 hover:shadow-[0_4px_14px_rgba(0,0,0,0.12)]"
         >
-          <CoverDisc src={cover} size="size-10" icon={11} />
+          <CoverDisc src={cover} size="size-10" icon={11} playing={playing} />
           <span className="flex flex-col text-left">
             <span className="text-xs leading-[14px] text-muted">
               {tr("label", { month: `${month} ${playlist.month.slice(2, 4)}` })}
@@ -134,22 +177,26 @@ export function NowPlaying({
               </a>
             )}
           </div>
-          <a
-            href={playlist.spotifyUrl}
-            target="_blank"
-            rel="noopener"
-            aria-label={tr("save")}
-            className={`inline-flex shrink-0 items-center justify-center rounded-full bg-lime text-black transition-colors duration-150 hover:bg-black hover:text-white ${
+          <button
+            type="button"
+            onClick={() => (loaded && controller.current ? controller.current.togglePlay() : play(playlist.spotifyUrl))}
+            aria-label={playing ? tr("pause") : tr("play")}
+            className={`inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-lime text-black transition-colors duration-150 hover:bg-black hover:text-white ${
               compact ? "size-11" : "size-12"
             }`}
           >
-            <PlayIcon size={compact ? 14 : 16} />
-          </a>
+            {playing ? <PauseIcon size={compact ? 14 : 16} /> : <PlayIcon size={compact ? 14 : 16} />}
+          </button>
         </div>
+
+        {/* Spotify's embedded player, filled in on the first play. */}
+        <div ref={slot} className={`overflow-hidden rounded-[12px] [&_iframe]:block ${loaded ? "h-20" : "hidden"}`} />
 
         {tracks.length > 0 && (
           <ol className="m-0 flex list-none flex-col p-0">
-            {tracks.slice(0, compact ? 3 : 4).map((track, index) => (
+            {tracks.slice(0, compact ? 3 : 4).map((track, index) => {
+              const current = loaded !== undefined && spotifyUri(track.url) === loaded;
+              return (
               <li
                 key={track._key}
                 className={`grid items-center border-t border-black/10 ${
@@ -176,19 +223,20 @@ export function NowPlaying({
                   </span>
                 </span>
                 {track.url && (
-                  <a
-                    href={track.url}
-                    target="_blank"
-                    rel="noopener"
-                    className={`rounded-full border border-black/25 font-medium tracking-[0.04em] text-black uppercase no-underline transition-colors duration-150 hover:border-black hover:bg-black hover:text-white ${
-                      compact ? "px-2 py-[3px] text-[10px] leading-[13px]" : "px-2.5 py-1 text-[11px] leading-[14px]"
-                    }`}
+                  <button
+                    type="button"
+                    onClick={() => play(track.url)}
+                    aria-label={`${current && playing ? tr("pause") : tr("play")}: ${track.title}`}
+                    className={`cursor-pointer rounded-full border font-medium tracking-[0.04em] uppercase transition-colors duration-150 hover:border-black hover:bg-black hover:text-white ${
+                      current ? "border-black bg-black text-white" : "border-black/25 bg-white text-black"
+                    } ${compact ? "px-2 py-[3px] text-[10px] leading-[13px]" : "px-2.5 py-1 text-[11px] leading-[14px]"}`}
                   >
-                    {tr("preview")}
-                  </a>
+                    {current && playing ? tr("playing") : tr("preview")}
+                  </button>
                 )}
               </li>
-            ))}
+              );
+            })}
           </ol>
         )}
 
