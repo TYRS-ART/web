@@ -1,3 +1,4 @@
+import { stegaClean } from "next-sanity";
 import type { PortableTextBlock } from "@portabletext/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -19,6 +20,7 @@ import type { Locale } from "@/i18n/locales";
 import { getPathname, Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { formatShortDate, formatTime, pragueDayRange } from "@/lib/dates";
+import { cleanMetadata } from "@/lib/metadata";
 import { eventIcsPath } from "@/lib/event-ics";
 import { headlinePrice } from "@/lib/events";
 import { t, tSlug } from "@/lib/localize";
@@ -45,7 +47,7 @@ const getEvent = cache(async (slug: string, locale: Locale) =>
 export async function generateStaticParams({ params }: { params: { locale: string } }) {
   const locale = params.locale as Locale;
   if (!routing.locales.includes(locale)) return [];
-  const slugs = await sanityFetch({ query: EVENT_SLUGS_QUERY, params: nowParams(), tags: ["event"] });
+  const slugs = await sanityFetch({ query: EVENT_SLUGS_QUERY, params: nowParams(), tags: ["event"], perspective: "published" });
   return slugs.flatMap((s) => (s[locale] ? [{ slug: s[locale] }] : []));
 }
 
@@ -64,7 +66,9 @@ function ogImage(event: EventDoc) {
   return urlFor(event.heroImage as Parameters<typeof urlFor>[0]).width(1200).height(630).fit("crop").url();
 }
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/program/[slug]">): Promise<Metadata> {
+export const generateMetadata = cleanMetadata(buildMetadata);
+
+async function buildMetadata({ params }: PageProps<"/[locale]/program/[slug]">): Promise<Metadata> {
   const { locale: l, slug } = await params;
   const locale = l as Locale;
   const { event } = await getEvent(slug, locale);
@@ -213,7 +217,7 @@ export default async function EventPage({ params }: PageProps<"/[locale]/program
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(stegaClean(jsonLd)).replace(/</g, "\\u003c") }} />
       <SetAlternates cs={paths.cs} en={paths.en} />
 
       <BackLink href="/program" label={tr("event.back")} ariaLabel={tr("detail.breadcrumb")} />

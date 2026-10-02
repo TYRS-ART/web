@@ -71,7 +71,7 @@ export async function sendEnquiry(_prev: EnquiryState, formData: FormData): Prom
 
   let spaceName = "Ještě nevím";
   if (values.space && values.space !== SPACE_UNKNOWN) {
-    const spaces = await sanityFetch({ query: RENTAL_SPACES_QUERY, tags: ["space"] }).catch(() => []);
+    const spaces = await sanityFetch({ query: RENTAL_SPACES_QUERY, tags: ["space"], perspective: "published" }).catch(() => []);
     const space = spaces.find((s) => spaceKey(s) === values.space);
     if (space) spaceName = space.name?.cs ?? values.space;
     else errors.space = "choice";
