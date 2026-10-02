@@ -337,26 +337,29 @@
 /* ----------------------------------------------------------- Footer logo */
 
 /* Each tile inverts on hover: the letter turns ink, the tile paper with an ink
-   outline drawn by the front rect (.o) all the way round, under the letter's
-   stem too, and inside the tile, so neither the tile nor the letter grows. */
+   outline. .b (ink, behind the letter) and .o (the outline) trace the tile's own
+   contour, so the corners keep their shape; .o is stroked double and clipped to
+   the tile, so the line sits inside it and nothing grows. The outline appears at
+   once: fading it in showed late under the letters, where the tile is open. */
 .lg g path {
   fill: var(--color-ink);
   transition: fill 160ms linear;
 }
-.lg g rect {
-  fill: var(--color-ink);
+.lg g .b {
   opacity: 0;
   transition: opacity 160ms linear;
 }
-.lg g rect.o {
+.lg g .o {
   fill: none;
   stroke: var(--color-ink);
-  stroke-width: 1.2;
+  stroke-width: 3.2;
+  opacity: 0;
 }
-.lg g:hover path {
+.lg g:hover path:not(.b, .o) {
   fill: var(--color-paper);
 }
-.lg g:hover rect {
+.lg g:hover .b,
+.lg g:hover .o {
   opacity: 1;
 }
 
