@@ -26,7 +26,7 @@ export async function MonthList({ events, locale }: { events: EventCard[]; local
         </Link>
       </div>
       {events.map((event, i) => (
-        <EventRow key={event._id} event={event} locale={locale} words={words} last={i === events.length - 1} />
+        <EventRow key={event._id} event={event} locale={locale} words={words} last={i === events.length - 1} duotone={false} />
       ))}
       <Link href="/program" className={`${buttonClass()} mt-5 self-start lg:hidden`}>
         {tr("home.allProgram")} →

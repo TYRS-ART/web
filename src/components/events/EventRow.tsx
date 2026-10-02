@@ -13,17 +13,20 @@ import type { EventCard } from "./types";
 /**
  * Programme row: date · title + chip · time · 160×100 thumbnail, 2px rule above.
  * Mobile stacks date + time, title and chip. No underline or colour change on hover.
+ * The thumbnail is duotone unless `duotone={false}` (homepage).
  */
 export function EventRow({
   event,
   locale,
   words,
   last = false,
+  duotone = true,
 }: {
   event: EventCard;
   locale: Locale;
   words: { today: string; tomorrow: string };
   last?: boolean;
+  duotone?: boolean;
 }) {
   const slug = tSlug(event.slug, locale);
   const courseSlug = event.course ? tSlug(event.course.slug, locale) : undefined;
@@ -36,7 +39,7 @@ export function EventRow({
   const day = dayLabel(event.startsAt, locale, words);
   const time = formatTime(event.startsAt);
   const category = event.categories?.[0];
-  const classes = `duo-host flex flex-col gap-2 border-t-2 border-black py-5 text-black no-underline lg:grid lg:grid-cols-[160px_1fr_auto_160px] lg:items-center lg:gap-8 lg:py-7 ${
+  const classes = `${duotone ? "duo-host" : ""} flex flex-col gap-2 border-t-2 border-black py-5 text-black no-underline lg:grid lg:grid-cols-[160px_1fr_auto_160px] lg:items-center lg:gap-8 lg:py-7 ${
     last ? "border-b-2" : ""
   }`;
   const body = (
@@ -56,7 +59,7 @@ export function EventRow({
         {event.heroImage?.asset ? (
           <>
             <SanityImage image={event.heroImage} alt="" fill sizes="160px" className="object-cover" />
-            <span className="duo" />
+            {duotone && <span className="duo" />}
           </>
         ) : (
           <span className={`cl cl-${category} absolute inset-0`} />
