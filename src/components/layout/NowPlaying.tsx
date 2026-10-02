@@ -114,34 +114,50 @@ export function NowPlaying({
   const cover = playlist.cover?.asset ? urlFor(playlist.cover).width(160).height(160).url() : art?.cover;
   const teaser = artists.length ? `${artists.slice(0, 2).join(", ")}${artists.length > 2 ? "…" : ""}` : title;
 
+  /** The playlist from the start, or pause/resume whatever is loaded. */
+  const togglePlaylist = () => (loaded && controller.current ? controller.current.togglePlay() : play(playlist.spotifyUrl));
+  const discLabel = playing ? tr("pause") : tr("play");
+
   return (
     <div ref={ref} className="now relative" data-open={open} data-playing={playing}>
       {compact ? (
+        // Phone: the disc plays/pauses and opens the card (its only way in).
         <button
           type="button"
-          aria-label={tr("open")}
+          aria-label={discLabel}
           aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => {
+            togglePlaylist();
+            setOpen(true);
+          }}
           className="inline-flex cursor-pointer rounded-full border-0 bg-white p-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.12)]"
         >
           <CoverDisc src={cover} size="size-[38px]" icon={10} playing={playing} />
         </button>
       ) : (
-        <button
-          type="button"
-          aria-label={tr("open")}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex cursor-pointer items-center gap-3 rounded-full border-0 bg-white py-1.5 pr-5 pl-1.5 text-black shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-shadow duration-200 hover:shadow-[0_4px_14px_rgba(0,0,0,0.12)]"
-        >
-          <CoverDisc src={cover} size="size-10" icon={11} playing={playing} />
-          <span className="flex flex-col text-left">
+        // Desktop: the disc plays/pauses; the rest of the capsule opens the card.
+        <div className="inline-flex items-center gap-3 rounded-full bg-white py-1.5 pr-5 pl-1.5 text-black shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-shadow duration-200 hover:shadow-[0_4px_14px_rgba(0,0,0,0.12)]">
+          <button
+            type="button"
+            aria-label={discLabel}
+            onClick={togglePlaylist}
+            className="inline-flex cursor-pointer rounded-full border-0 bg-transparent p-0 transition-transform duration-150 hover:scale-105"
+          >
+            <CoverDisc src={cover} size="size-10" icon={11} playing={playing} />
+          </button>
+          <button
+            type="button"
+            aria-label={tr("open")}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="flex cursor-pointer flex-col border-0 bg-transparent p-0 text-left text-black"
+          >
             <span className="text-xs leading-[14px] text-muted">
               {tr("label", { month: `${month} ${playlist.month.slice(2, 4)}` })}
             </span>
             <span className="max-w-56 truncate text-base leading-5 font-medium">{teaser}</span>
-          </span>
-        </button>
+          </button>
+        </div>
       )}
 
       <aside
@@ -179,7 +195,7 @@ export function NowPlaying({
           </div>
           <button
             type="button"
-            onClick={() => (loaded && controller.current ? controller.current.togglePlay() : play(playlist.spotifyUrl))}
+            onClick={togglePlaylist}
             aria-label={playing ? tr("pause") : tr("play")}
             className={`inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-lime text-black transition-colors duration-150 hover:bg-black hover:text-white ${
               compact ? "size-11" : "size-12"

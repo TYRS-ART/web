@@ -18,12 +18,12 @@
   },
   "playlist": {
     "label": "{month} · playlist",
-    "open": "Playlist of the month — play",
+    "open": "Open the playlist of the month",
     "card": "Spotify player — playlist of the month",
     "ofMonth": "Playlist of the month",
     "tracks": "{count, plural, one {# track} other {# tracks}}",
     "save": "Open in Spotify",
-    "preview": "Preview",
+    "preview": "Play",
     "play": "Play",
     "pause": "Pause",
     "playing": "Playing"
