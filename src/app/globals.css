@@ -26,6 +26,8 @@
   --color-tanec-edge: #94b23a;
   --color-lekce: #8cc4a0;
   --color-lekce-edge: #4b9466;
+  --color-umeni: #c3a6ec;
+  --color-umeni-edge: #8a5fd0;
   --color-pohyb: #f2dd6e;
 
   --font-display: var(--font-clash), "Clash Grotesk Variable", system-ui, sans-serif;
@@ -105,6 +107,11 @@
   background-image: linear-gradient(115deg, #9fcfb0 0%, #8cc4a0 45%, #b2dac0 100%);
   animation-duration: 13s;
 }
+.cl-umeni {
+  background-color: var(--color-umeni);
+  background-image: linear-gradient(115deg, #d2bcf2 0%, #b194e6 45%, #dfcff7 100%);
+  animation-duration: 11s;
+}
 @keyframes drift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 30%; }
@@ -123,6 +130,7 @@
 :is(a, button).cat-edge.cl-divadlo:is(:hover, [aria-pressed="true"]) { border-color: var(--color-divadlo-edge); }
 :is(a, button).cat-edge.cl-tanec:is(:hover, [aria-pressed="true"]) { border-color: var(--color-tanec-edge); }
 :is(a, button).cat-edge.cl-lekce:is(:hover, [aria-pressed="true"]) { border-color: var(--color-lekce-edge); }
+:is(a, button).cat-edge.cl-umeni:is(:hover, [aria-pressed="true"]) { border-color: var(--color-umeni-edge); }
 
 /* ------------------------------------------------------ Feathered photos */
 
@@ -204,7 +212,8 @@
   :root:has(:is(.pill, .chip).cl-hudba:hover) .duo-host:has(.cl-hudba) img,
   :root:has(:is(.pill, .chip).cl-divadlo:hover) .duo-host:has(.cl-divadlo) img,
   :root:has(:is(.pill, .chip).cl-tanec:hover) .duo-host:has(.cl-tanec) img,
-  :root:has(:is(.pill, .chip).cl-lekce:hover) .duo-host:has(.cl-lekce) img {
+  :root:has(:is(.pill, .chip).cl-lekce:hover) .duo-host:has(.cl-lekce) img,
+  :root:has(:is(.pill, .chip).cl-umeni:hover) .duo-host:has(.cl-umeni) img {
     filter: none;
   }
   .duo-host:hover .duo::before,
@@ -216,7 +225,9 @@
   :root:has(:is(.pill, .chip).cl-tanec:hover) .duo-host:has(.cl-tanec) .duo::before,
   :root:has(:is(.pill, .chip).cl-tanec:hover) .duo-host:has(.cl-tanec) .duo::after,
   :root:has(:is(.pill, .chip).cl-lekce:hover) .duo-host:has(.cl-lekce) .duo::before,
-  :root:has(:is(.pill, .chip).cl-lekce:hover) .duo-host:has(.cl-lekce) .duo::after {
+  :root:has(:is(.pill, .chip).cl-lekce:hover) .duo-host:has(.cl-lekce) .duo::after,
+  :root:has(:is(.pill, .chip).cl-umeni:hover) .duo-host:has(.cl-umeni) .duo::before,
+  :root:has(:is(.pill, .chip).cl-umeni:hover) .duo-host:has(.cl-umeni) .duo::after {
     opacity: 0;
   }
 }

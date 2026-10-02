@@ -195,7 +195,7 @@ export type LocaleHeroSentence = {
     style?: "normal";
     listItem?: never;
     markDefs?: Array<{
-      category: "hudba" | "divadlo" | "tanec" | "lekce";
+      category: "hudba" | "divadlo" | "tanec" | "lekce" | "umeni";
       _type: "categoryPill";
       _key: string;
     }>;
@@ -213,7 +213,7 @@ export type LocaleHeroSentence = {
     style?: "normal";
     listItem?: never;
     markDefs?: Array<{
-      category: "hudba" | "divadlo" | "tanec" | "lekce";
+      category: "hudba" | "divadlo" | "tanec" | "lekce" | "umeni";
       _type: "categoryPill";
       _key: string;
     }>;
