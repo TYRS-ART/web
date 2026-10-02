@@ -6,9 +6,10 @@
  *   node scripts/map/build-map.mjs            # downloads fresh OSM data + orthophoto
  *   node scripts/map/build-map.mjs --cached   # reuses scripts/map/osm.json + ortho.jpg
  *
- * Renders two crops with headless Chrome (labels in the brand fonts):
- *   public/images/map-kampa.jpg         wide, desktop (3200 px)
- *   public/images/map-kampa-mobile.jpg  tall, phones (1200 px)
+ * Renders two crops with headless Chrome (labels in the brand fonts), each as a map
+ * layer and a transparent bubble layer so the page can fade the map but not the bubble:
+ *   public/images/map-kampa.jpg + map-kampa-bubble.png                 wide, desktop (3200 px)
+ *   public/images/map-kampa-mobile.jpg + map-kampa-mobile-bubble.png   tall, phones (1200 px)
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -260,7 +261,7 @@ function bubble(scale) {
   <image href="data:image/jpeg;base64,${ortho.toString("base64")}" x="${fmt(px)}" y="${fmt(py)}" width="${fmt(photoW)}" height="${fmt(photoH)}" clip-path="url(#photo)" preserveAspectRatio="xMidYMid slice"/>`;
 }
 
-function svgFor(v) {
+function svgFor(v, layer) {
   const view = { x: -v.hx * v.w, y: -v.hy * v.h, w: v.w, h: v.h };
   const s = v.scale;
   const b = v.bubble;
@@ -278,7 +279,7 @@ function svgFor(v) {
     .stream { font: italic 500 ${9.5 * s}px "General Sans", system-ui, sans-serif; fill: ${C.waterText}; }
   </style>
 </defs>
-<rect x="${fmt(view.x)}" y="${fmt(view.y)}" width="${v.w}" height="${v.h}" fill="${C.land}"/>
+${layer === "bubble" ? bubble(v.bubble) : `<rect x="${fmt(view.x)}" y="${fmt(view.y)}" width="${v.w}" height="${v.h}" fill="${C.land}"/>
 <path d="${greens.map(areaPaths).join("")}" fill="${C.green}" fill-rule="evenodd" stroke="${C.greenEdge}" stroke-width=".6"/>
 <path d="${waters.map(areaPaths).join("")}" fill="${C.water}" fill-rule="evenodd"/>
 <path d="${trams.map((t) => linePath(t.geometry)).join("")}" stroke="${C.tram}" stroke-width="1.2" fill="none" stroke-dasharray="3 2"/>
@@ -288,8 +289,7 @@ ${roadLayers}
 ${texts}
 ${place("Kampa", { lat: 50.08285, lon: 14.40835 }, "park")}
 ${place("Vltava", v.vltava, "river", -82)}
-${place("Čertovka", { lat: 50.08335, lon: 14.40712 }, "stream", -68)}
-${bubble(v.bubble)}
+${place("Čertovka", { lat: 50.08335, lon: 14.40712 }, "stream", -68)}`}
 </svg>`;
 }
 
@@ -301,27 +301,37 @@ const font = (name, file, style = "normal") =>
 const fonts =
   font("General Sans", "GeneralSans-Variable.woff2") + font("General Sans", "GeneralSans-VariableItalic.woff2", "italic");
 
+// Two layers per crop: the map (JPEG, faded at the edges on the page) and the
+// bubble on a transparent background (PNG, never faded).
 for (const v of VARIANTS) {
-  const svg = svgFor(v);
   const pxH = Math.round((v.px * v.h) / v.w);
-  const html = join(here, `${v.name}.html`);
-  writeFileSync(html, `<!doctype html><meta charset="utf-8"><style>${fonts}html,body{margin:0}svg{display:block}</style>${svg}`);
-  const png = join(here, `${v.name}.png`);
-  execFileSync(
-    chrome,
-    [
-      "--headless=new",
-      "--disable-gpu",
-      "--hide-scrollbars",
-      "--allow-file-access-from-files",
-      "--virtual-time-budget=4000",
-      `--window-size=${v.px},${pxH}`,
-      `--screenshot=${png}`,
-      `file://${html}`,
-    ],
-    { stdio: "ignore" },
-  );
-  const jpg = join(root, `public/images/${v.name}.jpg`);
-  execFileSync("sips", ["-s", "format", "jpeg", "-s", "formatOptions", "86", png, "--out", jpg], { stdio: "ignore" });
-  console.log(`${v.name}.jpg  ${v.px}×${pxH}`);
+  for (const layer of ["map", "bubble"]) {
+    const name = layer === "map" ? v.name : `${v.name}-bubble`;
+    const html = join(here, `${name}.html`);
+    const bg = layer === "map" ? "" : "html,body{background:transparent}";
+    writeFileSync(html, `<!doctype html><meta charset="utf-8"><style>${fonts}html,body{margin:0}${bg}svg{display:block}</style>${svgFor(v, layer)}`);
+    const png = join(here, `${name}.png`);
+    execFileSync(
+      chrome,
+      [
+        "--headless=new",
+        "--disable-gpu",
+        "--hide-scrollbars",
+        "--allow-file-access-from-files",
+        "--virtual-time-budget=4000",
+        "--default-background-color=00000000",
+        `--window-size=${v.px},${pxH}`,
+        `--screenshot=${png}`,
+        `file://${html}`,
+      ],
+      { stdio: "ignore" },
+    );
+    if (layer === "map") {
+      execFileSync("sips", ["-s", "format", "jpeg", "-s", "formatOptions", "86", png, "--out", join(root, `public/images/${name}.jpg`)], { stdio: "ignore" });
+      console.log(`${name}.jpg  ${v.px}×${pxH}`);
+    } else {
+      writeFileSync(join(root, `public/images/${name}.png`), readFileSync(png));
+      console.log(`${name}.png  ${v.px}×${pxH}`);
+    }
+  }
 }

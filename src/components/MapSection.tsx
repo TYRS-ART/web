@@ -5,7 +5,9 @@ import type { Locale } from "@/i18n/locales";
 import { buttonClass } from "@/components/ui/button";
 
 import map from "../../public/images/map-kampa.jpg";
+import bubble from "../../public/images/map-kampa-bubble.png";
 import mapMobile from "../../public/images/map-kampa-mobile.jpg";
+import bubbleMobile from "../../public/images/map-kampa-mobile-bubble.png";
 
 type Address = {
   street?: string | null;
@@ -86,6 +88,9 @@ export async function MapSection({
         placeholder="blur"
         className="map-fade object-cover object-[100%_100%] max-lg:hidden"
       />
+      {/* The photo bubble sits on its own layer, aligned with the map but never faded. */}
+      <Image src={bubbleMobile} alt="" fill sizes="100vw" quality={90} className="object-cover object-top lg:hidden" />
+      <Image src={bubble} alt="" fill sizes="100vw" quality={90} className="object-cover object-[100%_100%] max-lg:hidden" />
       <a
         href="https://www.openstreetmap.org/copyright"
         target="_blank"
