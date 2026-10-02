@@ -31,13 +31,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages.flatMap((pathname) => entry(() => pathname as Href)),
     ...data.events.flatMap((event) =>
       entry((locale) => {
-        const slug = event.slug[locale]?.current;
+        const slug = event.slug?.[locale]?.current;
         return slug ? { pathname: "/program/[slug]", params: { slug } } : null;
       }, event._updatedAt),
     ),
     ...data.courses.flatMap((course) =>
       entry((locale) => {
-        const slug = course.slug[locale]?.current;
+        const slug = course.slug?.[locale]?.current;
         return slug ? { pathname: "/kurzy/[slug]", params: { slug } } : null;
       }, course._updatedAt),
     ),

@@ -21,13 +21,20 @@ export const course = defineType({
   ],
   fields: [
     defineField({ name: "title", title: "Název", type: "localeString", group: "main", validation: requiredLocale }),
-    defineField({ name: "slug", title: "Adresa stránky", type: "localeSlug", group: "main", validation: (rule) => rule.required() }),
+    defineField({
+      name: "slug",
+      title: "Adresa stránky",
+      description: "Vyplní se sama při zveřejnění z názvu (a u akcí z data). Změň jen když chceš jinou.",
+      type: "localeSlug",
+      group: "main",
+    }),
     defineField({
       name: "focus",
       title: "Zaměření",
       type: "string",
       group: "main",
       options: { list: courseFocuses.map((f) => ({ title: f.cs, value: f.id })), layout: "radio", direction: "horizontal" },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "audienceTags",
@@ -46,7 +53,7 @@ export const course = defineType({
     }),
     defineField({ name: "lecturer", title: "Lektor", type: "reference", to: [{ type: "person" }], group: "main" }),
     defineField({ name: "space", title: "Sál", type: "reference", to: [{ type: "space" }], group: "main" }),
-    photoField("heroImage", "Hlavní fotka"),
+    { ...photoField("heroImage", "Hlavní fotka", { required: true }), group: "main" },
     defineField({
       name: "slots",
       title: "Pravidelné termíny",
@@ -121,7 +128,7 @@ export const course = defineType({
       ],
     }),
     defineField({ name: "coursePrice", title: "Cena celého kurzu (Kč)", type: "number", group: "booking", validation: (rule) => rule.min(0) }),
-    defineField({ name: "bookingUrl", title: "Odkaz na přihlášku", type: "url", group: "booking", validation: (rule) => rule.required() }),
+    defineField({ name: "bookingUrl", title: "Odkaz na přihlášku", type: "url", group: "booking", description: "Bez odkazu se tlačítko „Přihlásit se“ nezobrazí." }),
     defineField({
       name: "allowSingleLesson",
       title: "Lze přijít i na jednu lekci",

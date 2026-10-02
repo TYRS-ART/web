@@ -1,4 +1,4 @@
-import { defineArrayMember, defineField, defineType, type SlugValue } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 import { localeTitles, locales } from "@/i18n/locales";
 import { eventCategories } from "@/lib/taxonomy";
@@ -116,11 +116,6 @@ export const localeSlug = defineType({
       title: localeTitles[lang],
       type: "slug",
       options: { source: `title.${lang}`, maxLength: 96 },
-      validation: (rule) =>
-        rule.custom((value: SlugValue | undefined, context) => {
-          const title = (context.document?.title as Record<string, string> | undefined)?.[lang];
-          return title && !value?.current ? "Vygeneruj adresu tlačítkem Generate." : true;
-        }),
     }),
   ),
 });

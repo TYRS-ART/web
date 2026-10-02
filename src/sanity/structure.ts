@@ -5,15 +5,68 @@ import { EnvelopeIcon } from "@sanity/icons/Envelope";
 import { HomeIcon } from "@sanity/icons/Home";
 import { InfoOutlineIcon } from "@sanity/icons/InfoOutline";
 import { PlayIcon } from "@sanity/icons/Play";
+import { ThListIcon } from "@sanity/icons/ThList";
 import { UserIcon } from "@sanity/icons/User";
 import type { StructureResolver } from "sanity/structure";
+
+import { CourseTablePane, EventTablePane } from "./studio/DocumentTable";
 
 export const structure: StructureResolver = (S) =>
   S.list()
     .title("Obsah")
     .items([
-      S.documentTypeListItem("event").title("Akce").icon(CalendarIcon),
-      S.documentTypeListItem("course").title("Kurzy").icon(BookIcon),
+      S.listItem()
+        .title("Akce")
+        .icon(CalendarIcon)
+        .child(
+          S.list()
+            .title("Akce")
+            .items([
+              S.listItem()
+                .title("Tabulka – hromadné úpravy")
+                .icon(ThListIcon)
+                .child(S.component(EventTablePane).id("event-table").title("Akce – tabulka")),
+              S.divider(),
+              S.listItem()
+                .title("Nadcházející")
+                .icon(CalendarIcon)
+                .child(
+                  S.documentList()
+                    .title("Nadcházející akce")
+                    .schemaType("event")
+                    .apiVersion("2026-10-01")
+                    .filter('_type == "event" && (!defined(startsAt) || startsAt >= now())')
+                    .defaultOrdering([{ field: "startsAt", direction: "asc" }]),
+                ),
+              S.listItem()
+                .title("Proběhlé")
+                .icon(CalendarIcon)
+                .child(
+                  S.documentList()
+                    .title("Proběhlé akce")
+                    .schemaType("event")
+                    .apiVersion("2026-10-01")
+                    .filter('_type == "event" && startsAt < now()')
+                    .defaultOrdering([{ field: "startsAt", direction: "desc" }]),
+                ),
+              S.documentTypeListItem("event").title("Všechny akce"),
+            ]),
+        ),
+      S.listItem()
+        .title("Kurzy")
+        .icon(BookIcon)
+        .child(
+          S.list()
+            .title("Kurzy")
+            .items([
+              S.listItem()
+                .title("Tabulka – hromadné úpravy")
+                .icon(ThListIcon)
+                .child(S.component(CourseTablePane).id("course-table").title("Kurzy – tabulka")),
+              S.divider(),
+              S.documentTypeListItem("course").title("Všechny kurzy"),
+            ]),
+        ),
       S.documentTypeListItem("person").title("Lidé").icon(UserIcon),
       S.documentTypeListItem("space").title("Prostory").icon(HomeIcon),
       S.documentTypeListItem("playlist").title("Playlisty").icon(PlayIcon),
