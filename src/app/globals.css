@@ -204,7 +204,7 @@
 }
 .duo-host img {
   filter: grayscale(1) contrast(1.08);
-  transition: filter 700ms ease, scale 1400ms var(--ease-zoom), transform 1400ms var(--ease-zoom);
+  transition: filter 600ms ease, scale 900ms var(--ease-zoom), transform 900ms var(--ease-zoom);
 }
 
 /* Back to full colour on hover of the tile/row, or of any chip of the same category.
@@ -367,7 +367,7 @@
 /* Slow, eased zoom for photo tiles on hover (no abrupt jump). */
 .zoom-soft {
   /* Tailwind's scale-* sets the `scale` property, so both are transitioned. */
-  transition: scale 1400ms var(--ease-zoom), transform 1400ms var(--ease-zoom);
+  transition: scale 900ms var(--ease-zoom), transform 900ms var(--ease-zoom);
   will-change: scale;
 }
 @media (prefers-reduced-motion: reduce) {
