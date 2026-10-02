@@ -12,9 +12,7 @@ export function HashScroll() {
   const searchParams = useSearchParams();
   useEffect(() => {
     const id = decodeURIComponent(window.location.hash.slice(1));
-    if (!id) return;
-    const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: "start" }));
-    return () => cancelAnimationFrame(frame);
+    if (id) document.getElementById(id)?.scrollIntoView({ block: "start" });
   }, [pathname, searchParams]);
   return null;
 }
