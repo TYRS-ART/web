@@ -45,13 +45,6 @@ export const settings = defineType({
         defineField({ name: "googleMapsUrl", title: "Odkaz do Google Maps", type: "url" }),
       ],
     }),
-    defineField({
-      name: "mapImage",
-      title: "Mapa (obrázek)",
-      type: "image",
-      group: "contact",
-      fields: [defineField({ name: "alt", title: "Popis obrázku", type: "localeString" })],
-    }),
     defineField({ name: "email", title: "E-mail", type: "string", group: "contact", validation: (rule) => rule.email() }),
     defineField({
       name: "phone",

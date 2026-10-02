@@ -2,9 +2,9 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 
 import type { Locale } from "@/i18n/locales";
-import { t } from "@/lib/localize";
 import { buttonClass } from "@/components/ui/button";
-import { SanityImage, type SanityImageValue } from "@/components/ui/SanityImage";
+
+import map from "../../public/images/map-kampa.jpg";
 
 type Address = {
   street?: string | null;
@@ -27,11 +27,12 @@ const variants = {
   },
 } as const;
 
-/** Full-width static map with the white address card and a Google Maps button. */
+/**
+ * Full-width map with the white address card and a Google Maps button. The map is
+ * drawn from OpenStreetMap data in the TYRŠ palette (scripts/map/build-map.mjs).
+ */
 export async function MapSection({
   address,
-  mapImage,
-  locale,
   title,
   heading,
   id,
@@ -39,8 +40,8 @@ export async function MapSection({
   className = "",
 }: {
   address: Address | undefined;
-  mapImage?: (SanityImageValue & { alt?: { cs?: string | null; en?: string | null } | null }) | null;
-  locale: Locale;
+  /** Kept for callers; the map itself has no language-specific content. */
+  locale?: Locale;
   /** Small label on the address card. */
   title?: string;
   /** Optional big section title over the map (Venue "Kde"). */
@@ -52,12 +53,13 @@ export async function MapSection({
   const tr = await getTranslations("home");
   if (!address?.street) return null;
   const label = title ?? tr("findUs");
-  const alt = t(mapImage?.alt, locale) ?? tr("mapAlt");
+  const alt = tr("mapAlt");
   const full = variant === "venue";
   // The homepage card shows the house number only ("Nosticova 634"); the footer has the full address.
   const street = full ? address.street : address.street.replace(/\/\d+\w*$/, "");
   const secondLine = (full && [address.postalCode, address.city].filter(Boolean).join(" ")) || address.district;
-  const imageClass = "object-cover object-[39%_30%] lg:object-[35%_45%]";
+  // Keeps the house in view: centred on phones, left of the address card on desktop.
+  const imageClass = "object-cover object-[39%_62%] lg:object-[40%_48%]";
 
   return (
     <section
@@ -65,11 +67,15 @@ export async function MapSection({
       aria-label={heading ?? label}
       className={`relative overflow-hidden bg-sunken ${variants[variant].section} ${className}`}
     >
-      {mapImage?.asset ? (
-        <SanityImage image={mapImage} alt={alt} fill sizes="100vw" className={imageClass} />
-      ) : (
-        <Image src="/images/map-mala-strana.jpg" alt={alt} fill sizes="100vw" className={imageClass} />
-      )}
+      <Image src={map} alt={alt} fill sizes="100vw" quality={85} placeholder="blur" className={imageClass} />
+      <a
+        href="https://www.openstreetmap.org/copyright"
+        target="_blank"
+        rel="noopener"
+        className="absolute top-2 right-2 rounded-xs bg-paper/85 px-1.5 py-0.5 text-[10px] leading-3 text-muted no-underline hover:text-black lg:top-auto lg:right-auto lg:bottom-2 lg:left-2 lg:text-[11px]"
+      >
+        © OpenStreetMap
+      </a>
       {heading && (
         <h2 className="absolute top-5 left-5 m-0 font-display text-[56px] leading-[52px] lg:top-12 lg:left-16 lg:text-[96px] lg:leading-[88px]">
           {heading}

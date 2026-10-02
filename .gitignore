@@ -46,3 +46,8 @@ next-env.d.ts
 
 # agent worktrees
 /.claude/worktrees/
+
+# map build intermediates
+/scripts/map/osm.json
+/scripts/map/render.html
+/scripts/map/map.png

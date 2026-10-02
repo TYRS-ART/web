@@ -84,7 +84,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
       <RentalBand band={data.settings?.rentalBand ?? null} locale={locale} />
 
-      <MapSection address={data.settings?.address} mapImage={data.settings?.mapImage} locale={locale} />
+      <MapSection address={data.settings?.address} locale={locale} />
     </>
   );
 }
