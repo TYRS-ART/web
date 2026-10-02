@@ -6,10 +6,10 @@ import { eventCard, imageFields, notOver } from "./shared";
 export const PROGRAM_QUERY = defineQuery(`{
   "settings": *[_id == "settings"][0]{ socials },
   "month": *[_type == "event" && startsAt >= $monthStart && startsAt < $monthEnd] | order(startsAt asc){
-    ${eventCard}, endsAt
+    ${eventCard}
   },
   "week": *[_type == "event" && startsAt >= $weekStart && startsAt < $weekEnd] | order(startsAt asc){
-    ${eventCard}, endsAt
+    ${eventCard}
   }
 }`);
 

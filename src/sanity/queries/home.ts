@@ -13,8 +13,6 @@ export const HOME_QUERY = defineQuery(`{
     runStart, runEnd,
     "lessonDates": lessonDates[].date,
     "hall": space->name,
-    heroImage{ ${imageFields} },
-    "morePhotos": morePhotos[]{ ${imageFields} },
-    "lecturerPhoto": lecturer->photo{ ${imageFields} }
+    heroImage{ ${imageFields} }
   }
 }`);

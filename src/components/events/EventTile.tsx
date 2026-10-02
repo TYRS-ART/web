@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";
-import { dateTimeLabel } from "@/lib/events";
+import { dateTimeLabel, type DateWords } from "@/lib/events";
 import { t, tSlug } from "@/lib/localize";
 import { CategoryChip } from "@/components/ui/CategoryChip";
 import { SanityImage } from "@/components/ui/SanityImage";
@@ -45,7 +45,7 @@ export function EventTile({
   locale: Locale;
   size: TileSize;
   mobileSize?: TileSize;
-  words: { today: string; tomorrow: string };
+  words: DateWords;
   className?: string;
   hideChipOnMobile?: boolean;
   sizes?: string;
@@ -83,7 +83,7 @@ export function EventTile({
       )}
       <span className="absolute top-3 left-3 inline-flex gap-1.5 lg:top-5 lg:left-5 lg:gap-2">
         <span className="inline-flex items-center rounded-[5px] bg-white px-2.5 py-1.5 text-[13px] leading-4 font-medium text-black lg:rounded-xs lg:px-3.5 lg:py-2 lg:text-base lg:leading-5">
-          {dateTimeLabel(event.startsAt, locale, words)}
+          {dateTimeLabel(event.startsAt, locale, words, event.endsAt)}
         </span>
         {event.categories?.map((c) => (
           <CategoryChip key={c} category={c} locale={locale} className={hideChipOnMobile ? "max-lg:hidden" : ""} />

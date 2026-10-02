@@ -36,6 +36,7 @@ export function lessonCard(lesson: Lesson<LessonCourse>, heroImage: Photo = less
     slug: null,
     course: { slug: course.slug },
     startsAt: lessonInstant(lesson.day, lesson.start),
+    endsAt: null,
     categories: ["lekce", ...(course.focus === "tanec" || course.focus === "hudba" ? [course.focus] : [])],
     featured: false,
     priceText: null,
@@ -61,24 +62,7 @@ export function nextLessonCards(courses: Course[], today: string, now: Date = ne
   return cards;
 }
 
-/**
- * Every upcoming lesson as a card. A course's lessons take turns with its photos
- * (main photo, "Další fotky", then the lecturer's photo) so they differ when they can.
- */
-export function allLessonCards(courses: Course[], today: string, now: Date = new Date()): EventCard[] {
-  const turn = new Map<string, number>();
-  return upcomingLessons(courses, today, now).map((lesson) => {
-    const course = lesson.course;
-    const photos = [course.heroImage, ...(course.morePhotos ?? []), course.lecturerPhoto].filter(
-      (photo): photo is NonNullable<Photo> => Boolean(photo?.asset),
-    );
-    const n = turn.get(course._id) ?? 0;
-    turn.set(course._id, n + 1);
-    return lessonCard(lesson, photos.length ? photos[n % photos.length] : course.heroImage);
-  });
-}
-
-/** Same photo = same thing (a repeated event, or a course's lessons). */
+/** Same photo = same thing (e.g. a repeated event). */
 function photoKey(card: EventCard) {
   return card.heroImage?.asset?._ref ?? `title:${card.title?.cs ?? card._id}`;
 }
@@ -89,10 +73,11 @@ export const MOSAIC_MIN = 4;
 export const MOSAIC_MAX = 5;
 
 /**
- * "Nejbližší události", shown in date order. Events come first (featured ones,
- * then the nearest), lessons fill the remaining places, and no photo appears
- * twice. When that leaves fewer than MOSAIC_MIN tiles, the nearest remaining
- * events and lessons are added even if their photo repeats.
+ * "Nejbližší události", shown in date order. Events (also ones still running,
+ * like a festival week) come first, featured ones before the rest; then each
+ * course once, with its next lesson. No photo appears twice; when that leaves
+ * fewer than MOSAIC_MIN tiles, the nearest remaining events are added even if
+ * their photo repeats.
  */
 export function pickMosaic(events: EventCard[], lessons: EventCard[]): EventCard[] {
   const used = new Set<string>();
