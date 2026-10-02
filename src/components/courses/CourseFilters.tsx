@@ -6,10 +6,10 @@ import { Link } from "@/i18n/navigation";
 import { audienceTags, courseFocuses } from "@/lib/taxonomy";
 import type { FilterId } from "@/lib/timetable";
 
-/** Solid colour + darker ring when selected. */
+/** Category chip (drifting gradient; Pohyb is plain butter) + darker ring when selected. */
 const focusChip: Record<string, string> = {
-  tanec: "bg-tanec! border-tanec! hover:shadow-[0_0_0_3px_var(--color-tanec-edge)] aria-[current]:shadow-[0_0_0_3px_var(--color-tanec-edge)]",
-  hudba: "bg-hudba! border-hudba! hover:shadow-[0_0_0_3px_var(--color-hudba-edge)] aria-[current]:shadow-[0_0_0_3px_var(--color-hudba-edge)]",
+  tanec: "cl cl-tanec border-transparent! hover:shadow-[0_0_0_3px_var(--color-tanec-edge)] aria-[current]:shadow-[0_0_0_3px_var(--color-tanec-edge)]",
+  hudba: "cl cl-hudba border-transparent! hover:shadow-[0_0_0_3px_var(--color-hudba-edge)] aria-[current]:shadow-[0_0_0_3px_var(--color-hudba-edge)]",
   pohyb: "bg-pohyb! border-pohyb! hover:shadow-[0_0_0_3px_#e0c23a] aria-[current]:shadow-[0_0_0_3px_#e0c23a]",
 };
 

@@ -11,7 +11,7 @@ import { buttonClass } from "@/components/ui/button";
 import { CategoryChip } from "@/components/ui/CategoryChip";
 import type { HOME_QUERY_RESULT } from "@/sanity/types";
 
-const focusColour: Record<string, string> = { tanec: "bg-tanec", hudba: "bg-hudba", pohyb: "bg-pohyb" };
+const focusColour: Record<string, string> = { tanec: "cl cl-tanec", hudba: "cl cl-hudba", pohyb: "bg-pohyb" };
 
 /**
  * Five sage course slots: what's left of this week, or — when nothing is on this
