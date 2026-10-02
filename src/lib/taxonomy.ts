@@ -7,6 +7,7 @@ export const eventCategories = [
   { id: "divadlo", cs: "Divadlo", en: "Theatre" },
   { id: "tanec", cs: "Tanec", en: "Dance" },
   { id: "lekce", cs: "Lekce", en: "Classes" },
+  { id: "umeni", cs: "Umění", en: "Art" },
 ] as const satisfies readonly Term<string>[];
 export type EventCategory = (typeof eventCategories)[number]["id"];
 
