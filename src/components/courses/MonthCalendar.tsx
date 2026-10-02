@@ -6,7 +6,6 @@ import { Link } from "@/i18n/navigation";
 import { shortTime, weekdayLong, weekdayShort } from "@/lib/courses";
 import { t } from "@/lib/localize";
 import { calendarDays, dayMonthLabel, dayNumber } from "@/lib/program";
-import { dayAnchor } from "@/lib/program";
 import { isoWeekday } from "@/lib/timetable";
 import { nbsp } from "@/lib/typography";
 
@@ -127,26 +126,23 @@ export async function MonthCalendar({
 }
 
 /**
- * Every day of the month that has lessons, in order. Under the mobile calendar it
- * starts at today (`fromToday`); as the list view it shows the whole month, each
- * day with an anchor the calendar links to.
+ * Mobile, under the month calendar: every day with lessons from today on (a past
+ * month is shown whole).
  */
 export async function MonthList({
   lessons,
   today,
   locale,
-  fromToday = false,
 }: {
   lessons: TimetableLesson[];
   today: string;
   locale: Locale;
-  fromToday?: boolean;
 }) {
   const tr = await getTranslations();
   const allDays = [...new Set(lessons.map((l) => l.day))];
   // In the current month, start at today; a past month is shown whole.
   const upcoming = allDays.filter((day) => day >= today);
-  const days = fromToday && upcoming.length > 0 ? upcoming : allDays;
+  const days = upcoming.length > 0 ? upcoming : allDays;
   return (
     <div className="flex flex-col">
       {days.map((day) => {
@@ -155,7 +151,6 @@ export async function MonthList({
         return (
           <section
             key={day}
-            id={fromToday ? undefined : dayAnchor(day)}
             aria-label={`${weekdayLong(isoWeekday(day), locale)} ${dayMonthLabel(day, locale)}`}
             className="scroll-mt-4 [&:first-child>div]:border-t-0"
           >
