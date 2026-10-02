@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.sanity.io" },
       // Spotify playlist and album artwork (oEmbed thumbnails).
       { protocol: "https", hostname: "i.scdn.co" },
+      { protocol: "https", hostname: "**.spotifycdn.com" },
     ],
   },
 };

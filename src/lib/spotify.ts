@@ -13,7 +13,8 @@ export async function spotifyArtwork(url: string | null | undefined): Promise<st
     });
     if (!response.ok) return undefined;
     const data = (await response.json()) as { thumbnail_url?: string };
-    return data.thumbnail_url?.startsWith("https://i.scdn.co/") ? data.thumbnail_url : undefined;
+    const art = data.thumbnail_url;
+    return art && /^https:\/\/(i\.scdn\.co|[a-z0-9-]+\.spotifycdn\.com)\//.test(art) ? art : undefined;
   } catch {
     return undefined;
   }
