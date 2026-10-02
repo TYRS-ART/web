@@ -50,6 +50,12 @@ export function EventTile({
   sizes?: string;
 }) {
   const slug = tSlug(event.slug, locale);
+  const courseSlug = event.course ? tSlug(event.course.slug, locale) : undefined;
+  const target = courseSlug
+    ? ({ pathname: "/kurzy/[slug]", params: { slug: courseSlug } } as const)
+    : slug
+      ? ({ pathname: "/program/[slug]", params: { slug } } as const)
+      : undefined;
   const title = nbsp(t(event.title, locale) ?? "");
   const category = event.categories?.[0];
   const hasImage = Boolean(event.heroImage?.asset);
@@ -88,8 +94,8 @@ export function EventTile({
     </>
   );
   const classes = `tile duo-host feathered group relative block overflow-hidden rounded-[14px] bg-sunken text-white no-underline lg:rounded-tile ${className}`;
-  return slug ? (
-    <Link href={{ pathname: "/program/[slug]", params: { slug } }} className={classes}>
+  return target ? (
+    <Link href={target} className={classes}>
       {body}
     </Link>
   ) : (
