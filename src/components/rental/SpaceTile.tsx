@@ -47,7 +47,7 @@ export async function SpaceTile({ space, locale, className = "" }: { space: Spac
             alt=""
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"
-            className="soft object-cover transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none"
+            className="soft object-cover zoom-soft group-hover:scale-[1.03] motion-reduce:transition-none"
           />
           <span className="soft absolute inset-0 bg-linear-to-t from-black/65 to-black/0 to-55%" />
         </>

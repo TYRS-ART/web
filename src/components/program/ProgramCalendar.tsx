@@ -105,7 +105,7 @@ function DayTile({
               alt=""
               fill
               sizes={v.sizes}
-              className="soft object-cover transition-transform duration-250 group-hover:scale-[1.04] motion-reduce:transition-none"
+              className="soft object-cover zoom-soft group-hover:scale-[1.03] motion-reduce:transition-none"
             />
             <span className="soft absolute inset-0 bg-linear-to-t from-black/60 to-black/0 to-60%" />
           </>

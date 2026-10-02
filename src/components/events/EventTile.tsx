@@ -68,7 +68,7 @@ export function EventTile({
             alt=""
             fill
             sizes={sizes}
-            className="soft absolute inset-0 block h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className="soft absolute inset-0 block h-full w-full object-cover zoom-soft group-hover:scale-[1.03]"
           />
           <span className="duo" />
           <span className="soft absolute inset-0 bg-linear-to-t from-black/60 to-black/0 to-55%" />

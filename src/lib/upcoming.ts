@@ -50,3 +50,29 @@ export function nextLessonCards(courses: Course[], today: string, now: Date = ne
   }
   return cards;
 }
+
+/** Same photo = same thing (a repeated event, or a course's lessons). */
+function photoKey(card: EventCard) {
+  return card.heroImage?.asset?._ref ?? `title:${card.title?.cs ?? card._id}`;
+}
+
+/**
+ * "Nejbližší události": up to `count` tiles, never the same photo twice. Events
+ * come first (featured ones before the rest, then the nearest); lessons fill the
+ * remaining places. The result is shown in date order.
+ */
+export function pickMosaic(events: EventCard[], lessons: EventCard[], count = 5): EventCard[] {
+  const used = new Set<string>();
+  const picked: EventCard[] = [];
+  const take = (card: EventCard) => {
+    if (picked.length >= count || picked.includes(card)) return;
+    const key = photoKey(card);
+    if (used.has(key)) return;
+    used.add(key);
+    picked.push(card);
+  };
+  events.filter((e) => e.featured).forEach(take);
+  events.forEach(take);
+  lessons.forEach(take);
+  return picked.sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+}

@@ -35,7 +35,7 @@ export function CourseTile({
             alt=""
             fill
             sizes="(min-width: 1024px) 33vw, 100vw"
-            className="soft absolute inset-0 block h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none"
+            className="soft absolute inset-0 block h-full w-full object-cover zoom-soft group-hover:scale-[1.03] motion-reduce:transition-none"
           />
           <span className="soft absolute inset-0 bg-linear-to-t from-black/60 to-black/0 to-55%" />
         </>
