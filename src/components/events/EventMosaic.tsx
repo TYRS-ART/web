@@ -58,6 +58,7 @@ export function EventMosaic({
             hideChipOnMobile={mobile.pair}
             className={`${mobile.pair ? "col-span-1" : "col-span-2"} ${mobile.height} ${slot.span} ${slot.height}`}
             sizes={index === 0 ? "(min-width: 1024px) 66vw, 100vw" : "(min-width: 1024px) 40vw, 100vw"}
+            duotone={false}
           />
         );
       })}

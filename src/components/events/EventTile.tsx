@@ -26,9 +26,9 @@ const mobileTitle: Record<TileSize, string> = {
 };
 
 /**
- * Event photo tile: feathered duotone photo, scrim, white date badge + category chip
- * top-left, Clash title bottom-left. Without a photo it becomes a typographic tile
- * in the category colour.
+ * Event photo tile: feathered duotone photo (full colour with `duotone={false}`),
+ * scrim, white date badge + category chip top-left, Clash title bottom-left.
+ * Without a photo it becomes a typographic tile in the category colour.
  */
 export function EventTile({
   event,
@@ -39,6 +39,7 @@ export function EventTile({
   className = "",
   hideChipOnMobile = false,
   sizes = "(min-width: 1024px) 66vw, 100vw",
+  duotone = true,
 }: {
   event: EventCard;
   locale: Locale;
@@ -48,6 +49,7 @@ export function EventTile({
   className?: string;
   hideChipOnMobile?: boolean;
   sizes?: string;
+  duotone?: boolean;
 }) {
   const slug = tSlug(event.slug, locale);
   const courseSlug = event.course ? tSlug(event.course.slug, locale) : undefined;
@@ -72,7 +74,7 @@ export function EventTile({
               sizes={sizes}
               className="zoom-soft absolute inset-0 block h-full w-full object-cover group-hover:scale-[1.04]"
             />
-            <span className="duo" />
+            {duotone && <span className="duo" />}
           </span>
           <span className="soft absolute inset-0 bg-linear-to-t from-black/60 to-black/0 to-55%" />
         </>
@@ -96,7 +98,7 @@ export function EventTile({
       </span>
     </>
   );
-  const classes = `tile duo-host feathered group relative block overflow-hidden rounded-[14px] bg-sunken text-white no-underline lg:rounded-tile ${className}`;
+  const classes = `tile ${duotone ? "duo-host" : ""} feathered group relative block overflow-hidden rounded-[14px] bg-sunken text-white no-underline lg:rounded-tile ${className}`;
   return target ? (
     <Link href={target} className={classes}>
       {body}
