@@ -1,12 +1,14 @@
 /**
- * Builds the Malá Strana map used on the homepage and Venue page from OpenStreetMap
- * data (© OpenStreetMap contributors, ODbL), styled in the TYRŠ palette.
+ * Builds the Kampa map used on the homepage and Venue page: OpenStreetMap data
+ * (© OpenStreetMap contributors, ODbL) in the light style of the design canvas,
+ * with the TYRŠ house shown in a white bubble holding a ČÚZK orthophoto (© ČÚZK).
  *
- *   node scripts/map/build-map.mjs            # downloads fresh OSM data
- *   node scripts/map/build-map.mjs --cached   # reuses scripts/map/osm.json
+ *   node scripts/map/build-map.mjs            # downloads fresh OSM data + orthophoto
+ *   node scripts/map/build-map.mjs --cached   # reuses scripts/map/osm.json + ortho.jpg
  *
- * Writes public/images/map-kampa.svg (vector source, labels in brand fonts)
- * and renders public/images/map-kampa.jpg at 3200 px with headless Chrome.
+ * Renders two crops with headless Chrome (labels in the brand fonts):
+ *   public/images/map-kampa.jpg         wide, desktop (3200 px)
+ *   public/images/map-kampa-mobile.jpg  tall, phones (1200 px)
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -15,27 +17,49 @@ import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "../..");
+const cached = process.argv.includes("--cached");
 
-/* ------------------------------------------------------------------ Extent */
+/* -------------------------------------------------------------- Geometry */
 
-// TYRŠ, Nosticova 634/2a.
+// TYRŠ, Nosticova 634/2a. Everything is measured in metres from the house.
 const HOUSE = { lat: 50.0842796, lon: 14.4070477 };
-const BBOX = { south: 50.0816, west: 14.4, north: 50.0868, east: 14.4165 };
-const PX_WIDTH = 3200;
-
 const M_PER_DEG = 111_320;
-const cosLat = Math.cos(((BBOX.south + BBOX.north) / 2) * (Math.PI / 180));
-const W = (BBOX.east - BBOX.west) * M_PER_DEG * cosLat;
-const H = (BBOX.north - BBOX.south) * M_PER_DEG;
-const project = ({ lat, lon }) => [(lon - BBOX.west) * M_PER_DEG * cosLat, (BBOX.north - lat) * M_PER_DEG];
+const cosLat = Math.cos(HOUSE.lat * (Math.PI / 180));
+const project = ({ lat, lon }) => [(lon - HOUSE.lon) * M_PER_DEG * cosLat, (HOUSE.lat - lat) * M_PER_DEG];
 const fmt = (n) => Math.round(n * 10) / 10;
+
+/**
+ * Crops: size in metres, where the house sits (fraction of width/height), output
+ * pixels, and a scale for labels and the bubble so they read the same on screen.
+ */
+const VARIANTS = [
+  { name: "map-kampa", w: 1180, h: 580, hx: 0.43, hy: 0.62, px: 3200, scale: 1, bubble: 1, vltava: { lat: 50.0836, lon: 14.411 } },
+  { name: "map-kampa-mobile", w: 560, h: 800, hx: 0.5, hy: 0.42, px: 1200, scale: 1.8, bubble: 1.25, vltava: { lat: 50.0853, lon: 14.4099 } },
+];
+
+// Area to download: everything any crop can show, plus a margin.
+const extent = VARIANTS.reduce(
+  (box, v) => ({
+    west: Math.min(box.west, -v.hx * v.w),
+    east: Math.max(box.east, (1 - v.hx) * v.w),
+    north: Math.min(box.north, -v.hy * v.h),
+    south: Math.max(box.south, (1 - v.hy) * v.h),
+  }),
+  { west: 0, east: 0, north: 0, south: 0 },
+);
+const toLon = (x) => HOUSE.lon + x / (M_PER_DEG * cosLat);
+const toLat = (y) => HOUSE.lat - y / M_PER_DEG;
+const BBOX = `${toLat(extent.south + 80)},${toLon(extent.west - 80)},${toLat(extent.north - 80)},${toLon(extent.east + 80)}`;
 
 /* ------------------------------------------------------------------ Data */
 
-const cachePath = join(here, "osm.json");
+const osmPath = join(here, "osm.json");
+const orthoPath = join(here, "ortho.jpg");
+const UA = { "User-Agent": "tyrs-web-map/1.0 (booking@tyrs.art)" };
+
 async function loadOsm() {
-  if (process.argv.includes("--cached") && existsSync(cachePath)) return JSON.parse(readFileSync(cachePath, "utf8"));
-  const b = `${BBOX.south - 0.001},${BBOX.west - 0.0015},${BBOX.north + 0.001},${BBOX.east + 0.0015}`;
+  if (cached && existsSync(osmPath)) return JSON.parse(readFileSync(osmPath, "utf8"));
+  const b = BBOX;
   const query = `[out:json][timeout:90];(
     way["building"](${b});relation["building"](${b});
     way["highway"](${b});way["railway"="tram"](${b});
@@ -45,13 +69,28 @@ async function loadOsm() {
   );out geom;`;
   const response = await fetch("https://overpass-api.de/api/interpreter", {
     method: "POST",
-    headers: { "User-Agent": "tyrs-web-map/1.0 (booking@tyrs.art)", "Content-Type": "application/x-www-form-urlencoded" },
+    headers: { ...UA, "Content-Type": "application/x-www-form-urlencoded" },
     body: `data=${encodeURIComponent(query)}`,
   });
   if (!response.ok) throw new Error(`Overpass ${response.status}`);
   const json = await response.json();
-  writeFileSync(cachePath, JSON.stringify(json));
+  writeFileSync(osmPath, JSON.stringify(json));
   return json;
+}
+
+/** ČÚZK orthophoto, 76 × 68 m around the house (house at 37.5 % × 51 % of the image). */
+async function loadOrtho() {
+  if (cached && existsSync(orthoPath)) return readFileSync(orthoPath);
+  const c = { lat: 50.0842596, lon: 14.4071677 };
+  const dl = 34 / M_PER_DEG;
+  const dn = 38 / (M_PER_DEG * cosLat);
+  const bbox = [c.lon - dn, c.lat - dl, c.lon + dn, c.lat + dl].map((v) => v.toFixed(7)).join(",");
+  const url = `https://ags.cuzk.gov.cz/arcgis1/services/ORTOFOTO/MapServer/WMSServer?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=0&STYLES=&SRS=EPSG:4326&BBOX=${bbox}&WIDTH=1200&HEIGHT=1074&FORMAT=image/jpeg`;
+  const response = await fetch(url, { headers: UA });
+  if (!response.ok) throw new Error(`ČÚZK ${response.status}`);
+  const buffer = Buffer.from(await response.arrayBuffer());
+  writeFileSync(orthoPath, buffer);
+  return buffer;
 }
 
 /** Joins open member ways of a multipolygon into closed rings. */
@@ -91,36 +130,30 @@ function areaPaths(element) {
   return "";
 }
 
-function inside(point, ring) {
-  let hit = false;
-  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const a = ring[i];
-    const b = ring[j];
-    if (a.lat > point.lat !== b.lat > point.lat && point.lon < ((b.lon - a.lon) * (point.lat - a.lat)) / (b.lat - a.lat) + a.lon) hit = !hit;
-  }
-  return hit;
-}
-
 /* ------------------------------------------------------------------ Style */
 
+// The light style of the design canvas: grey ground, cream buildings with a
+// little depth, blue-grey streets, bright blue water, pale green parks.
 const C = {
-  paper: "#f3f1ea",
-  green: "#d3e5d4",
-  greenEdge: "#bfd8c2",
-  water: "#cddcf4",
-  waterText: "#6f8fd9",
-  building: "#e5e0d3",
-  buildingEdge: "#d5cfbf",
-  road: "#ffffff",
-  tram: "#c9c2b4",
-  text: "#5c5c5c",
-  ink: "#000000",
-  lime: "#79cb6f",
+  land: "#f2f2f4",
+  green: "#c9ecd3",
+  greenEdge: "#b7e2c3",
+  water: "#a9dff1",
+  waterText: "#5a8fa6",
+  building: "#f6eedc",
+  buildingSide: "#e6dcc6",
+  buildingEdge: "#ece2cc",
+  road: "#e1e5ee",
+  roadMinor: "#e9ecf2",
+  tram: "#cfd3dc",
+  text: "#5f6368",
+  halo: "#ffffff",
+  white: "#ffffff",
 };
 
 const ROAD_WIDTH = {
   secondary: 10, tertiary: 9, residential: 7, unclassified: 7, living_street: 6, pedestrian: 6, busway: 6,
-  service: 3.6, footway: 1.8, path: 1.6, cycleway: 1.8, steps: 1.8,
+  service: 3.6, footway: 1.8, path: 1.6, cycleway: 1.8,
 };
 
 const LABELS = [
@@ -131,131 +164,164 @@ const LABELS = [
 
 /* ------------------------------------------------------------------ Build */
 
-const osm = await loadOsm();
+const [osm, ortho] = await Promise.all([loadOsm(), loadOrtho()]);
 const els = osm.elements;
 
 const greens = els.filter((e) => e.tags && (e.tags.leisure || e.tags.landuse || ["wood", "scrub"].includes(e.tags.natural)));
 const waters = els.filter((e) => e.tags?.natural === "water" && !e.tags.amenity);
 const buildings = els.filter((e) => e.tags?.building);
-const roads = els.filter((e) => e.tags?.highway && e.geometry && ROAD_WIDTH[e.tags.highway] && !["steps"].includes(e.tags.highway));
+const roads = els.filter((e) => e.tags?.highway && e.geometry && ROAD_WIDTH[e.tags.highway]);
 const trams = els.filter((e) => e.tags?.railway === "tram" && e.geometry);
 
-// The TYRŠ house: the building whose outline contains the address point.
-const house = buildings.find((b) => b.type === "way" && b.geometry && inside(HOUSE, b.geometry));
-if (!house) console.warn("House outline not found — only the pin will mark it.");
-
+const buildingD = buildings.map(areaPaths).join("");
 const roadLayers = Object.entries(ROAD_WIDTH)
   .sort((a, b) => a[1] - b[1])
   .map(([kind, width]) => {
     const d = roads.filter((r) => r.tags.highway === kind).map((r) => linePath(r.geometry)).join("");
     if (!d) return "";
-    const dash = kind === "footway" || kind === "path" || kind === "cycleway" ? ` opacity=".85"` : "";
-    return `<path d="${d}" stroke="${C.road}" stroke-width="${width}" fill="none" stroke-linecap="round" stroke-linejoin="round"${dash}/>`;
+    const minor = ["footway", "path", "cycleway", "service"].includes(kind);
+    return `<path d="${d}" stroke="${minor ? C.roadMinor : C.road}" stroke-width="${width}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   })
   .join("\n");
 
-// Street labels along the longest way of each name, written left to right.
-let defs = "";
-const labels = [];
-for (const name of LABELS) {
-  const ways = roads.filter((r) => r.tags.name === name);
-  if (!ways.length) continue;
-  const longest = ways
-    .map((w) => ({ w, len: w.geometry.reduce((s, p, i, a) => (i ? s + Math.hypot(...project(p).map((v, k) => v - project(a[i - 1])[k])) : 0), 0) }))
-    .sort((a, b) => b.len - a.len)[0];
-  if (longest.len < name.length * 6.5) continue;
-  let pts = longest.w.geometry.map(project);
-  // Keep text upright.
-  if (pts[0][0] > pts.at(-1)[0]) pts = pts.reverse();
-  const visible = pts.some(([x, y]) => x > 0 && x < W && y > 0 && y < H);
-  if (!visible) continue;
-  const id = `s${labels.length}`;
-  defs += `<path id="${id}" d="M${pts.map((p) => p.map(fmt).join(" ")).join("L")}"/>`;
-  labels.push(
-    `<text class="street"><textPath href="#${id}" startOffset="50%" text-anchor="middle">${name}</textPath></text>`,
-  );
+/** Street labels along the longest way of each name, written left to right. */
+function streetLabels(view, size, hidden) {
+  let defs = "";
+  const texts = [];
+  for (const name of LABELS) {
+    const ways = roads.filter((r) => r.tags.name === name);
+    if (!ways.length) continue;
+    const measured = ways.map((w) => {
+      const pts = w.geometry.map(project);
+      const len = pts.reduce((s, p, i) => (i ? s + Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]) : 0), 0);
+      return { pts, len };
+    });
+    let placed = null;
+    for (const longest of measured.sort((a, b) => b.len - a.len)) {
+      if (longest.len < name.length * size * 0.62) continue;
+      let pts = longest.pts;
+      if (pts[0][0] > pts.at(-1)[0]) pts = [...pts].reverse();
+      const mid = pts[Math.floor(pts.length / 2)];
+      const inView = mid[0] > view.x + 20 && mid[0] < view.x + view.w - 20 && mid[1] > view.y + 20 && mid[1] < view.y + view.h - 20;
+      // Names that would peek out from under the bubble are left out: sample the stretch
+      // of the street the (centred) name occupies.
+      const labelLen = name.length * size * 0.62;
+      const at = (d) => {
+        for (let i = 1, run = 0; i < pts.length; i++) {
+          const seg = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+          if (run + seg >= d) {
+            const t = (d - run) / seg;
+            return [pts[i - 1][0] + t * (pts[i][0] - pts[i - 1][0]), pts[i - 1][1] + t * (pts[i][1] - pts[i - 1][1])];
+          }
+          run += seg;
+        }
+        return pts.at(-1);
+      };
+      const covered = Array.from({ length: 9 }, (_, k) => at(longest.len / 2 - labelLen / 2 + (k * labelLen) / 8)).some(
+        ([x, y]) => x > hidden.x && x < hidden.x + hidden.w && y > hidden.y && y < hidden.y + hidden.h,
+      );
+      if (!inView || covered) continue;
+      placed = pts;
+      break;
+    }
+    if (!placed) continue;
+    const pts = placed;
+    const id = `s${texts.length}`;
+    defs += `<path id="${id}" d="M${pts.map((p) => p.map(fmt).join(" ")).join("L")}"/>`;
+    texts.push(`<text class="street"><textPath href="#${id}" startOffset="50%" text-anchor="middle">${name}</textPath></text>`);
+  }
+  return { defs, texts: texts.join("\n") };
 }
 
-const [hx, hy] = project(HOUSE);
-const logo = readFileSync(join(root, "public/logos/logo-primary-inverse.svg"), "utf8")
-  .replace(/<metadata>[\s\S]*?<\/metadata>/, "")
-  .replace(/^<svg[^>]*>/, "")
-  .replace(/<\/svg>\s*$/, "");
+const place = (text, at, cls, rotate = 0) => {
+  const [x, y] = project(at);
+  return `<text class="${cls}" x="${fmt(x)}" y="${fmt(y)}" text-anchor="middle"${rotate ? ` transform="rotate(${rotate} ${fmt(x)} ${fmt(y)})"` : ""}>${text}</text>`;
+};
 
-// Pin: black pill with the white wordmark, pointer down onto the house.
-const PIN_W = 104;
-const PIN_H = 38;
-const pinX = hx - PIN_W / 2;
-const pinY = hy - PIN_H - 22;
-const pin = `
+/** White rounded bubble with the aerial photo; its pointer touches the house. */
+function bubble(scale) {
+  const BW = 170 * scale;
+  const BH = 148 * scale;
+  const border = 7 * scale;
+  const r = 22 * scale;
+  const bx = -BW / 2 - 6 * scale;
+  const by = -BH - 30 * scale;
+  // Zoomed so the house (37.5 % × 51 % of the photo) sits in the middle.
+  const photoW = 260 * scale;
+  const photoH = (photoW * 1074) / 1200;
+  const px = bx + BW / 2 - 0.375 * photoW;
+  const py = by + BH / 2 - 0.51 * photoH;
+  return `
+  <clipPath id="photo"><rect x="${fmt(bx + border)}" y="${fmt(by + border)}" width="${fmt(BW - 2 * border)}" height="${fmt(BH - 2 * border)}" rx="${fmt(r - border)}"/></clipPath>
   <g filter="url(#shadow)">
-    <rect x="${fmt(pinX)}" y="${fmt(pinY)}" width="${PIN_W}" height="${PIN_H}" rx="${PIN_H / 2}" fill="${C.ink}"/>
-    <path d="M${fmt(hx - 7)} ${fmt(pinY + PIN_H - 0.5)} L${fmt(hx)} ${fmt(pinY + PIN_H + 9)} L${fmt(hx + 7)} ${fmt(pinY + PIN_H - 0.5)}Z" fill="${C.ink}"/>
+    <rect x="${fmt(bx)}" y="${fmt(by)}" width="${fmt(BW)}" height="${fmt(BH)}" rx="${fmt(r)}" fill="${C.white}"/>
+    <path d="M${fmt(-13 * scale)} ${fmt(by + BH - 1)} L0 ${fmt(-4 * scale)} L${fmt(13 * scale)} ${fmt(by + BH - 1)}Z" fill="${C.white}"/>
   </g>
-  <svg x="${fmt(pinX + 18)}" y="${fmt(pinY + 8)}" width="${PIN_W - 36}" height="${PIN_H - 16}" viewBox="340.43 329.06 496.87 164.04" preserveAspectRatio="xMidYMid meet">${logo}</svg>
-  <circle cx="${fmt(hx)}" cy="${fmt(hy)}" r="6" fill="${C.lime}" stroke="${C.ink}" stroke-width="2.4"/>`;
+  <image href="data:image/jpeg;base64,${ortho.toString("base64")}" x="${fmt(px)}" y="${fmt(py)}" width="${fmt(photoW)}" height="${fmt(photoH)}" clip-path="url(#photo)" preserveAspectRatio="xMidYMid slice"/>`;
+}
 
-// Big place names, positioned by hand in metres.
-const place = (text, x, y, cls, rotate = 0) =>
-  `<text class="${cls}" x="${fmt(x)}" y="${fmt(y)}" text-anchor="middle"${rotate ? ` transform="rotate(${rotate} ${fmt(x)} ${fmt(y)})"` : ""}>${text}</text>`;
-const [kx, ky] = project({ lat: 50.08285, lon: 14.40835 });
-const [vx, vy] = project({ lat: 50.0836, lon: 14.4110 });
-const [cx, cy] = project({ lat: 50.08335, lon: 14.40712 });
-
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${fmt(W)} ${fmt(H)}" width="${PX_WIDTH}" height="${Math.round((PX_WIDTH * H) / W)}">
+function svgFor(v) {
+  const view = { x: -v.hx * v.w, y: -v.hy * v.h, w: v.w, h: v.h };
+  const s = v.scale;
+  const b = v.bubble;
+  const hidden = { x: -91 * b - 15, y: -178 * b - 12, w: 170 * b + 30, h: 178 * b + 6 };
+  const { defs, texts } = streetLabels(view, 9.5 * s, hidden);
+  const pxH = Math.round((v.px * v.h) / v.w);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${fmt(view.x)} ${fmt(view.y)} ${v.w} ${v.h}" width="${v.px}" height="${pxH}">
 <defs>
   ${defs}
-  <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity=".18"/></filter>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="${3 * s}" stdDeviation="${5 * s}" flood-color="#000" flood-opacity=".22"/></filter>
   <style>
-    .street { font: 500 9.5px "General Sans", system-ui, sans-serif; fill: ${C.text}; letter-spacing: .02em; paint-order: stroke; stroke: ${C.paper}; stroke-width: 2.6px; stroke-linejoin: round; }
-    .park { font: 500 28px "Clash Grotesk Variable", system-ui, sans-serif; fill: #6f9c7b; letter-spacing: -.02em; }
-    .river { font: 500 34px "Clash Grotesk Variable", system-ui, sans-serif; fill: ${C.waterText}; letter-spacing: .12em; }
-    .stream { font: italic 500 10px "General Sans", system-ui, sans-serif; fill: ${C.waterText}; }
+    .street { font: 600 ${9.5 * s}px "General Sans", system-ui, sans-serif; fill: ${C.text}; letter-spacing: .01em; paint-order: stroke; stroke: ${C.halo}; stroke-width: ${2.8 * s}px; stroke-linejoin: round; }
+    .park { font: italic 500 ${17 * s}px "General Sans", system-ui, sans-serif; fill: #4f5a55; paint-order: stroke; stroke: ${C.green}; stroke-width: ${3 * s}px; }
+    .river { font: italic 500 ${17 * s}px "General Sans", system-ui, sans-serif; fill: ${C.waterText}; letter-spacing: .04em; }
+    .stream { font: italic 500 ${9.5 * s}px "General Sans", system-ui, sans-serif; fill: ${C.waterText}; }
   </style>
 </defs>
-<rect width="100%" height="100%" fill="${C.paper}"/>
+<rect x="${fmt(view.x)}" y="${fmt(view.y)}" width="${v.w}" height="${v.h}" fill="${C.land}"/>
 <path d="${greens.map(areaPaths).join("")}" fill="${C.green}" fill-rule="evenodd" stroke="${C.greenEdge}" stroke-width=".6"/>
 <path d="${waters.map(areaPaths).join("")}" fill="${C.water}" fill-rule="evenodd"/>
 <path d="${trams.map((t) => linePath(t.geometry)).join("")}" stroke="${C.tram}" stroke-width="1.2" fill="none" stroke-dasharray="3 2"/>
 ${roadLayers}
-<path d="${buildings.filter((b) => b !== house).map(areaPaths).join("")}" fill="${C.building}" stroke="${C.buildingEdge}" stroke-width=".5" fill-rule="evenodd"/>
-${house ? `<path d="${areaPaths(house)}" fill="${C.ink}"/>` : ""}
-${labels.join("\n")}
-${place("Kampa", kx, ky, "park")}
-${place("VLTAVA", vx, vy, "river", -82)}
-${place("Čertovka", cx, cy, "stream", -68)}
-${pin}
+<g transform="translate(0 2.4)"><path d="${buildingD}" fill="${C.buildingSide}" fill-rule="evenodd"/></g>
+<path d="${buildingD}" fill="${C.building}" stroke="${C.buildingEdge}" stroke-width=".5" fill-rule="evenodd"/>
+${texts}
+${place("Kampa", { lat: 50.08285, lon: 14.40835 }, "park")}
+${place("Vltava", v.vltava, "river", -82)}
+${place("Čertovka", { lat: 50.08335, lon: 14.40712 }, "stream", -68)}
+${bubble(v.bubble)}
 </svg>`;
-
-const svgPath = join(root, "public/images/map-kampa.svg");
-writeFileSync(svgPath, svg);
-console.log(`SVG: ${(svg.length / 1024).toFixed(0)} KB, ${buildings.length} buildings, ${labels.length} street labels, house ${house ? "found" : "missing"}`);
+}
 
 /* ------------------------------------------------------------------ Render */
 
 const chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const pxH = Math.round((PX_WIDTH * H) / W);
-const html = join(here, "render.html");
-const font = (name, file) =>
-  `@font-face{font-family:"${name}";src:url("${join(root, "public/fonts", file)}") format("woff2");font-weight:200 700;font-style:normal}`;
-writeFileSync(
-  html,
-  `<!doctype html><meta charset="utf-8"><style>${font("General Sans", "GeneralSans-Variable.woff2")}${font(
-    "Clash Grotesk Variable",
-    "ClashGrotesk-Variable.woff2",
-  )}@font-face{font-family:"General Sans";src:url("${join(root, "public/fonts/GeneralSans-VariableItalic.woff2")}") format("woff2");font-weight:200 700;font-style:italic}html,body{margin:0}svg{display:block}</style>${svg}`,
-);
-const png = join(here, "map.png");
-execFileSync(chrome, [
-  "--headless=new",
-  "--disable-gpu",
-  "--hide-scrollbars",
-  "--allow-file-access-from-files",
-  "--virtual-time-budget=4000",
-  `--window-size=${PX_WIDTH},${pxH}`,
-  `--screenshot=${png}`,
-  `file://${html}`,
-]);
-const jpg = join(root, "public/images/map-kampa.jpg");
-execFileSync("sips", ["-s", "format", "jpeg", "-s", "formatOptions", "88", png, "--out", jpg]);
-console.log(`JPG: ${jpg} (${PX_WIDTH}×${pxH})`);
+const font = (name, file, style = "normal") =>
+  `@font-face{font-family:"${name}";src:url("${join(root, "public/fonts", file)}") format("woff2");font-weight:200 700;font-style:${style}}`;
+const fonts =
+  font("General Sans", "GeneralSans-Variable.woff2") + font("General Sans", "GeneralSans-VariableItalic.woff2", "italic");
+
+for (const v of VARIANTS) {
+  const svg = svgFor(v);
+  const pxH = Math.round((v.px * v.h) / v.w);
+  const html = join(here, `${v.name}.html`);
+  writeFileSync(html, `<!doctype html><meta charset="utf-8"><style>${fonts}html,body{margin:0}svg{display:block}</style>${svg}`);
+  const png = join(here, `${v.name}.png`);
+  execFileSync(
+    chrome,
+    [
+      "--headless=new",
+      "--disable-gpu",
+      "--hide-scrollbars",
+      "--allow-file-access-from-files",
+      "--virtual-time-budget=4000",
+      `--window-size=${v.px},${pxH}`,
+      `--screenshot=${png}`,
+      `file://${html}`,
+    ],
+    { stdio: "ignore" },
+  );
+  const jpg = join(root, `public/images/${v.name}.jpg`);
+  execFileSync("sips", ["-s", "format", "jpeg", "-s", "formatOptions", "86", png, "--out", jpg], { stdio: "ignore" });
+  console.log(`${v.name}.jpg  ${v.px}×${pxH}`);
+}
