@@ -441,7 +441,7 @@ export default async function CoursePage({ params }: PageProps<"/[locale]/kurzy/
           )}
         </article>
 
-        <aside className="flex flex-col gap-4 lg:col-span-4">
+        <aside className="flex flex-col gap-4 lg:sticky lg:top-8 lg:col-span-4 lg:self-start">
           <GoodToKnowCard title={tr("detail.goodToKnow")} items={goodToKnow} />
           <div className="max-lg:hidden">
             <LinksCard groups={[{ label: tr("detail.share"), content: <ShareButtons title={title} /> }]} />

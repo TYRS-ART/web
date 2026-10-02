@@ -260,7 +260,7 @@ export default async function EventPage({ params }: PageProps<"/[locale]/program
             {body && body.length > 0 && <RichText value={body} />}
           </article>
         )}
-        <aside className="flex flex-col gap-5 lg:col-span-4 lg:col-start-9 lg:gap-4">
+        <aside className="flex flex-col gap-5 lg:sticky lg:top-8 lg:col-span-4 lg:col-start-9 lg:gap-4 lg:self-start">
           <GoodToKnowCard title={tr("detail.goodToKnow")} items={goodToKnow} />
           <LinksCard
             groups={[

@@ -5,16 +5,16 @@ import { useState } from "react";
 
 import { cardButtonClass } from "./SideCards";
 
-/** "Sdílet" (native share sheet, falls back to copying) + "Kopírovat odkaz" with a toast. */
+/** "Sdílet" (native share sheet, falls back to copying) + "Kopírovat odkaz", which confirms in place. */
 export function ShareButtons({ title }: { title: string }) {
   const tr = useTranslations("detail");
-  const [toast, setToast] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   async function copy() {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      setToast(true);
-      window.setTimeout(() => setToast(false), 2400);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2400);
     } catch {
       window.prompt(tr("copyLink"), window.location.href);
     }
@@ -41,22 +41,24 @@ export function ShareButtons({ title }: { title: string }) {
         </svg>
         {tr("share")}
       </button>
-      <button type="button" onClick={copy} className={`${cardButtonClass.base} ${cardButtonClass.outline}`}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-          <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.5 1.5" />
-          <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.5-1.5" />
-        </svg>
-        {tr("copyLink")}
-      </button>
-      <span
-        role="status"
-        aria-live="polite"
-        className={`fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-black px-5 py-3 text-[15px] font-medium text-white transition-opacity duration-200 ${
-          toast ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+      <button
+        type="button"
+        onClick={copy}
+        className={`${cardButtonClass.base} ${copied ? "border-black bg-black text-white" : cardButtonClass.outline} transition-colors duration-150`}
       >
-        {toast ? tr("copied") : ""}
-      </span>
+        {copied ? (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+            <path d="M5 12.5l4.5 4.5L19 7.5" />
+          </svg>
+        ) : (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.5 1.5" />
+            <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.5-1.5" />
+          </svg>
+        )}
+        {/* Announced to screen readers too. */}
+        <span aria-live="polite">{copied ? tr("copied") : tr("copyLink")}</span>
+      </button>
     </>
   );
 }
