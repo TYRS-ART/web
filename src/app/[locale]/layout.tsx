@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AlternatesProvider } from "@/components/layout/AlternateLinks";
 import { Footer } from "@/components/layout/Footer";
+import { HashScroll } from "@/components/layout/HashScroll";
 import { Header } from "@/components/layout/Header";
 import { PreviewBar } from "@/components/layout/PreviewBar";
 import { PreviewRefresh } from "@/components/layout/PreviewRefresh";
@@ -72,6 +74,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
               {children}
             </main>
             <Footer settings={data.settings} newsletterHref={newsletterHref} />
+            <Suspense>
+              <HashScroll />
+            </Suspense>
           </AlternatesProvider>
         {preview && (
           <>
