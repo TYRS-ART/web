@@ -10,13 +10,16 @@ import { SectionNav } from "@/components/venue/SectionNav";
 import { VenueIntro } from "@/components/venue/VenueIntro";
 import type { Locale } from "@/i18n/locales";
 import { t } from "@/lib/localize";
+import { cleanMetadata } from "@/lib/metadata";
 import { nbsp } from "@/lib/typography";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { VENUE_QUERY } from "@/sanity/queries/venue";
 
 const getData = () => sanityFetch({ query: VENUE_QUERY, tags: ["venuePage", "person", "settings"] });
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/venue">): Promise<Metadata> {
+export const generateMetadata = cleanMetadata(buildMetadata);
+
+async function buildMetadata({ params }: PageProps<"/[locale]/venue">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const [data, tr] = await Promise.all([getData(), getTranslations({ locale, namespace: "venue" })]);
   return { title: tr("title"), description: t(data.page?.statement, locale) };

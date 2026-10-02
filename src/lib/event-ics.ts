@@ -41,7 +41,7 @@ function toIcsEvent(event: IcsSource, settings: Settings, locale: Locale, venue:
 export async function feedResponse(locale: Locale): Promise<Response> {
   const since = pragueMidnight(addDays(pragueDay(new Date()), -30)).toISOString();
   const [data, tr, tre] = await Promise.all([
-    sanityFetch({ query: ICS_FEED_QUERY, params: { since }, tags: ["event", "settings"], revalidate: 300 }),
+    sanityFetch({ query: ICS_FEED_QUERY, params: { since }, tags: ["event", "settings"], revalidate: 300, perspective: "published" }),
     getTranslations({ locale, namespace: "program" }),
     getTranslations({ locale, namespace: "event" }),
   ]);
@@ -59,7 +59,7 @@ export async function eventResponse(locale: Locale, file: string): Promise<Respo
   const slug = file.replace(/\.ics$/i, "");
   if (!file.toLowerCase().endsWith(".ics") || !slug) return new Response("Not found", { status: 404 });
   const [data, tre] = await Promise.all([
-    sanityFetch({ query: ICS_EVENT_QUERY, params: { slug, locale }, tags: ["event", "settings"], revalidate: 300 }),
+    sanityFetch({ query: ICS_EVENT_QUERY, params: { slug, locale }, tags: ["event", "settings"], revalidate: 300, perspective: "published" }),
     getTranslations({ locale, namespace: "event" }),
   ]);
   if (!data.event) return new Response("Not found", { status: 404 });

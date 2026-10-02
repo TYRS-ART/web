@@ -1,3 +1,4 @@
+import { stegaClean } from "next-sanity";
 import type { PortableTextBlock } from "@portabletext/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -20,6 +21,7 @@ import { SanityImage } from "@/components/ui/SanityImage";
 import { locales, type Locale } from "@/i18n/locales";
 import { getPathname, Link } from "@/i18n/navigation";
 import { minutes, shortTime, weekdayShort } from "@/lib/courses";
+import { cleanMetadata } from "@/lib/metadata";
 import { formatShortDate, pragueDay } from "@/lib/dates";
 import { t, tSlug } from "@/lib/localize";
 import { formatDay, formatPrice, formatRun, keepDashWithNext, lessonTimes, lessonTotal, slotsBadge } from "@/lib/timetable";
@@ -35,7 +37,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://tyrs.art";
 const schemaDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export async function generateStaticParams({ params }: { params: { locale: string } }) {
-  const slugs = await sanityFetch({ query: COURSE_SLUGS_QUERY, tags: ["course"] });
+  const slugs = await sanityFetch({ query: COURSE_SLUGS_QUERY, tags: ["course"], perspective: "published" });
   return slugs
     .map((s) => (params.locale === "en" ? (s.en ?? s.cs) : s.cs))
     .filter((slug): slug is string => Boolean(slug))
@@ -66,7 +68,9 @@ function sortedSlots(course: Pick<Course, "slots">) {
   return [...(course.slots ?? [])].sort((a, b) => a.weekday - b.weekday || minutes(a.startTime) - minutes(b.startTime));
 }
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/kurzy/[slug]">): Promise<Metadata> {
+export const generateMetadata = cleanMetadata(buildMetadata);
+
+async function buildMetadata({ params }: PageProps<"/[locale]/kurzy/[slug]">): Promise<Metadata> {
   const { locale: raw, slug } = await params;
   const locale = raw as Locale;
   const { course } = await load(locale, slug);
@@ -320,7 +324,7 @@ export default async function CoursePage({ params }: PageProps<"/[locale]/kurzy/
   return (
     <>
       <SetAlternates cs={urls.cs} en={urls.en} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(stegaClean(jsonLd)).replace(/</g, "\\u003c") }} />
 
       <BackLink href="/kurzy" label={tr("course.back")} ariaLabel={tr("detail.breadcrumb")} />
 

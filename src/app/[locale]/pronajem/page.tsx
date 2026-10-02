@@ -9,6 +9,7 @@ import { buttonClass } from "@/components/ui/button";
 import { QuoteBand } from "@/components/ui/QuoteBand";
 import type { Locale } from "@/i18n/locales";
 import { pragueDay } from "@/lib/dates";
+import { cleanMetadata } from "@/lib/metadata";
 import { t } from "@/lib/localize";
 import { nbsp } from "@/lib/typography";
 import { sanityFetch } from "@/sanity/lib/fetch";
@@ -19,7 +20,9 @@ const BOOKING_EMAIL = "booking@tyrs.art";
 
 const getData = () => sanityFetch({ query: RENTAL_QUERY, tags: ["rentalPage", "space", "settings"] });
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/pronajem">): Promise<Metadata> {
+export const generateMetadata = cleanMetadata(buildMetadata);
+
+async function buildMetadata({ params }: PageProps<"/[locale]/pronajem">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const [data, tr] = await Promise.all([getData(), getTranslations({ locale, namespace: "rental" })]);
   return {

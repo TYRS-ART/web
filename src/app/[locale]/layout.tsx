@@ -6,13 +6,17 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AlternatesProvider } from "@/components/layout/AlternateLinks";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { PreviewBar } from "@/components/layout/PreviewBar";
+import { PreviewRefresh } from "@/components/layout/PreviewRefresh";
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { pragueDay, pragueDayRange } from "@/lib/dates";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { LAYOUT_QUERY } from "@/sanity/queries/layout";
 
+import { draftMode } from "next/headers";
 import Script from "next/script";
+import { VisualEditing } from "next-sanity/visual-editing";
 
 import { clash, generalSans, hedvig } from "../fonts";
 import "../globals.css";
@@ -41,6 +45,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
     }),
     getTranslations({ locale, namespace: "nav" }),
   ]);
+  const preview = (await draftMode()).isEnabled;
   const newsletterHref = `${getPathname({ href: "/program", locale })}#newsletter`;
 
   return (
@@ -68,6 +73,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
             </main>
             <Footer settings={data.settings} newsletterHref={newsletterHref} />
           </AlternatesProvider>
+        {preview && (
+          <>
+            <VisualEditing />
+            <PreviewRefresh />
+            <PreviewBar />
+          </>
+        )}
         </NextIntlClientProvider>
       </body>
     </html>
