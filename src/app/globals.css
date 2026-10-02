@@ -361,3 +361,17 @@
 @media (prefers-reduced-motion: reduce) {
   .marquee { animation: none; }
 }
+
+/* --------------------------------------------------------------- Map fade */
+
+/* The canvas map's soft arched edge: the map melts into the paper along the top and the corners. */
+.map-fade {
+  -webkit-mask-image: radial-gradient(ellipse 105% 96% at 50% 100%, #000 64%, rgba(0, 0, 0, 0.45) 84%, transparent 99%);
+  mask-image: radial-gradient(ellipse 105% 96% at 50% 100%, #000 64%, rgba(0, 0, 0, 0.45) 84%, transparent 99%);
+}
+@media (min-width: 1024px) {
+  .map-fade {
+    -webkit-mask-image: radial-gradient(ellipse 56% 112% at 47% 100%, #000 60%, rgba(0, 0, 0, 0.5) 84%, transparent 100%);
+    mask-image: radial-gradient(ellipse 56% 112% at 47% 100%, #000 60%, rgba(0, 0, 0, 0.5) 84%, transparent 100%);
+  }
+}

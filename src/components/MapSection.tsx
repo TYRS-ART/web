@@ -5,6 +5,9 @@ import type { Locale } from "@/i18n/locales";
 import { buttonClass } from "@/components/ui/button";
 
 import map from "../../public/images/map-kampa.jpg";
+import bubble from "../../public/images/map-kampa-bubble.png";
+import mapMobile from "../../public/images/map-kampa-mobile.jpg";
+import bubbleMobile from "../../public/images/map-kampa-mobile-bubble.png";
 
 type Address = {
   street?: string | null;
@@ -29,7 +32,8 @@ const variants = {
 
 /**
  * Full-width map with the white address card and a Google Maps button. The map is
- * drawn from OpenStreetMap data in the TYRŠ palette (scripts/map/build-map.mjs).
+ * drawn from OpenStreetMap data in the canvas style, with the house in an aerial-photo
+ * bubble (scripts/map/build-map.mjs): a wide crop for desktop, a tall one for phones.
  */
 export async function MapSection({
   address,
@@ -58,24 +62,42 @@ export async function MapSection({
   // The homepage card shows the house number only ("Nosticova 634"); the footer has the full address.
   const street = full ? address.street : address.street.replace(/\/\d+\w*$/, "");
   const secondLine = (full && [address.postalCode, address.city].filter(Boolean).join(" ")) || address.district;
-  // Keeps the house in view: centred on phones; on desktop any extra width is cropped
-  // from the left so the house stays clear of the address card (right side).
-  const imageClass = "object-cover object-[39%_62%] lg:object-[100%_48%]";
+  // Desktop: extra width is cropped from the left so the house stays clear of the card.
 
   return (
     <section
       id={id}
       aria-label={heading ?? label}
-      className={`relative overflow-hidden bg-sunken ${variants[variant].section} ${className}`}
+      className={`relative overflow-hidden bg-paper ${variants[variant].section} ${className}`}
     >
-      <Image src={map} alt={alt} fill sizes="100vw" quality={85} placeholder="blur" className={imageClass} />
+      <Image
+        src={mapMobile}
+        alt={alt}
+        fill
+        sizes="100vw"
+        quality={85}
+        placeholder="blur"
+        className="map-fade object-cover object-top lg:hidden"
+      />
+      <Image
+        src={map}
+        alt={alt}
+        fill
+        sizes="100vw"
+        quality={85}
+        placeholder="blur"
+        className="map-fade object-cover object-[100%_100%] max-lg:hidden"
+      />
+      {/* The photo bubble sits on its own layer, aligned with the map but never faded. */}
+      <Image src={bubbleMobile} alt="" fill sizes="100vw" quality={90} className="object-cover object-top lg:hidden" />
+      <Image src={bubble} alt="" fill sizes="100vw" quality={90} className="object-cover object-[100%_100%] max-lg:hidden" />
       <a
         href="https://www.openstreetmap.org/copyright"
         target="_blank"
         rel="noopener"
         className="absolute top-2 right-2 rounded-xs bg-paper/85 px-1.5 py-0.5 text-[10px] leading-3 text-muted no-underline hover:text-black lg:top-auto lg:right-auto lg:bottom-2 lg:left-2 lg:text-[11px]"
       >
-        © OpenStreetMap
+        © OpenStreetMap · Ortofoto © ČÚZK
       </a>
       {heading && (
         <h2 className="absolute top-5 left-5 m-0 font-display text-[56px] leading-[52px] lg:top-12 lg:left-16 lg:text-[96px] lg:leading-[88px]">

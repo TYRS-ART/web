@@ -51,3 +51,6 @@ next-env.d.ts
 /scripts/map/osm.json
 /scripts/map/render.html
 /scripts/map/map.png
+/scripts/map/ortho.jpg
+/scripts/map/*.html
+/scripts/map/*.png
