@@ -97,7 +97,7 @@ export async function MapSection({
         rel="noopener"
         className="absolute top-2 right-2 rounded-xs bg-paper/85 px-1.5 py-0.5 text-[10px] leading-3 text-muted no-underline hover:text-black lg:top-auto lg:right-auto lg:bottom-2 lg:left-2 lg:text-[11px]"
       >
-        © OpenStreetMap · Ortofoto © ČÚZK
+        © OpenStreetMap
       </a>
       {heading && (
         <h2 className="absolute top-5 left-5 m-0 font-display text-[56px] leading-[52px] lg:top-12 lg:left-16 lg:text-[96px] lg:leading-[88px]">

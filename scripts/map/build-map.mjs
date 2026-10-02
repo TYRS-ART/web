@@ -1,10 +1,11 @@
 /**
  * Builds the Kampa map used on the homepage and Venue page: OpenStreetMap data
  * (© OpenStreetMap contributors, ODbL) in the light style of the design canvas,
- * with the TYRŠ house shown in a white bubble holding a ČÚZK orthophoto (© ČÚZK).
+ * with the TYRŠ house shown in a white bubble holding a photo of the building
+ * (scripts/map/building.jpg, cropped to the bubble's 156 × 134 proportions).
  *
- *   node scripts/map/build-map.mjs            # downloads fresh OSM data + orthophoto
- *   node scripts/map/build-map.mjs --cached   # reuses scripts/map/osm.json + ortho.jpg
+ *   node scripts/map/build-map.mjs            # downloads fresh OSM data
+ *   node scripts/map/build-map.mjs --cached   # reuses scripts/map/osm.json
  *
  * Renders two crops with headless Chrome (labels in the brand fonts), each as a map
  * layer and a transparent bubble layer so the page can fade the map but not the bubble:
@@ -55,7 +56,6 @@ const BBOX = `${toLat(extent.south + 80)},${toLon(extent.west - 80)},${toLat(ext
 /* ------------------------------------------------------------------ Data */
 
 const osmPath = join(here, "osm.json");
-const orthoPath = join(here, "ortho.jpg");
 const UA = { "User-Agent": "tyrs-web-map/1.0 (booking@tyrs.art)" };
 
 async function loadOsm() {
@@ -77,21 +77,6 @@ async function loadOsm() {
   const json = await response.json();
   writeFileSync(osmPath, JSON.stringify(json));
   return json;
-}
-
-/** ČÚZK orthophoto, 76 × 68 m around the house (house at 37.5 % × 51 % of the image). */
-async function loadOrtho() {
-  if (cached && existsSync(orthoPath)) return readFileSync(orthoPath);
-  const c = { lat: 50.0842596, lon: 14.4071677 };
-  const dl = 34 / M_PER_DEG;
-  const dn = 38 / (M_PER_DEG * cosLat);
-  const bbox = [c.lon - dn, c.lat - dl, c.lon + dn, c.lat + dl].map((v) => v.toFixed(7)).join(",");
-  const url = `https://ags.cuzk.gov.cz/arcgis1/services/ORTOFOTO/MapServer/WMSServer?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=0&STYLES=&SRS=EPSG:4326&BBOX=${bbox}&WIDTH=1200&HEIGHT=1074&FORMAT=image/jpeg`;
-  const response = await fetch(url, { headers: UA });
-  if (!response.ok) throw new Error(`ČÚZK ${response.status}`);
-  const buffer = Buffer.from(await response.arrayBuffer());
-  writeFileSync(orthoPath, buffer);
-  return buffer;
 }
 
 /** Joins open member ways of a multipolygon into closed rings. */
@@ -165,7 +150,8 @@ const LABELS = [
 
 /* ------------------------------------------------------------------ Build */
 
-const [osm, ortho] = await Promise.all([loadOsm(), loadOrtho()]);
+const osm = await loadOsm();
+const building = readFileSync(join(here, "building.jpg"));
 const els = osm.elements;
 
 const greens = els.filter((e) => e.tags && (e.tags.leisure || e.tags.landuse || ["wood", "scrub"].includes(e.tags.natural)));
@@ -239,7 +225,7 @@ const place = (text, at, cls, rotate = 0) => {
   return `<text class="${cls}" x="${fmt(x)}" y="${fmt(y)}" text-anchor="middle"${rotate ? ` transform="rotate(${rotate} ${fmt(x)} ${fmt(y)})"` : ""}>${text}</text>`;
 };
 
-/** White rounded bubble with the aerial photo; its pointer touches the house. */
+/** White rounded bubble with the photo of the building; its pointer touches the house. */
 function bubble(scale) {
   const BW = 170 * scale;
   const BH = 148 * scale;
@@ -247,18 +233,13 @@ function bubble(scale) {
   const r = 22 * scale;
   const bx = -BW / 2 - 6 * scale;
   const by = -BH - 30 * scale;
-  // Zoomed so the house (37.5 % × 51 % of the photo) sits in the middle.
-  const photoW = 260 * scale;
-  const photoH = (photoW * 1074) / 1200;
-  const px = bx + BW / 2 - 0.375 * photoW;
-  const py = by + BH / 2 - 0.51 * photoH;
   return `
   <clipPath id="photo"><rect x="${fmt(bx + border)}" y="${fmt(by + border)}" width="${fmt(BW - 2 * border)}" height="${fmt(BH - 2 * border)}" rx="${fmt(r - border)}"/></clipPath>
   <g filter="url(#shadow)">
     <rect x="${fmt(bx)}" y="${fmt(by)}" width="${fmt(BW)}" height="${fmt(BH)}" rx="${fmt(r)}" fill="${C.white}"/>
     <path d="M${fmt(-13 * scale)} ${fmt(by + BH - 1)} L0 ${fmt(-4 * scale)} L${fmt(13 * scale)} ${fmt(by + BH - 1)}Z" fill="${C.white}"/>
   </g>
-  <image href="data:image/jpeg;base64,${ortho.toString("base64")}" x="${fmt(px)}" y="${fmt(py)}" width="${fmt(photoW)}" height="${fmt(photoH)}" clip-path="url(#photo)" preserveAspectRatio="xMidYMid slice"/>`;
+  <image href="data:image/jpeg;base64,${building.toString("base64")}" x="${fmt(bx + border)}" y="${fmt(by + border)}" width="${fmt(BW - 2 * border)}" height="${fmt(BH - 2 * border)}" clip-path="url(#photo)" preserveAspectRatio="xMidYMid slice"/>`;
 }
 
 function svgFor(v, layer) {
