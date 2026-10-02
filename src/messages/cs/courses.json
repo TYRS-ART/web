@@ -23,7 +23,19 @@
     "startingSoon": "Brzy začínáme",
     "startingNote": "Kurzy s pevným začátkem — přihlas se na celý běh",
     "newRuns": "Nové kurzy",
-    "from": "od {date}"
+    "from": "od {date}",
+    "view": "Zobrazení",
+    "viewWeek": "Týden",
+    "viewMonth": "Měsíc",
+    "prevMonth": "Předchozí měsíc",
+    "nextMonth": "Další měsíc",
+    "monthCalendar": "Kurzy a lekce v měsíci",
+    "monthSummary": "Kurzy · {month} · {count, plural, one {# lekce} few {# lekce} other {# lekcí}}",
+    "moreLessons": "+ {count, plural, one {# další} few {# další} other {# dalších}}",
+    "emptyMonthTitle": "Tenhle měsíc žádné lekce",
+    "emptyMonthText": "Rozvrh na další měsíce brzy zveřejníme. Novinky posíláme v newsletteru.",
+    "emptyMonthFilteredTitle": "Tenhle měsíc tu nic takového není",
+    "emptyMonthFilteredText": "Zkus jiný filtr nebo se podívej na další měsíc."
   },
   "course": {
     "back": "Kurzy & lekce",

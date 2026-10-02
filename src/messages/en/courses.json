@@ -23,7 +23,19 @@
     "startingSoon": "Starting soon",
     "startingNote": "Courses with a fixed start — sign up for the whole run",
     "newRuns": "New courses",
-    "from": "from {date}"
+    "from": "from {date}",
+    "view": "View",
+    "viewWeek": "Week",
+    "viewMonth": "Month",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "monthCalendar": "Courses and classes this month",
+    "monthSummary": "Courses · {month} · {count, plural, one {# class} other {# classes}}",
+    "moreLessons": "+ {count} more",
+    "emptyMonthTitle": "No classes this month",
+    "emptyMonthText": "We’ll publish the timetable for the coming months soon. News goes out in the newsletter.",
+    "emptyMonthFilteredTitle": "Nothing like that this month",
+    "emptyMonthFilteredText": "Try another filter or look at next month."
   },
   "course": {
     "back": "Courses & classes",

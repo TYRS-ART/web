@@ -16,11 +16,11 @@ export type TimetableLesson = Lesson<COURSES_PAGE_QUERY_RESULT[number]>;
 /** Pixels per half hour in the desktop grid. */
 const ROW = 34;
 
-function meta(lesson: TimetableLesson, locale: Locale) {
+export function meta(lesson: TimetableLesson, locale: Locale) {
   return [`${lesson.start}–${lesson.end}`, t(lesson.course.level, locale), lesson.course.lecturer].filter(Boolean).join(" · ");
 }
 
-function href(lesson: TimetableLesson, locale: Locale) {
+export function href(lesson: TimetableLesson, locale: Locale) {
   const slug = tSlug(lesson.course.slug, locale);
   return slug ? ({ pathname: "/kurzy/[slug]", params: { slug } } as const) : undefined;
 }
