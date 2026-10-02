@@ -23,12 +23,17 @@ export function MobileMenu({ today, settings, newsletterHref }: Props) {
   const locale = useLocale() as Locale;
   const tr = useTranslations();
   const dialog = useRef<HTMLDialogElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const el = dialog.current;
     if (!el) return;
-    if (open && !el.open) el.showModal();
+    if (open && !el.open) {
+      el.showModal();
+      // showModal() focuses the first link (the logo), which phones outline; start on the panel instead.
+      panel.current?.focus();
+    }
     if (!open && el.open) el.close();
     document.documentElement.style.overflow = open ? "hidden" : "";
   }, [open]);
@@ -62,7 +67,7 @@ export function MobileMenu({ today, settings, newsletterHref }: Props) {
         aria-label={tr("nav.mainMenu")}
         className="m-0 h-dvh max-h-none w-screen max-w-none bg-paper p-0 text-black backdrop:bg-transparent"
       >
-        <div className="flex min-h-full flex-col">
+        <div ref={panel} tabIndex={-1} className="flex min-h-full flex-col outline-none focus-visible:outline-none">
           <div className="flex items-center justify-between px-5 py-4">
             <Link href="/" aria-label={tr("nav.homeLabel")} className="inline-flex">
               <Image src="/logos/logo-primary.svg" alt="TYRŠ" width={103} height={34} className="block h-[34px] w-auto" priority />

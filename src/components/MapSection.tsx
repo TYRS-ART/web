@@ -68,7 +68,7 @@ export async function MapSection({
     <section
       id={id}
       aria-label={heading ?? label}
-      className={`relative overflow-hidden bg-paper ${variants[variant].section} ${className}`}
+      className={`map-section relative overflow-hidden bg-paper ${variants[variant].section} ${className}`}
     >
       <Image
         src={mapMobile}
