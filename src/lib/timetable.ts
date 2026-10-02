@@ -6,8 +6,6 @@ import { audienceTags, courseFocuses } from "./taxonomy";
 
 /* ------------------------------------------------------------------ Weeks */
 
-const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
-
 /** ISO weekday (Monday = 1) of a "YYYY-MM-DD". */
 export function isoWeekday(day: string): number {
   return ((new Date(`${day}T12:00:00Z`).getUTCDay() + 6) % 7) + 1;
@@ -18,15 +16,6 @@ export function mondayOf(day: string): string {
   return addDays(day, 1 - isoWeekday(day));
 }
 
-/** Monday of the week requested in the URL (`?tyden=2026-10-12`), or of this week. */
-export function parseWeek(value: string | string[] | undefined, today: string): string {
-  const raw = Array.isArray(value) ? value[0] : value;
-  if (raw && ISO_DAY.test(raw) && !Number.isNaN(Date.parse(`${raw}T12:00:00Z`))) {
-    return mondayOf(new Date(`${raw}T12:00:00Z`).toISOString().slice(0, 10));
-  }
-  return mondayOf(today);
-}
-
 function dayMonth(day: string) {
   const [, m, d] = day.split("-").map(Number);
   return { d, m };
@@ -34,15 +23,6 @@ function dayMonth(day: string) {
 
 const monthShort = (day: string) =>
   new Date(`${day}T12:00:00Z`).toLocaleDateString("en-GB", { month: "short", timeZone: "UTC" });
-
-/** "12.–18. 10." / "28. 9.–4. 10." · "12–18 Oct" / "28 Sep – 4 Oct" */
-export function formatWeekRange(monday: string, locale: Locale): string {
-  const sunday = addDays(monday, 6);
-  const a = dayMonth(monday);
-  const b = dayMonth(sunday);
-  if (locale === "cs") return a.m === b.m ? `${a.d}.–${b.d}. ${b.m}.` : `${a.d}. ${a.m}.–${b.d}. ${b.m}.`;
-  return a.m === b.m ? `${a.d}–${b.d} ${monthShort(sunday)}` : `${a.d} ${monthShort(monday)} – ${b.d} ${monthShort(sunday)}`;
-}
 
 /** "6. 10." / "6 Oct", with the year when it isn't this year's. */
 export function formatDay(day: string, locale: Locale, withYear = false): string {
@@ -72,9 +52,10 @@ export function formatPrice(amount: number, locale: Locale): string {
 }
 
 /** `?zobrazeni=mesic` → month grid; anything else → the weekly timetable. */
-export type CoursesView = "tyden" | "mesic";
+/** Kurzy & lekce views, as on Akce: the month calendar (default) or the list. */
+export type CoursesView = "kalendar" | "seznam";
 export function parseView(value: string | string[] | undefined): CoursesView {
-  return (Array.isArray(value) ? value[0] : value) === "mesic" ? "mesic" : "tyden";
+  return (Array.isArray(value) ? value[0] : value) === "seznam" ? "seznam" : "kalendar";
 }
 
 /** `?mesic=2026-11` → "2026-11", else the month of `today`. */
@@ -161,39 +142,6 @@ export function lessonsBetween<C extends CourseForWeek>(courses: C[], first: str
     }
   }
   return lessons.sort((a, b) => a.day.localeCompare(b.day) || minutes(a.start) - minutes(b.start));
-}
-
-/** The lessons of the week starting on `monday`. */
-export function lessonsInWeek<C extends CourseForWeek>(courses: C[], monday: string): Lesson<C>[] {
-  return lessonsBetween(courses, monday, addDays(monday, 6));
-}
-
-/** Side-by-side columns for lessons that overlap on the same day. */
-export function layoutDay<L extends { start: string; end: string }>(lessons: L[]) {
-  const placed: { lesson: L; column: number; columns: number }[] = [];
-  let cluster: typeof placed = [];
-  let clusterEnd = -1;
-  const close = () => {
-    const columns = Math.max(1, ...cluster.map((p) => p.column + 1));
-    for (const p of cluster) p.columns = columns;
-    cluster = [];
-  };
-  for (const lesson of lessons) {
-    const start = minutes(lesson.start);
-    if (start >= clusterEnd) {
-      close();
-      clusterEnd = -1;
-    }
-    const taken = cluster.filter((p) => minutes(p.lesson.end) > start).map((p) => p.column);
-    let column = 0;
-    while (taken.includes(column)) column++;
-    const item = { lesson, column, columns: 1 };
-    cluster.push(item);
-    placed.push(item);
-    clusterEnd = Math.max(clusterEnd, minutes(lesson.end));
-  }
-  close();
-  return placed;
 }
 
 /* ------------------------------------------------------------------ Slots */
