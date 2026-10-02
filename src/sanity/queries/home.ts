@@ -8,8 +8,12 @@ export const HOME_QUERY = defineQuery(`{
     mapImage{ ${imageFields} }
   },
   "upcoming": *[_type == "event" && ${notOver}] | order(startsAt asc)[0...30]{ ${eventCard} },
-  "courses": *[_type == "course"
-    && (!defined(runStart) || runStart <= $weekEnd)
-    && (!defined(runEnd) || runEnd >= $weekStart)
-  ]{ _id, title, slug, focus, slots[]{ _key, weekday, startTime, endTime } }
+  "courses": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)]{
+    _id, title, slug, focus, level,
+    slots[]{ _key, weekday, startTime, endTime },
+    runStart, runEnd,
+    "lessonDates": lessonDates[].date,
+    "hall": space->name,
+    heroImage{ ${imageFields} }
+  }
 }`);

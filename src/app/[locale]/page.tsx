@@ -12,6 +12,7 @@ import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";
 import { alternates } from "@/lib/metadata";
 import { addDays, dayOffset, pragueDay, pragueDayRange } from "@/lib/dates";
+import { nextLessonCards } from "@/lib/upcoming";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { HOME_QUERY } from "@/sanity/queries/home";
 
@@ -31,14 +32,17 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const [data, tr] = await Promise.all([
     sanityFetch({
       query: HOME_QUERY,
-      params: { now: now.toISOString(), ...pragueDayRange(today), weekStart, weekEnd: addDays(weekStart, 6) },
+      params: { now: now.toISOString(), ...pragueDayRange(today), today },
       tags: ["settings", "event", "course"],
     }),
     getTranslations(),
   ]);
 
   const words = { today: tr("common.today"), tomorrow: tr("common.tomorrow") };
-  const upcoming = data.upcoming;
+  // Events and each course's next lesson, in one timeline.
+  const upcoming = [...data.upcoming, ...nextLessonCards(data.courses, today, now)].sort((a, b) =>
+    a.startsAt.localeCompare(b.startsAt),
+  );
 
   // Ticker: today's and the next events, shown only when something is on today or tomorrow.
   const ticker = upcoming.filter((e) => dayOffset(e.startsAt, now) <= 1).length > 0 ? upcoming.slice(0, 5) : [];
@@ -74,7 +78,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </section>
       )}
 
-      <CoursesThisWeek courses={data.courses} locale={locale} />
+      <CoursesThisWeek courses={data.courses} locale={locale} today={today} weekStart={weekStart} />
 
       <MonthList events={upcoming.slice(0, 4)} locale={locale} />
 

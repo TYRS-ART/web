@@ -26,6 +26,12 @@ export function EventRow({
   last?: boolean;
 }) {
   const slug = tSlug(event.slug, locale);
+  const courseSlug = event.course ? tSlug(event.course.slug, locale) : undefined;
+  const target = courseSlug
+    ? ({ pathname: "/kurzy/[slug]", params: { slug: courseSlug } } as const)
+    : slug
+      ? ({ pathname: "/program/[slug]", params: { slug } } as const)
+      : undefined;
   const title = nbsp(t(event.title, locale) ?? "");
   const day = dayLabel(event.startsAt, locale, words);
   const time = formatTime(event.startsAt);
@@ -58,8 +64,8 @@ export function EventRow({
       </span>
     </>
   );
-  return slug ? (
-    <Link href={{ pathname: "/program/[slug]", params: { slug } }} className={classes}>
+  return target ? (
+    <Link href={target} className={classes}>
       {body}
     </Link>
   ) : (
