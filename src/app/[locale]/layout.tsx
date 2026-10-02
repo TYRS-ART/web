@@ -7,6 +7,7 @@ import { AlternatesProvider } from "@/components/layout/AlternateLinks";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { PreviewBar } from "@/components/layout/PreviewBar";
+import { PreviewRefresh } from "@/components/layout/PreviewRefresh";
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { pragueDay, pragueDayRange } from "@/lib/dates";
@@ -75,6 +76,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
         {preview && (
           <>
             <VisualEditing />
+            <PreviewRefresh />
             <PreviewBar />
           </>
         )}
