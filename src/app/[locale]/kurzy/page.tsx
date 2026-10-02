@@ -3,26 +3,32 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { CourseFilters } from "@/components/courses/CourseFilters";
 import { CourseTile } from "@/components/courses/CourseTile";
+import { MonthCalendar, MonthList } from "@/components/courses/MonthCalendar";
 import { DayList, Timetable } from "@/components/courses/Timetable";
 import { SetAlternates } from "@/components/layout/AlternateLinks";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
-import { ProgramTabs } from "@/components/program/ProgramTabs";
+import { filterChipClass, ProgramTabs } from "@/components/program/ProgramTabs";
 import { buttonClass } from "@/components/ui/button";
 import { CategoryChip } from "@/components/ui/CategoryChip";
 import type { Locale } from "@/i18n/locales";
 import { getPathname, Link } from "@/i18n/navigation";
-import { addDays, pragueDay } from "@/lib/dates";
+import { addDays, formatMonthKey, pragueDay } from "@/lib/dates";
 import { t, tSlug } from "@/lib/localize";
+import { calendarDays, shiftMonth } from "@/lib/program";
 import {
   formatDay,
   formatWeekRange,
+  lessonsBetween,
   lessonsInWeek,
   lessonTotal,
   matchesFilters,
   mondayOf,
-  monthKey,
+  monthKey as monthKeyOf,
   parseFilters,
+  parseMonth,
+  parseView,
   parseWeek,
+  type CoursesView,
   type FilterId,
 } from "@/lib/timetable";
 import { sanityFetch } from "@/sanity/lib/fetch";
@@ -51,40 +57,66 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
 
   const today = pragueDay(new Date());
   const thisMonday = mondayOf(today);
+  const thisMonth = today.slice(0, 7);
+  const view = parseView(query.zobrazeni);
   const monday = parseWeek(query.tyden, today);
+  const monthKey = parseMonth(query.mesic, today);
   const filters = parseFilters(query.filtr);
+  const gridDays = calendarDays(monthKey);
+  const rangeStart = view === "mesic" ? gridDays[0] : monday;
 
   const [courses, tr] = await Promise.all([
-    sanityFetch({ query: COURSES_PAGE_QUERY, params: { from: monday < today ? monday : today }, tags: ["course"] }),
+    sanityFetch({ query: COURSES_PAGE_QUERY, params: { from: rangeStart < today ? rangeStart : today }, tags: ["course"] }),
     getTranslations(),
   ]);
 
   const visible = courses.filter((course) => matchesFilters(course, filters));
   const lessons = lessonsInWeek(visible, monday);
+  // Month view: only the month's own days (the grid's neighbour days stay empty).
+  const monthLessons =
+    view === "mesic" ? lessonsBetween(visible, `${monthKey}-01`, addDays(`${shiftMonth(monthKey, 1)}-01`, -1)) : [];
   const newRuns = visible
     .filter((c) => c.runStart && c.runStart > today && c.runStart <= addDays(today, NEW_RUNS_DAYS))
     .slice(0, 3);
 
-  const hrefFor = (nextFilters: FilterId[], week = monday) => {
+  type Target = { filters?: FilterId[]; week?: string; month?: string; view?: CoursesView };
+  const hrefFor = (target: Target = {}) => {
+    const next = { filters, view, week: monday, month: monthKey, ...target };
     const q: Record<string, string> = {};
-    if (nextFilters.length > 0) q.filtr = nextFilters.join(",");
-    if (week !== thisMonday) q.tyden = week;
+    if (next.filters.length > 0) q.filtr = next.filters.join(",");
+    if (next.view === "mesic") {
+      q.zobrazeni = "mesic";
+      if (next.month !== thisMonth) q.mesic = next.month;
+    } else if (next.week !== thisMonday) {
+      q.tyden = next.week;
+    }
     return { pathname: "/kurzy" as const, query: q };
   };
-  const current = hrefFor(filters);
+  const current = hrefFor();
 
   // Only say it when it's true for every course shown this week.
   const shownCourses = new Set(lessons.map((l) => l.course));
   const note =
     shownCourses.size > 0 && [...shownCourses].every((c) => c.allowSingleLesson) ? tr("courses.singleOrCourse") : undefined;
 
-  const newRunsMonths = new Set(newRuns.map((c) => monthKey(c.runStart!)));
+  const newRunsMonths = new Set(newRuns.map((c) => monthKeyOf(c.runStart!)));
   const newRunsTitle =
     newRunsMonths.size === 1 ? tr("courses.startingIn", { month: [...newRunsMonths][0] }) : tr("courses.startingSoon");
 
-  const weekLabel = `${tr("courses.weekRange", { range: formatWeekRange(monday, locale) })} · ${tr("courses.lessonCount", {
-    count: lessons.length,
-  })}`;
+  const monthName = formatMonthKey(monthKey, locale);
+  const headLabel =
+    view === "mesic"
+      ? tr("courses.monthSummary", {
+          month: `${locale === "cs" ? monthName.toLowerCase() : monthName} ${monthKey.slice(0, 4)}`,
+          count: monthLessons.length,
+        })
+      : `${tr("courses.weekRange", { range: formatWeekRange(monday, locale) })} · ${tr("courses.lessonCount", {
+          count: lessons.length,
+        })}`;
+  const prevHref = view === "mesic" ? hrefFor({ month: shiftMonth(monthKey, -1) }) : hrefFor({ week: addDays(monday, -7) });
+  const nextHref = view === "mesic" ? hrefFor({ month: shiftMonth(monthKey, 1) }) : hrefFor({ week: addDays(monday, 7) });
+  const nextLabel = view === "mesic" ? formatMonthKey(shiftMonth(monthKey, 1), locale) : tr("courses.nextWeek");
+  const shown = view === "mesic" ? monthLessons : lessons;
 
   return (
     <>
@@ -93,67 +125,107 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
       <section className="flex flex-col gap-5 px-5 pt-8 lg:gap-8 lg:px-16 lg:pt-16">
         <div className="flex items-end justify-between gap-3 lg:gap-6">
           <div className="flex flex-col gap-1.5">
-            <h1 className="m-0 font-display text-[88px] leading-[84px] lg:text-[200px] lg:leading-[180px]">{tr("courses.title")}</h1>
-            <span className="text-[15px] leading-5 text-muted lg:hidden">{weekLabel}</span>
+            <h1 className="m-0 font-display text-[88px] leading-[84px] lg:text-[200px] lg:leading-[180px]">
+              {view === "mesic" ? monthName : tr("courses.title")}
+            </h1>
+            <span className="text-[15px] leading-5 text-muted lg:hidden">{headLabel}</span>
           </div>
           <div className="flex items-center gap-1.5 pb-1.5 lg:gap-6 lg:pb-5">
             <span className="text-xl leading-6 text-muted max-lg:hidden" aria-live="polite">
-              {weekLabel}
+              {headLabel}
             </span>
             <Link
-              href={hrefFor(filters, addDays(monday, -7))}
+              href={prevHref}
               scroll={false}
-              aria-label={tr("courses.prevWeek")}
+              aria-label={view === "mesic" ? tr("courses.prevMonth") : tr("courses.prevWeek")}
               className="inline-flex size-12 items-center justify-center rounded-full border-2 border-black bg-white text-xl no-underline hover:bg-black hover:text-white lg:size-16 lg:text-2xl"
             >
               <span aria-hidden="true">←</span>
             </Link>
             <Link
-              href={hrefFor(filters, addDays(monday, 7))}
+              href={nextHref}
               scroll={false}
-              aria-label={tr("courses.nextWeek")}
+              aria-label={view === "mesic" ? `${tr("courses.nextMonth")}: ${nextLabel}` : tr("courses.nextWeek")}
               className="inline-flex size-12 items-center justify-center rounded-full bg-black text-xl text-white no-underline hover:bg-green lg:hidden"
             >
               <span aria-hidden="true">→</span>
             </Link>
-            <Link href={hrefFor(filters, addDays(monday, 7))} scroll={false} className={`${buttonClass("primary", "lg")} max-lg:hidden`}>
-              {tr("courses.nextWeek")} →
+            <Link href={nextHref} scroll={false} className={`${buttonClass("primary", "lg")} max-lg:hidden`}>
+              {nextLabel} →
             </Link>
           </div>
         </div>
         <div className="flex flex-col gap-5 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-6">
           <ProgramTabs active="courses" />
-          <CourseFilters locale={locale} filters={filters} hrefFor={(f) => hrefFor(f)} />
+          <div className="flex flex-col gap-3 lg:flex-row lg:flex-wrap lg:items-center lg:gap-6">
+            <CourseFilters locale={locale} filters={filters} hrefFor={(f) => hrefFor({ filters: f })} />
+            <nav aria-label={tr("courses.view")} className="flex gap-2">
+              <Link href={hrefFor({ view: "tyden" })} scroll={false} className={filterChipClass} aria-current={view === "tyden" ? "true" : undefined}>
+                {tr("courses.viewWeek")}
+              </Link>
+              <Link href={hrefFor({ view: "mesic" })} scroll={false} className={filterChipClass} aria-current={view === "mesic" ? "true" : undefined}>
+                {tr("courses.viewMonth")}
+              </Link>
+            </nav>
+          </div>
         </div>
       </section>
 
-      <section
-        aria-label={tr("courses.timetable")}
-        className="mx-3 mt-6 flex flex-col rounded-tile bg-white px-4 pt-1 pb-2 lg:mx-6 lg:mt-10 lg:gap-2 lg:rounded-card lg:p-8"
-      >
-        {lessons.length > 0 ? (
-          <>
-            <Timetable lessons={lessons} monday={monday} today={today} locale={locale} note={note} />
-            <DayList lessons={lessons} monday={monday} today={today} locale={locale} note={note} />
-          </>
-        ) : (
-          <div className="flex flex-col items-start gap-4 py-6 lg:gap-6 lg:px-2 lg:py-10">
-            <h2 className="m-0 font-display text-4xl leading-9 lg:text-[72px] lg:leading-[66px]">
-              {filters.length > 0 ? tr("courses.emptyFilteredTitle") : tr("courses.emptyTitle")}
-            </h2>
-            <p className="m-0 max-w-[640px] text-[17px] leading-[26px] text-muted lg:text-[22px] lg:leading-[34px]">
-              {filters.length > 0 ? tr("courses.emptyFilteredText") : tr("courses.emptyText")}
-            </p>
-            {filters.length > 0 ? (
-              <Link href={hrefFor([])} scroll={false} className={buttonClass("primary", "md")}>
-                {tr("courses.clearFilter")}
-              </Link>
-            ) : (
-              <NewsletterForm className="w-full max-w-[520px]" />
-            )}
-          </div>
-        )}
-      </section>
+      {view === "mesic" && monthLessons.length > 0 ? (
+        <>
+          <MonthCalendar
+            lessons={monthLessons}
+            monthKey={monthKey}
+            today={today}
+            locale={locale}
+            weekHref={(week) => hrefFor({ view: "tyden", week })}
+            label={tr("courses.monthCalendar")}
+          />
+          <section aria-label={tr("courses.monthCalendar")} className="mx-3 mt-6 flex flex-col rounded-tile bg-white px-4 pt-1 pb-2 lg:hidden">
+            <MonthList lessons={monthLessons} today={today} locale={locale} />
+          </section>
+        </>
+      ) : (
+        <section
+          aria-label={tr("courses.timetable")}
+          className="mx-3 mt-6 flex flex-col rounded-tile bg-white px-4 pt-1 pb-2 lg:mx-6 lg:mt-10 lg:gap-2 lg:rounded-card lg:p-8"
+        >
+          {shown.length > 0 ? (
+            <>
+              <Timetable lessons={lessons} monday={monday} today={today} locale={locale} note={note} />
+              <DayList lessons={lessons} monday={monday} today={today} locale={locale} note={note} />
+            </>
+          ) : (
+            <div className="flex flex-col items-start gap-4 py-6 lg:gap-6 lg:px-2 lg:py-10">
+              <h2 className="m-0 font-display text-4xl leading-9 lg:text-[72px] lg:leading-[66px]">
+                {view === "mesic"
+                  ? filters.length > 0
+                    ? tr("courses.emptyMonthFilteredTitle")
+                    : tr("courses.emptyMonthTitle")
+                  : filters.length > 0
+                    ? tr("courses.emptyFilteredTitle")
+                    : tr("courses.emptyTitle")}
+              </h2>
+              <p className="m-0 max-w-[640px] text-[17px] leading-[26px] text-muted lg:text-[22px] lg:leading-[34px]">
+                {view === "mesic"
+                  ? filters.length > 0
+                    ? tr("courses.emptyMonthFilteredText")
+                    : tr("courses.emptyMonthText")
+                  : filters.length > 0
+                    ? tr("courses.emptyFilteredText")
+                    : tr("courses.emptyText")}
+              </p>
+              {filters.length > 0 ? (
+                <Link href={hrefFor({ filters: [] })} scroll={false} className={buttonClass("primary", "md")}>
+                  {tr("courses.clearFilter")}
+                </Link>
+              ) : (
+                <NewsletterForm className="w-full max-w-[520px]" />
+              )}
+            </div>
+          )}
+        </section>
+      )}
 
       {newRuns.length > 0 && (
         <section

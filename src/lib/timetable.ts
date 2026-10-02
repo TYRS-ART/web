@@ -71,6 +71,18 @@ export function formatPrice(amount: number, locale: Locale): string {
   return `CZK ${new Intl.NumberFormat("en-GB").format(amount)}`;
 }
 
+/** `?zobrazeni=mesic` → month grid; anything else → the weekly timetable. */
+export type CoursesView = "tyden" | "mesic";
+export function parseView(value: string | string[] | undefined): CoursesView {
+  return (Array.isArray(value) ? value[0] : value) === "mesic" ? "mesic" : "tyden";
+}
+
+/** `?mesic=2026-11` → "2026-11", else the month of `today`. */
+export function parseMonth(value: string | string[] | undefined, today: string): string {
+  const raw = Array.isArray(value) ? value[0] : value;
+  return raw && /^\d{4}-(0[1-9]|1[0-2])$/.test(raw) ? raw : today.slice(0, 7);
+}
+
 /* ---------------------------------------------------------------- Filters */
 
 export const filterIds = [...courseFocuses.map((f) => f.id), "pro-deti", "zacatecnici"] as const;
@@ -122,11 +134,10 @@ export function lessonTimes(slots: Slot[], date: string) {
 }
 
 /**
- * The lessons of the given week. Courses with lesson dates meet exactly on those dates
- * (holidays and moved lessons included); the others on every slot within their run.
+ * The lessons between two days (inclusive). Courses with lesson dates meet exactly on
+ * those dates (holidays and moved lessons included); the others on every slot within their run.
  */
-export function lessonsInWeek<C extends CourseForWeek>(courses: C[], monday: string): Lesson<C>[] {
-  const sunday = addDays(monday, 6);
+export function lessonsBetween<C extends CourseForWeek>(courses: C[], first: string, last: string): Lesson<C>[] {
   const lessons: Lesson<C>[] = [];
   for (const course of courses) {
     const slots = course.slots ?? [];
@@ -134,19 +145,27 @@ export function lessonsInWeek<C extends CourseForWeek>(courses: C[], monday: str
     if (course.lessonDates && course.lessonDates.length > 0) {
       for (const date of course.lessonDates) {
         const times = lessonTimes(slots, date);
-        if (times.day < monday || times.day > sunday) continue;
+        if (times.day < first || times.day > last) continue;
         lessons.push({ key: `${course._id}-${date}`, course, ...times });
       }
     } else {
-      for (const slot of slots) {
-        const day = addDays(monday, slot.weekday - 1);
-        if (course.runStart && day < course.runStart) continue;
-        if (course.runEnd && day > course.runEnd) continue;
-        lessons.push({ key: `${course._id}-${slot._key}`, course, day, weekday: slot.weekday, start: slot.startTime, end: slot.endTime });
+      for (let monday = mondayOf(first); monday <= last; monday = addDays(monday, 7)) {
+        for (const slot of slots) {
+          const day = addDays(monday, slot.weekday - 1);
+          if (day < first || day > last) continue;
+          if (course.runStart && day < course.runStart) continue;
+          if (course.runEnd && day > course.runEnd) continue;
+          lessons.push({ key: `${course._id}-${slot._key}-${day}`, course, day, weekday: slot.weekday, start: slot.startTime, end: slot.endTime });
+        }
       }
     }
   }
   return lessons.sort((a, b) => a.day.localeCompare(b.day) || minutes(a.start) - minutes(b.start));
+}
+
+/** The lessons of the week starting on `monday`. */
+export function lessonsInWeek<C extends CourseForWeek>(courses: C[], monday: string): Lesson<C>[] {
+  return lessonsBetween(courses, monday, addDays(monday, 6));
 }
 
 /** Side-by-side columns for lessons that overlap on the same day. */
