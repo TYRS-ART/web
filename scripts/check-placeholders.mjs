@@ -42,7 +42,7 @@ function visibleText(html) {
 
 const problems = [];
 for await (const file of htmlFiles(".next/server/app")) {
-  if (file.includes("/studio")) continue;
+  if (file.includes("/admin")) continue;
   const hits = visibleText(await readFile(file, "utf8")).match(PLACEHOLDER);
   if (hits) problems.push(`${file.replace(".next/server/app", "")}: ${[...new Set(hits)].join(", ")}`);
 }

@@ -32,6 +32,7 @@ export async function Header({ data, newsletterHref }: { data: LAYOUT_QUERY_RESU
         <NavLink href="/program" label={tr("program")} match={["/program", "/kurzy"]} />
         <NavLink href="/venue" label={tr("venue")} />
         <NavLink href="/pronajem" label={tr("rental")} />
+        <NavLink href="/studio" label={tr("studio")} />
         <LocaleNavLink />
       </nav>
 

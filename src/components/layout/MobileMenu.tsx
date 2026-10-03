@@ -96,8 +96,12 @@ export function MobileMenu({ today, settings, newsletterHref }: Props) {
               <span className="font-display text-[52px] leading-[52px]">{tr("nav.venue")}</span>
               <span className={arrow} aria-hidden="true">→</span>
             </Link>
-            <Link href="/pronajem" className={`${item} border-b-2`}>
+            <Link href="/pronajem" className={item}>
               <span className="font-display text-[52px] leading-[52px]">{tr("nav.rental")}</span>
+              <span className={arrow} aria-hidden="true">→</span>
+            </Link>
+            <Link href="/studio" className={`${item} border-b-2`}>
+              <span className="font-display text-[52px] leading-[52px]">{tr("nav.studio")}</span>
               <span className={arrow} aria-hidden="true">→</span>
             </Link>
           </nav>

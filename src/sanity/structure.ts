@@ -4,6 +4,7 @@ import { CogIcon } from "@sanity/icons/Cog";
 import { EnvelopeIcon } from "@sanity/icons/Envelope";
 import { HomeIcon } from "@sanity/icons/Home";
 import { InfoOutlineIcon } from "@sanity/icons/InfoOutline";
+import { MicrophoneIcon } from "@sanity/icons/Microphone";
 import { PlayIcon } from "@sanity/icons/Play";
 import { ThListIcon } from "@sanity/icons/ThList";
 import { UserIcon } from "@sanity/icons/User";
@@ -73,5 +74,6 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
       S.listItem().title("Stránka Venue").icon(InfoOutlineIcon).child(S.document().schemaType("venuePage").documentId("venuePage")),
       S.listItem().title("Stránka Pronájem").icon(EnvelopeIcon).child(S.document().schemaType("rentalPage").documentId("rentalPage")),
+      S.listItem().title("Stránka Studio").icon(MicrophoneIcon).child(S.document().schemaType("studioPage").documentId("studioPage")),
       S.listItem().title("Nastavení webu").icon(CogIcon).child(S.document().schemaType("settings").documentId("settings")),
     ]);
