@@ -1110,7 +1110,7 @@ export type SITEMAP_QUERY_RESULT = {
 
 // Source: src/sanity/queries/studio.ts
 // Variable: STUDIO_QUERY
-// Query: {  "page": *[_type == "studioPage" && _id == "studioPage"][0]{    headline, intro, motto,    collaborators[]{ _key, name, credits, url },    offerCards[]{ _key, title, headline, body, link, highlight }  },  "email": *[_type == "settings" && _id == "settings"][0].email}
+// Query: {  "page": *[_type == "studioPage" && _id == "studioPage"][0]{    headline, intro, motto,    collaborators[]{ _key, name, credits, url },    offerCards[]{ _key, title, headline, body, link, highlight }  }}
 export type STUDIO_QUERY_RESULT = {
   page: {
     headline: LocaleText | null;
@@ -1131,7 +1131,6 @@ export type STUDIO_QUERY_RESULT = {
       highlight: boolean | null;
     }> | null;
   } | null;
-  email: string | null;
 };
 
 // Source: src/sanity/queries/venue.ts
@@ -1193,7 +1192,7 @@ declare global {
     '*[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n}': RENTAL_SPACES_QUERY_RESULT;
     '{\n  "page": *[_type == "rentalPage" && _id == "rentalPage"][0]{\n    headline, intro, formIntro, quote,\n    included[]{ _key, title, body }\n  },\n  "spaces": *[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n},\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': RENTAL_QUERY_RESULT;
     '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
-    '{\n  "page": *[_type == "studioPage" && _id == "studioPage"][0]{\n    headline, intro, motto,\n    collaborators[]{ _key, name, credits, url },\n    offerCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': STUDIO_QUERY_RESULT;
+    '{\n  "page": *[_type == "studioPage" && _id == "studioPage"][0]{\n    headline, intro, motto,\n    collaborators[]{ _key, name, credits, url },\n    offerCards[]{ _key, title, headline, body, link, highlight }\n  }\n}': STUDIO_QUERY_RESULT;
     '{\n  "page": *[_type == "venuePage" && _id == "venuePage"][0]{\n    statement, intro, motto,\n    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    infoCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "settings": *[_type == "settings" && _id == "settings"][0]{\n    address, email\n  }\n}': VENUE_QUERY_RESULT;
   }
 }

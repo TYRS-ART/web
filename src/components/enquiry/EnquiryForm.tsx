@@ -6,7 +6,7 @@ import { useActionState, useEffect, useRef, type ComponentProps, type ReactNode 
 import { Link } from "@/i18n/navigation";
 
 import { sendEnquiry } from "./actions";
-import { EVENT_TYPES, SPACE_UNKNOWN, type EnquiryField, type EnquiryState } from "./fields";
+import { EVENT_TYPES, SPACE_UNKNOWN, type EnquiryField, type EnquiryState, type EventType } from "./fields";
 
 const control =
   "box-border block w-full min-h-14 rounded-md border-2 border-black bg-white px-[18px] py-3.5 font-sans text-[17px] leading-6 text-black outline-none aria-invalid:shadow-[0_0_0_2px_#000] lg:min-h-16 lg:rounded-[14px] lg:px-6 lg:py-4 lg:text-xl lg:leading-7";
@@ -15,12 +15,15 @@ const control =
 export function EnquiryForm({
   spaces,
   defaultSpace,
+  defaultType,
   email,
   today,
   className = "",
 }: {
   spaces: { key: string; name: string }[];
   defaultSpace?: string;
+  /** Preselected event type (from ?typ=, e.g. "studio" from the Studio page). */
+  defaultType?: EventType;
   email: string;
   /** YYYY-MM-DD in Prague, the earliest date the picker offers. */
   today: string;
@@ -155,7 +158,7 @@ export function EnquiryForm({
       </div>
       <div className={wrap}>
         <label htmlFor="enquiry-type">{tr("type")}</label>
-        <Select key={values.type} {...field("type")} required defaultValue={values.type ?? EVENT_TYPES[0]}>
+        <Select key={`${defaultType}-${values.type}`} {...field("type")} required defaultValue={values.type ?? defaultType ?? EVENT_TYPES[0]}>
           {EVENT_TYPES.map((type) => (
             <option key={type} value={type}>
               {tr(`types.${type}`)}

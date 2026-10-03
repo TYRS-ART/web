@@ -23,8 +23,10 @@ function CardLink({ href, className, children }: { href: string; className: stri
   const route = internalRoute(href);
   if (route) {
     const hash = href.split("#")[1];
+    const search = href.split("#")[0].split("?")[1];
+    const query = search ? Object.fromEntries(new URLSearchParams(search)) : undefined;
     return (
-      <Link href={hash ? { pathname: route, hash } : route} className={className}>
+      <Link href={hash || query ? { pathname: route, ...(query ? { query } : {}), ...(hash ? { hash } : {}) } : route} className={className}>
         {children}
       </Link>
     );

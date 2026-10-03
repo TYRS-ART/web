@@ -5,6 +5,5 @@ export const STUDIO_QUERY = defineQuery(`{
     headline, intro, motto,
     collaborators[]{ _key, name, credits, url },
     offerCards[]{ _key, title, headline, body, link, highlight }
-  },
-  "email": *[_type == "settings" && _id == "settings"][0].email
+  }
 }`);
