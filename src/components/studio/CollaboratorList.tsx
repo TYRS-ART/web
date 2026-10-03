@@ -23,9 +23,12 @@ const initials = (name: string) =>
 export function CollaboratorList({
   people,
   websiteLabel,
+  photoLabel,
 }: {
   people: Collaborator[];
   websiteLabel: string;
+  /** "Foto:" before a photo credit. */
+  photoLabel: string;
 }) {
   const withPhotos = people.some((person) => person.photo?.asset);
   return (
@@ -56,7 +59,14 @@ export function CollaboratorList({
                 )}
               </span>
             )}
-            <span className="font-display text-[36px] leading-9 lg:text-[56px] lg:leading-[56px]">{nbsp(person.name ?? "")}</span>
+            <span className="flex flex-col gap-1">
+              <span className="font-display text-[36px] leading-9 lg:text-[56px] lg:leading-[56px]">{nbsp(person.name ?? "")}</span>
+              {person.photo?.asset && person.photoCredit && (
+                <span className="text-[11px] leading-[14px] text-muted lg:text-xs">
+                  {photoLabel} {person.photoCredit}
+                </span>
+              )}
+            </span>
           </span>
           {person.credits ? (
             <span className="text-[15px] leading-[22px] text-muted lg:text-xl lg:leading-7">{person.credits}</span>

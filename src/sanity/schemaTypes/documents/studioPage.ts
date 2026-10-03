@@ -25,6 +25,12 @@ export const studioPage = defineType({
             defineField({ name: "name", title: "Jméno", type: "string", validation: (rule) => rule.required() }),
             { ...photoField("photo", "Fotka"), description: "Malá fotka vedle jména. Použij jen fotku, kterou smíme zveřejnit." },
             defineField({
+              name: "photoCredit",
+              title: "Autor fotky",
+              description: "Když to licence vyžaduje, např. „Karasic, CC BY-SA 3.0“. Zobrazí se drobně pod jménem.",
+              type: "string",
+            }),
+            defineField({
               name: "credits",
               title: "S kým spolupracoval/a (kredity)",
               description: "Jména oddělená čárkou, např. „Sting, Aretha Franklin, Billie Eilish“.",

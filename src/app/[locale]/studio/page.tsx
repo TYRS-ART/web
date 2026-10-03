@@ -77,7 +77,7 @@ export default async function StudioPage({ params }: PageProps<"/[locale]/studio
           <h2 id="spoluprace-title" className="m-0 text-[15px] leading-5 font-medium text-muted lg:text-lg lg:leading-6">
             {tr("collaborators")}
           </h2>
-          <CollaboratorList people={people} websiteLabel={tr("website")} />
+          <CollaboratorList people={people} websiteLabel={tr("website")} photoLabel={tr("photo")} />
         </section>
       )}
 
