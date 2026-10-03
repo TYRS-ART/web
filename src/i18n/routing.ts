@@ -17,6 +17,7 @@ export const routing = defineRouting({
     "/venue": "/venue",
     "/pronajem": { cs: "/pronajem", en: "/rental" },
     "/studio": "/studio",
+    "/manifest": { cs: "/manifest", en: "/manifesto" },
     "/ochrana-soukromi": { cs: "/ochrana-soukromi", en: "/privacy" },
   },
 });

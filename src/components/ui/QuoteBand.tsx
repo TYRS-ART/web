@@ -24,6 +24,7 @@ export function QuoteBand({
   label,
   locale,
   size = "quote",
+  marks = true,
   className = "",
 }: {
   text: string;
@@ -31,12 +32,14 @@ export function QuoteBand({
   label: string;
   locale: Locale;
   size?: keyof typeof sizes;
+  /** Wrap in quotation marks (off for a question such as on the Manifest page). */
+  marks?: boolean;
   className?: string;
 }) {
   return (
     <section aria-label={label} className={`bg-butter px-5 py-12 text-black lg:px-16 lg:py-24 ${className}`}>
       <figure className="m-0 max-w-[1100px]">
-        <blockquote className={`m-0 font-serif ${sizes[size]}`}>{nbsp(quoted(text, locale))}</blockquote>
+        <blockquote className={`m-0 font-serif ${sizes[size]}`}>{nbsp(marks ? quoted(text, locale) : text)}</blockquote>
         {cite && (
           <figcaption className="mt-3 font-sans text-[15px] leading-[22px] text-muted lg:mt-5 lg:text-xl lg:leading-7">
             — {cite}

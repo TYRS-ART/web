@@ -15,6 +15,8 @@ export const resolve: PresentationPluginOptions["resolve"] = {
     { route: "/en/rental", filter: `_id == "rentalPage"` },
     { route: "/studio", filter: `_id == "studioPage"` },
     { route: "/en/studio", filter: `_id == "studioPage"` },
+    { route: "/manifest", filter: `_id == "manifestoPage"` },
+    { route: "/en/manifesto", filter: `_id == "manifestoPage"` },
     { route: "/", filter: `_id == "settings"` },
     { route: "/en", filter: `_id == "settings"` },
   ]),
@@ -53,6 +55,12 @@ export const resolve: PresentationPluginOptions["resolve"] = {
       locations: [
         { title: "Homepage", href: "/" },
         { title: "Homepage (EN)", href: "/en" },
+      ],
+    }),
+    manifestoPage: defineLocations({
+      locations: [
+        { title: "Manifest", href: "/manifest" },
+        { title: "Manifesto (EN)", href: "/en/manifesto" },
       ],
     }),
     studioPage: defineLocations({
