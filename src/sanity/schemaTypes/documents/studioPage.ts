@@ -1,6 +1,7 @@
 import { MicrophoneIcon } from "@sanity/icons/Microphone";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
+import { photoField } from "../objects/image";
 import { infoCardMember } from "../objects/infoCard";
 
 export const studioPage = defineType({
@@ -22,6 +23,7 @@ export const studioPage = defineType({
           type: "object",
           fields: [
             defineField({ name: "name", title: "Jméno", type: "string", validation: (rule) => rule.required() }),
+            { ...photoField("photo", "Fotka"), description: "Malá fotka vedle jména. Použij jen fotku, kterou smíme zveřejnit." },
             defineField({
               name: "credits",
               title: "S kým pracoval(a)",
@@ -35,7 +37,7 @@ export const studioPage = defineType({
               validation: (rule) => rule.uri({ scheme: ["https", "http"] }),
             }),
           ],
-          preview: { select: { title: "name", subtitle: "credits" } },
+          preview: { select: { title: "name", subtitle: "credits", media: "photo" } },
         }),
       ],
     }),
