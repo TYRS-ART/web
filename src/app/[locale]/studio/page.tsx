@@ -77,7 +77,7 @@ export default async function StudioPage({ params }: PageProps<"/[locale]/studio
           <h2 id="spoluprace-title" className="m-0 text-[15px] leading-5 font-medium text-muted lg:text-lg lg:leading-6">
             {tr("collaborators")}
           </h2>
-          <CollaboratorList people={people} creditsLabel={tr("credits")} websiteLabel={tr("website")} />
+          <CollaboratorList people={people} creditsLabel={(form) => (form === "m" ? tr("creditsM") : form === "f" ? tr("creditsF") : tr("credits"))} websiteLabel={tr("website")} />
         </section>
       )}
 

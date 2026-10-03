@@ -26,7 +26,8 @@ export function CollaboratorList({
   websiteLabel,
 }: {
   people: Collaborator[];
-  creditsLabel: string;
+  /** "Pracoval s" / "Pracovala s" by the person's Czech form, else a neutral "Kredity:". */
+  creditsLabel: (form: string | null) => string;
   websiteLabel: string;
 }) {
   const withPhotos = people.some((person) => person.photo?.asset);
@@ -62,7 +63,7 @@ export function CollaboratorList({
           </span>
           {person.credits ? (
             <span className="text-[15px] leading-[22px] lg:text-xl lg:leading-7">
-              <span className="text-muted">{creditsLabel} </span>
+              <span className="text-muted">{creditsLabel(person.form)} </span>
               {person.credits}
             </span>
           ) : (

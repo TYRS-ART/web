@@ -4,9 +4,11 @@
     "metaDescription": "Nahrávací studio v TYRŠi na Malé Straně. K pronájmu i pro spolupráci se zvukaři a producenty.",
     "contact": "Napiš nám",
     "collaborators": "Spolupracujeme s",
-    "credits": "Pracoval(a) s",
+    "credits": "Kredity:",
     "website": "Web",
     "offer": "Co nabízíme",
-    "motto": "Motto"
+    "motto": "Motto",
+    "creditsM": "Pracoval s",
+    "creditsF": "Pracovala s"
   }
 }
