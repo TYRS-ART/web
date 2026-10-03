@@ -81,7 +81,7 @@ export async function sendEnquiry(_prev: EnquiryState, formData: FormData): Prom
 
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.ENQUIRY_FROM;
-  const to = process.env.ENQUIRY_TO || "booking@tyrs.art";
+  const to = process.env.ENQUIRY_TO || "hello@tyrs.art";
   if (!apiKey || !from) {
     console.error("[enquiry] RESEND_API_KEY or ENQUIRY_FROM is not set; the enquiry was not sent.");
     return { status: "failed", values };
