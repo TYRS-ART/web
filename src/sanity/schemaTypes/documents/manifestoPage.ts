@@ -5,7 +5,7 @@ const plain = (value?: { cs?: string } | null) => value?.cs?.replace(/\s+/g, " "
 
 /**
  * Manifesto: a headline, then a list of blocks the editor can add and reorder:
- * section heading, text, big statement, the pillars, the one quote, and a line of words.
+ * section label, text, statement, the pillars, a question and a line of words.
  */
 export const manifestoPage = defineType({
   name: "manifestoPage",
@@ -98,11 +98,10 @@ export const manifestoPage = defineType({
         }),
         defineArrayMember({
           name: "mQuote",
-          title: "Citát (žlutý pruh)",
+          title: "Otázka / citát",
           type: "object",
-          description: "Nejvýš jeden na stránce.",
           fields: [defineField({ name: "text", title: "Text", type: "localeString" })],
-          preview: { select: { text: "text" }, prepare: ({ text }) => ({ title: plain(text), subtitle: "Citát" }) },
+          preview: { select: { text: "text" }, prepare: ({ text }) => ({ title: plain(text), subtitle: "Otázka / citát" }) },
         }),
         defineArrayMember({
           name: "mWords",
@@ -110,7 +109,6 @@ export const manifestoPage = defineType({
           type: "object",
           fields: [
             defineField({ name: "text", title: "Slova", description: "Např. „Koncerty. Divadlo. Přednášky.“", type: "localeText" }),
-            defineField({ name: "band", title: "Na černém pruhu", type: "boolean", initialValue: false }),
           ],
           preview: { select: { text: "text" }, prepare: ({ text }) => ({ title: plain(text), subtitle: "Řada slov" }) },
         }),

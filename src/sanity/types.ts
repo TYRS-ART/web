@@ -63,7 +63,6 @@ export type ManifestoPage = {
       }
     | {
         text?: LocaleText;
-        band?: boolean;
         _type: "mWords";
         _key: string;
       }
@@ -884,7 +883,7 @@ export type LAYOUT_QUERY_RESULT = {
 
 // Source: src/sanity/queries/manifesto.ts
 // Variable: MANIFESTO_QUERY
-// Query: *[_type == "manifestoPage" && _id == "manifestoPage"][0]{    title,    sections[]{      _key, _type, text, size, muted, band,      items[]{ _key, title, text }    }  }
+// Query: *[_type == "manifestoPage" && _id == "manifestoPage"][0]{    title,    sections[]{      _key, _type, text, size, muted,      items[]{ _key, title, text }    }  }
 export type MANIFESTO_QUERY_RESULT = {
   title: LocaleText | null;
   sections: Array<
@@ -894,7 +893,6 @@ export type MANIFESTO_QUERY_RESULT = {
         text: LocaleString | null;
         size: null;
         muted: null;
-        band: null;
         items: null;
       }
     | {
@@ -903,7 +901,6 @@ export type MANIFESTO_QUERY_RESULT = {
         text: null;
         size: null;
         muted: null;
-        band: null;
         items: Array<{
           _key: string;
           title: LocaleString | null;
@@ -916,7 +913,6 @@ export type MANIFESTO_QUERY_RESULT = {
         text: LocaleString | null;
         size: null;
         muted: null;
-        band: null;
         items: null;
       }
     | {
@@ -925,7 +921,6 @@ export type MANIFESTO_QUERY_RESULT = {
         text: LocaleText | null;
         size: "l" | "m" | "xl" | null;
         muted: boolean | null;
-        band: null;
         items: null;
       }
     | {
@@ -934,7 +929,6 @@ export type MANIFESTO_QUERY_RESULT = {
         text: LocaleText | null;
         size: "body" | "lead" | null;
         muted: null;
-        band: null;
         items: null;
       }
     | {
@@ -943,7 +937,6 @@ export type MANIFESTO_QUERY_RESULT = {
         text: LocaleText | null;
         size: null;
         muted: null;
-        band: boolean | null;
         items: null;
       }
   > | null;
@@ -1301,7 +1294,7 @@ declare global {
     '\n  *[_type == "course" && defined(slug.cs.current)]{ "cs": slug.cs.current, "en": slug.en.current }\n': COURSE_SLUGS_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    heroSentence, rentalBand, address\n  },\n  "upcoming": *[_type == "event" && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...30]{ \n  _id, title, slug, startsAt, endsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n },\n  "courses": *[_type == "course" && (!defined(runEnd) || runEnd >= $today)]{\n    _id, title, slug, focus, level,\n    slots[]{ _key, weekday, startTime, endTime },\n    runStart, runEnd,\n    "lessonDates": lessonDates[].date,\n    "hall": space->name,\n    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  }\n}': HOME_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{\n    address, email, phone, socials, openingHours\n  },\n  "playlist": *[_type == "playlist" && month <= $month] | order(month desc)[0]{\n    month, title, spotifyUrl, trackCount, tracks[]{ _key, title, artist, url },\n    cover{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "today": *[_type == "event" && startsAt >= $dayStart && startsAt < $dayEnd] | order(startsAt asc)[0]{\n    title, slug, startsAt, ticketUrl, "hall": hall->name\n  }\n}': LAYOUT_QUERY_RESULT;
-    '\n  *[_type == "manifestoPage" && _id == "manifestoPage"][0]{\n    title,\n    sections[]{\n      _key, _type, text, size, muted, band,\n      items[]{ _key, title, text }\n    }\n  }\n': MANIFESTO_QUERY_RESULT;
+    '\n  *[_type == "manifestoPage" && _id == "manifestoPage"][0]{\n    title,\n    sections[]{\n      _key, _type, text, size, muted,\n      items[]{ _key, title, text }\n    }\n  }\n': MANIFESTO_QUERY_RESULT;
     '{\n  "settings": *[_id == "settings"][0]{ socials },\n  "month": *[_type == "event" && startsAt >= $monthStart && startsAt < $monthEnd] | order(startsAt asc){\n    \n  _id, title, slug, startsAt, endsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n\n  },\n  "week": *[_type == "event" && startsAt >= $weekStart && startsAt < $weekEnd] | order(startsAt asc){\n    \n  _id, title, slug, startsAt, endsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n\n  }\n}': PROGRAM_QUERY_RESULT;
     '{\n  "event": *[_type == "event" && (\n    ($locale == "cs" && slug.cs.current == $slug)\n    || ($locale == "en" && coalesce(slug.en.current, slug.cs.current) == $slug)\n  )][0]{\n    _id, title, slug, startsAt, doorsAt, endsAt, categories, lead, body, goodToKnow,\n    priceText, ticketUrl, capacityNote, links,\n    "hall": hall->name,\n    heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n  },\n  "settings": *[_id == "settings"][0]{ address }\n}': EVENT_QUERY_RESULT;
     '\n  *[_type == "event" && _id != $id && ((defined(endsAt) && endsAt > $now) || (!defined(endsAt) && startsAt >= $dayStart))] | order(startsAt asc)[0...24]{ \n  _id, title, slug, startsAt, endsAt, categories, featured, priceText, tickerText, ticketUrl,\n  "hall": hall->name,\n  heroImage{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n }\n': RELATED_EVENTS_QUERY_RESULT;
