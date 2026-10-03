@@ -104,6 +104,9 @@ export function MobileMenu({ today, settings, newsletterHref }: Props) {
               <span className="font-display text-[52px] leading-[52px]">{tr("nav.studio")}</span>
               <span className={arrow} aria-hidden="true">→</span>
             </Link>
+            <Link href="/manifest" className="self-start pt-4 text-[17px] leading-[26px] font-medium underline underline-offset-4">
+              {tr("nav.manifesto")}
+            </Link>
           </nav>
 
           {today && todaySlug && (

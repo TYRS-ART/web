@@ -25,7 +25,7 @@ function entry(href: (locale: (typeof locales)[number]) => Href | null, lastModi
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const data = await sanityFetch({ query: SITEMAP_QUERY, tags: ["event", "course"], perspective: "published" });
-  const staticPages: AppPathname[] = ["/", "/program", "/kurzy", "/venue", "/pronajem", "/studio", "/ochrana-soukromi"];
+  const staticPages: AppPathname[] = ["/", "/program", "/kurzy", "/venue", "/pronajem", "/studio", "/manifest", "/ochrana-soukromi"];
 
   return [
     ...staticPages.flatMap((pathname) => entry(() => pathname as Href)),

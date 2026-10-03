@@ -1,6 +1,7 @@
 import type { SchemaTypeDefinition } from "sanity";
 
 import { course } from "./documents/course";
+import { manifestoPage } from "./documents/manifestoPage";
 import { event } from "./documents/event";
 import { person } from "./documents/person";
 import { playlist } from "./documents/playlist";
@@ -17,7 +18,7 @@ import {
   localeText,
 } from "./objects/locale";
 
-export const singletonTypes = new Set(["settings", "venuePage", "rentalPage", "studioPage"]);
+export const singletonTypes = new Set(["settings", "venuePage", "rentalPage", "studioPage", "manifestoPage"]);
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   localeString,
@@ -34,4 +35,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   venuePage,
   rentalPage,
   studioPage,
+  manifestoPage,
 ];
