@@ -1,6 +1,6 @@
 /** Rental enquiry form: field names, choices and the state the server action returns. */
 
-export const EVENT_TYPES = ["koncert", "divadlo-tanec", "workshop", "firemni", "nataceni", "oslava", "jine"] as const;
+export const EVENT_TYPES = ["koncert", "divadlo-tanec", "workshop", "firemni", "nataceni", "oslava", "studio", "jine"] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
 
 /** Value of the "Ještě nevím" space option. */

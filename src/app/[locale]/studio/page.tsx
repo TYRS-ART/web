@@ -8,16 +8,14 @@ import { QuoteBand } from "@/components/ui/QuoteBand";
 import { InfoCards } from "@/components/venue/InfoCards";
 import { VenueIntro } from "@/components/venue/VenueIntro";
 import type { Locale } from "@/i18n/locales";
-import { getPathname } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import { t } from "@/lib/localize";
 import { cleanMetadata } from "@/lib/metadata";
 import { nbsp } from "@/lib/typography";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { STUDIO_QUERY } from "@/sanity/queries/studio";
 
-const CONTACT_EMAIL = "hello@tyrs.art";
-
-const getData = () => sanityFetch({ query: STUDIO_QUERY, tags: ["studioPage", "settings"] });
+const getData = () => sanityFetch({ query: STUDIO_QUERY, tags: ["studioPage"] });
 
 export const generateMetadata = cleanMetadata(buildMetadata);
 
@@ -49,7 +47,6 @@ export default async function StudioPage({ params }: PageProps<"/[locale]/studio
   const cards = page?.offerCards ?? [];
   const hasOffer = cards.some((card) => t(card.headline, locale) || t(card.body, locale));
   const motto = t(page?.motto, locale);
-  const mail = `mailto:${data.email || CONTACT_EMAIL}?subject=${encodeURIComponent(tr("mailSubject"))}`;
 
   return (
     <>
@@ -58,9 +55,9 @@ export default async function StudioPage({ params }: PageProps<"/[locale]/studio
           {nbsp(headline)}
         </h1>
         <div className="flex flex-col items-start gap-5 lg:col-span-3">
-          <a href={mail} className={buttonClass("primary")}>
+          <Link href={{ pathname: "/pronajem", query: { typ: "studio" }, hash: "poptavka" }} className={buttonClass("primary")}>
             {tr("contact")} <span aria-hidden="true">→</span>
-          </a>
+          </Link>
         </div>
       </section>
 

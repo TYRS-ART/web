@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { EnquiryForm } from "@/components/enquiry/EnquiryForm";
-import { SPACE_UNKNOWN, spaceKey } from "@/components/enquiry/fields";
+import { EVENT_TYPES, SPACE_UNKNOWN, spaceKey, type EventType } from "@/components/enquiry/fields";
 import { IncludedBand } from "@/components/rental/IncludedBand";
 import { SpaceTile } from "@/components/rental/SpaceTile";
 import { buttonClass } from "@/components/ui/button";
@@ -50,6 +50,9 @@ export default async function RentalPage({ params, searchParams }: PageProps<"/[
   const requested = typeof query.prostor === "string" ? query.prostor : undefined;
   const defaultSpace =
     requested && (requested === SPACE_UNKNOWN || options.some((o) => o.key === requested)) ? requested : undefined;
+  // ?typ=studio (from the Studio page) preselects the type of event.
+  const requestedType = typeof query.typ === "string" ? query.typ : undefined;
+  const defaultType = EVENT_TYPES.find((type): type is EventType => type === requestedType);
 
   const mail = (
     <a href={`mailto:${email}`} className="font-medium text-black hover:text-green">
@@ -121,6 +124,7 @@ export default async function RentalPage({ params, searchParams }: PageProps<"/[
         <EnquiryForm
           spaces={options}
           defaultSpace={defaultSpace}
+          defaultType={defaultType}
           email={email}
           today={pragueDay(new Date())}
           className="lg:col-span-8"
