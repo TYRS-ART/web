@@ -33,7 +33,6 @@ export async function Footer({
     <footer className="mt-14 flex flex-col gap-7 border-t-2 border-black px-5 pt-8 pb-6 lg:mt-24 lg:gap-10 lg:px-16 lg:pt-12 lg:pb-10">
       <div className="grid grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-4 lg:gap-8">
         <Column title={tr("footer.menu")}>
-          <Link href="/" className={item}>{tr("nav.home")}</Link>
           <Link href="/program" className={item}>{tr("nav.program")}</Link>
           <Link href="/venue" className={item}>{tr("nav.venue")}</Link>
           <Link href="/pronajem" className={item}>{tr("nav.rental")}</Link>
