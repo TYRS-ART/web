@@ -38,6 +38,7 @@ export async function Footer({
           <Link href="/venue" className={item}>{tr("nav.venue")}</Link>
           <Link href="/pronajem" className={item}>{tr("nav.rental")}</Link>
           <Link href="/studio" className={item}>{tr("nav.studio")}</Link>
+          <Link href="/manifest" className={item}>{tr("nav.manifesto")}</Link>
         </Column>
         <Column title={tr("footer.follow")}>
           {socials?.instagram && (
