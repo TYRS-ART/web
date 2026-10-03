@@ -13,6 +13,8 @@ export const resolve: PresentationPluginOptions["resolve"] = {
     { route: "/en/venue", filter: `_id == "venuePage"` },
     { route: "/pronajem", filter: `_id == "rentalPage"` },
     { route: "/en/rental", filter: `_id == "rentalPage"` },
+    { route: "/studio", filter: `_id == "studioPage"` },
+    { route: "/en/studio", filter: `_id == "studioPage"` },
     { route: "/", filter: `_id == "settings"` },
     { route: "/en", filter: `_id == "settings"` },
   ]),
@@ -51,6 +53,12 @@ export const resolve: PresentationPluginOptions["resolve"] = {
       locations: [
         { title: "Homepage", href: "/" },
         { title: "Homepage (EN)", href: "/en" },
+      ],
+    }),
+    studioPage: defineLocations({
+      locations: [
+        { title: "Studio", href: "/studio" },
+        { title: "Studio (EN)", href: "/en/studio" },
       ],
     }),
     venuePage: defineLocations({

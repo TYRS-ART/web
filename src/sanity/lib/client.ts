@@ -21,7 +21,7 @@ export const client = createClient({
   useCdn: true,
   stega: {
     enabled: false,
-    studioUrl: "/studio",
+    studioUrl: "/admin",
     filter: (props) => {
       const path = props.sourcePath.filter((segment): segment is string => typeof segment === "string");
       if (path.some((segment) => NEVER.has(segment))) return false;

@@ -15,73 +15,42 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: src/sanity/extract.json
-export type RentalPage = {
+export type Link = {
+  label?: LocaleString;
+  href?: string;
+};
+
+export type StudioPage = {
   _id: string;
-  _type: "rentalPage";
+  _type: "studioPage";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  headline?: LocaleString;
-  intro?: LocaleText;
-  included?: Array<{
-    title?: LocaleString;
-    body?: LocaleText;
-    _type: "includedItem";
+  headline?: LocaleText;
+  intro?: LocaleBlockContent;
+  collaborators?: Array<{
+    name: string;
+    credits?: string;
+    url?: string;
+    _type: "collaborator";
     _key: string;
   }>;
-  formIntro?: LocaleText;
-  quote?: {
-    text?: LocaleText;
-    author?: string;
-    organisation?: string;
-  };
-};
-
-export type LocaleText = {
-  _type: "localeText";
-  cs?: string;
-  en?: string;
+  offerCards?: Array<{
+    title?: LocaleString;
+    headline?: LocaleString;
+    body?: LocaleText;
+    link?: Link;
+    highlight?: boolean;
+    _type: "infoCard";
+    _key: string;
+  }>;
+  motto?: LocaleString;
 };
 
 export type LocaleString = {
   _type: "localeString";
   cs?: string;
   en?: string;
-};
-
-export type PersonReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "person";
-};
-
-export type VenuePage = {
-  _id: string;
-  _type: "venuePage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  statement?: LocaleText;
-  intro?: LocaleBlockContent;
-  founders?: Array<
-    {
-      _key: string;
-    } & PersonReference
-  >;
-  motto?: LocaleString;
-  infoCards?: Array<{
-    title?: LocaleString;
-    headline?: LocaleString;
-    body?: LocaleText;
-    link?: {
-      label?: LocaleString;
-      href?: string;
-    };
-    highlight?: boolean;
-    _type: "infoCard";
-    _key: string;
-  }>;
 };
 
 export type LocaleBlockContent = {
@@ -120,6 +89,66 @@ export type LocaleBlockContent = {
     }>;
     level?: number;
     _type: "block";
+    _key: string;
+  }>;
+};
+
+export type LocaleText = {
+  _type: "localeText";
+  cs?: string;
+  en?: string;
+};
+
+export type RentalPage = {
+  _id: string;
+  _type: "rentalPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  headline?: LocaleString;
+  intro?: LocaleText;
+  included?: Array<{
+    title?: LocaleString;
+    body?: LocaleText;
+    _type: "includedItem";
+    _key: string;
+  }>;
+  formIntro?: LocaleText;
+  quote?: {
+    text?: LocaleText;
+    author?: string;
+    organisation?: string;
+  };
+};
+
+export type PersonReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "person";
+};
+
+export type VenuePage = {
+  _id: string;
+  _type: "venuePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  statement?: LocaleText;
+  intro?: LocaleBlockContent;
+  founders?: Array<
+    {
+      _key: string;
+    } & PersonReference
+  >;
+  motto?: LocaleString;
+  infoCards?: Array<{
+    title?: LocaleString;
+    headline?: LocaleString;
+    body?: LocaleText;
+    link?: Link;
+    highlight?: boolean;
+    _type: "infoCard";
     _key: string;
   }>;
 };
@@ -496,12 +525,14 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
-  | RentalPage
-  | LocaleText
+  | Link
+  | StudioPage
   | LocaleString
+  | LocaleBlockContent
+  | LocaleText
+  | RentalPage
   | PersonReference
   | VenuePage
-  | LocaleBlockContent
   | Settings
   | LocaleHeroSentence
   | SanityImageAssetReference
@@ -1077,6 +1108,32 @@ export type SITEMAP_QUERY_RESULT = {
   }>;
 };
 
+// Source: src/sanity/queries/studio.ts
+// Variable: STUDIO_QUERY
+// Query: {  "page": *[_type == "studioPage" && _id == "studioPage"][0]{    headline, intro, motto,    collaborators[]{ _key, name, credits, url },    offerCards[]{ _key, title, headline, body, link, highlight }  },  "email": *[_type == "settings" && _id == "settings"][0].email}
+export type STUDIO_QUERY_RESULT = {
+  page: {
+    headline: LocaleText | null;
+    intro: LocaleBlockContent | null;
+    motto: LocaleString | null;
+    collaborators: Array<{
+      _key: string;
+      name: string;
+      credits: string | null;
+      url: string | null;
+    }> | null;
+    offerCards: Array<{
+      _key: string;
+      title: LocaleString | null;
+      headline: LocaleString | null;
+      body: LocaleText | null;
+      link: Link | null;
+      highlight: boolean | null;
+    }> | null;
+  } | null;
+  email: string | null;
+};
+
 // Source: src/sanity/queries/venue.ts
 // Variable: VENUE_QUERY
 // Query: {  "page": *[_type == "venuePage" && _id == "venuePage"][0]{    statement, intro, motto,    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },    infoCards[]{ _key, title, headline, body, link, highlight }  },  "settings": *[_type == "settings" && _id == "settings"][0]{    address, email  }}
@@ -1103,10 +1160,7 @@ export type VENUE_QUERY_RESULT = {
       title: LocaleString | null;
       headline: LocaleString | null;
       body: LocaleText | null;
-      link: {
-        label?: LocaleString;
-        href?: string;
-      } | null;
+      link: Link | null;
       highlight: boolean | null;
     }> | null;
   } | null;
@@ -1139,6 +1193,7 @@ declare global {
     '*[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n}': RENTAL_SPACES_QUERY_RESULT;
     '{\n  "page": *[_type == "rentalPage" && _id == "rentalPage"][0]{\n    headline, intro, formIntro, quote,\n    included[]{ _key, title, body }\n  },\n  "spaces": *[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n},\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': RENTAL_QUERY_RESULT;
     '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
+    '{\n  "page": *[_type == "studioPage" && _id == "studioPage"][0]{\n    headline, intro, motto,\n    collaborators[]{ _key, name, credits, url },\n    offerCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': STUDIO_QUERY_RESULT;
     '{\n  "page": *[_type == "venuePage" && _id == "venuePage"][0]{\n    statement, intro, motto,\n    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    infoCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "settings": *[_type == "settings" && _id == "settings"][0]{\n    address, email\n  }\n}': VENUE_QUERY_RESULT;
   }
 }

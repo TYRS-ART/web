@@ -12,7 +12,7 @@ import { schemaTypes, singletonTypes } from "./src/sanity/schemaTypes";
 import { structure } from "./src/sanity/structure";
 
 export default defineConfig({
-  basePath: "/studio",
+  basePath: "/admin",
   title: "TYRŠ",
   projectId,
   dataset,

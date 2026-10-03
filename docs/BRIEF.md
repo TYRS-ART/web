@@ -27,7 +27,7 @@ This is a **completely new project**. Do not reuse any earlier TYRŠ code or rep
 |---|---|
 | Framework | **Next.js 16** (App Router, React 19) + TypeScript, pnpm. Deployed on **Vercel** (connected to the TYRS-ART GitHub organization). |
 | Styling | **Tailwind CSS v4** with the tokens below defined in `@theme`; hand-written CSS for the special effects (drift, duotone, feather, logo hover, nav roll). |
-| CMS | **Sanity** (hosted Studio at /studio or studio.tyrs.art) |
+| CMS | **Sanity** (Studio embedded at /admin; /studio is the public recording-studio page) |
 | Languages | **Czech + English at launch** (next-intl). Czech is default (`/`), English under `/en`. All CMS text fields bilingual. |
 | Tickets | **External service.** Each event has a ticket URL (GoOut / Ticketportal / Eventbrite…). No payments on our site. |
 | Course sign-ups | **External booking tool** (e.g. Reservio, Bookio). Each course has a booking URL; optional separate URL for a single lesson. |

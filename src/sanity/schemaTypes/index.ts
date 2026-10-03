@@ -7,6 +7,7 @@ import { playlist } from "./documents/playlist";
 import { rentalPage } from "./documents/rentalPage";
 import { settings } from "./documents/settings";
 import { space } from "./documents/space";
+import { studioPage } from "./documents/studioPage";
 import { venuePage } from "./documents/venuePage";
 import {
   localeBlockContent,
@@ -16,7 +17,7 @@ import {
   localeText,
 } from "./objects/locale";
 
-export const singletonTypes = new Set(["settings", "venuePage", "rentalPage"]);
+export const singletonTypes = new Set(["settings", "venuePage", "rentalPage", "studioPage"]);
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   localeString,
@@ -32,4 +33,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   settings,
   venuePage,
   rentalPage,
+  studioPage,
 ];
