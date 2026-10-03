@@ -101,7 +101,7 @@ Category chips carry a slow, drifting gradient within their own hue (copy the `.
 Paths shown for Czech; English mirrors them under `/en` with translated slugs.
 
 ### `/` Homepage
-1. Hero sentence with clickable category pills (current copy: "Nové venue na Kampě. Ráno *Lekce*, odpoledne *Tanec*, večer *Divadlo* a v noci *Hudba*."). Lekce → `/kurzy`; the others → `/program?kategorie=…` with that filter preselected.
+1. Hero sentence with clickable category pills (current copy: "Human lab. Ráno *Lekce*, odpoledne *Tanec*, večer *Divadlo* a v noci *Hudba*."). Lekce → `/kurzy`; the others → `/program?kategorie=…` with that filter preselected.
 2. "Dnes" ticker band: transparent, black rules above and below, scrolling text with green dots (today and next events, auto from CMS).
 3. "Nejbližší události" white card: mosaic of the next 5 events (8+4 / 3+5+4 grid on desktop, stacked on mobile), duotone photos.
 4. "Tenhle týden v kurzech": white card with 5 course slots (sage green) → course detail; "Celý rozvrh →".
