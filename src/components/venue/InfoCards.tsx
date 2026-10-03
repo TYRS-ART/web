@@ -53,7 +53,7 @@ export function InfoCards({ cards, locale }: { cards: Card[]; locale: Locale }) 
   if (items.length === 0) return null;
 
   return (
-    <div className="flex flex-col gap-3 lg:grid lg:grid-cols-3 lg:gap-4">
+    <div className={`flex flex-col gap-3 lg:grid lg:gap-4 ${items.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3"}`}>
       {items.map((card) => {
         const headlineClass = "font-display text-[26px] leading-7 lg:text-[32px] lg:leading-[34px]";
         // A link whose text is the headline itself (e.g. the contact email) turns the headline into the link.

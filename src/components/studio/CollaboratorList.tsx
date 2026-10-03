@@ -33,7 +33,7 @@ export function CollaboratorList({
           ) : (
             <span className="max-lg:hidden" />
           )}
-          {person.url && (
+          {person.url ? (
             <a
               href={person.url}
               target="_blank"
@@ -43,6 +43,11 @@ export function CollaboratorList({
             >
               {websiteLabel} <span aria-hidden="true">↗</span>
             </a>
+          ) : (
+            // Keeps the columns aligned with the rows that have a link.
+            <span aria-hidden="true" className="max-lg:hidden">
+              <span className="invisible text-lg">{websiteLabel} ↗</span>
+            </span>
           )}
         </li>
       ))}
