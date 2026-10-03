@@ -18,16 +18,13 @@ const initials = (name: string) =>
 /**
  * Engineers and producers, one row each like the programme list: a small photo
  * (feathered, never cut into a shape), the name in the display face, who they've
- * worked with and a link to their site. Without photos the column is left out.
+ * worked with (no label, it reads as credits) and a link to their site. Without photos the column is left out.
  */
 export function CollaboratorList({
   people,
-  creditsLabel,
   websiteLabel,
 }: {
   people: Collaborator[];
-  /** "Pracoval s" / "Pracovala s" by the person's Czech form, else a neutral "Kredity:". */
-  creditsLabel: (form: string | null) => string;
   websiteLabel: string;
 }) {
   const withPhotos = people.some((person) => person.photo?.asset);
@@ -62,10 +59,7 @@ export function CollaboratorList({
             <span className="font-display text-[36px] leading-9 lg:text-[56px] lg:leading-[56px]">{nbsp(person.name ?? "")}</span>
           </span>
           {person.credits ? (
-            <span className="text-[15px] leading-[22px] lg:text-xl lg:leading-7">
-              <span className="text-muted">{creditsLabel(person.form)} </span>
-              {person.credits}
-            </span>
+            <span className="text-[15px] leading-[22px] text-muted lg:text-xl lg:leading-7">{person.credits}</span>
           ) : (
             <span className="max-lg:hidden" />
           )}

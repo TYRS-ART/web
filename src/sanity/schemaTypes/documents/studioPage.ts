@@ -25,20 +25,6 @@ export const studioPage = defineType({
             defineField({ name: "name", title: "Jméno", type: "string", validation: (rule) => rule.required() }),
             { ...photoField("photo", "Fotka"), description: "Malá fotka vedle jména. Použij jen fotku, kterou smíme zveřejnit." },
             defineField({
-              name: "form",
-              title: "Česky: pracoval / pracovala",
-              description: "Aby čeština na webu zněla správně („Pracoval s…“ / „Pracovala s…“). Bez výběru se ukáže „Kredity:“.",
-              type: "string",
-              options: {
-                list: [
-                  { title: "pracoval", value: "m" },
-                  { title: "pracovala", value: "f" },
-                ],
-                layout: "radio",
-                direction: "horizontal",
-              },
-            }),
-            defineField({
               name: "credits",
               title: "S kým spolupracoval/a (kredity)",
               description: "Jména oddělená čárkou, např. „Sting, Aretha Franklin, Billie Eilish“.",
