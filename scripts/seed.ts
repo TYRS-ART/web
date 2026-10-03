@@ -140,7 +140,7 @@ async function siteDocuments(): Promise<Doc[]> {
         city: "Praha 1",
         googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nosticova+634%2F2%2C+118+00+Praha+1",
       },
-      email: "booking@tyrs.art",
+      email: "hello@tyrs.art",
       openingHours: lt(
         "Bar a foyer denně [16:00–24:00]. Sál podle programu, dveře hodinu před začátkem.",
         "Bar and foyer daily [16:00–24:00]. The hall follows the programme, doors open an hour before the start.",
@@ -188,9 +188,9 @@ async function siteDocuments(): Promise<Doc[]> {
         },
         {
           title: ls("Kontakt", "Contact"),
-          headline: ls("booking@tyrs.art", "booking@tyrs.art"),
+          headline: ls("hello@tyrs.art", "hello@tyrs.art"),
           body: lt("Program, pronájem i dotazy.", "Programme, rentals and questions."),
-          link: { label: ls("booking@tyrs.art", "booking@tyrs.art"), href: "mailto:booking@tyrs.art" },
+          link: { label: ls("hello@tyrs.art", "hello@tyrs.art"), href: "mailto:hello@tyrs.art" },
           highlight: true,
         },
       ]),

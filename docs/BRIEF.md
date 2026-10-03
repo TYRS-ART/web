@@ -141,7 +141,7 @@ Paths shown for Czech; English mirrors them under `/en` with translated slugs.
 - "Další kurzy" card.
 
 ### `/pronajem` Space rental
-Hero headline + "Poptat termín"; "Prostory" white card with 4 space tiles (Velký sál, Malý sál, Foyer a bar, Celý dům: capacity, m², features); black "Co je v ceně" band (Technika / Catering / Ceník / Přístup); enquiry form (name, organisation, email, phone, space, event type, date, people, message, consent) → email to booking@tyrs.art (Resend or Vercel email route); butter reference quote.
+Hero headline + "Poptat termín"; "Prostory" white card with 4 space tiles (Velký sál, Malý sál, Foyer a bar, Celý dům: capacity, m², features); black "Co je v ceně" band (Technika / Catering / Ceník / Přístup); enquiry form (name, organisation, email, phone, space, event type, date, people, message, consent) → email to hello@tyrs.art (Resend or Vercel email route); butter reference quote.
 
 ### `/venue` Venue (Kdo / Kde / Jak)
 Kdo: big statement, intro text, founders in 3 photo tiles on a white card. Butter motto band. Kde: full-width map image + address card + Google Maps. Jak: 6 info cards (Otevírací doba, Vstupenky, Bezbariérovost, Děti, Umělci a pořadatelé, butter Kontakt).
@@ -167,7 +167,7 @@ title · slug · focus (tanec / hudba / pohyb) · audienceTags[] (pro děti, za�
 
 **playlist** (monthly): month · title · spotifyUrl · cover? · tracks preview?
 
-**settings** (singleton): heroSentence (rich text with category pills) · address · contacts (booking@tyrs.art; optional phone) · socials (Instagram, Spotify, WhatsApp channel) · opening hours · Mailchimp list id · map image.
+**settings** (singleton): heroSentence (rich text with category pills) · address · contacts (hello@tyrs.art; optional phone) · socials (Instagram, Spotify, WhatsApp channel) · opening hours · Mailchimp list id · map image.
 
 The timetable on `/kurzy` and "Tenhle týden v kurzech" are generated from course slots. The homepage lists, calendar and ticker come from events by date.
 
@@ -235,7 +235,7 @@ The site must be usable from day one with whatever real content exists, even if 
 ## 11. Confirmed facts (use these, not canvas placeholders)
 
 - **Domain:** tyrs.art. It's registered at **Namecheap**; point DNS to Vercel (A/CNAME records, or switch nameservers to Vercel).
-- **Contact email:** booking@tyrs.art. It's the single address for programme, rental and general questions, used everywhere a contact appears; enquiry form submissions go here too.
+- **Contact email:** hello@tyrs.art. It's the single address for programme, rental and general questions, used everywhere a contact appears; enquiry form submissions go here too.
 - **Instagram:** @tyrs.human.lab → https://www.instagram.com/tyrs.human.lab/ (changed from @tyrs.art on 2 Oct 2026; the link itself is the Instagram field under socials in the Sanity settings document)
 - **Capacity:** 80 people.
 - **Accessibility:** step-free (barrier-free) entry.

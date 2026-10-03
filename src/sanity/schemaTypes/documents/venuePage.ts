@@ -38,7 +38,7 @@ export const venuePage = defineType({
                 defineField({
                   name: "href",
                   title: "Adresa",
-                  description: "Např. /pronajem nebo mailto:booking@tyrs.art",
+                  description: "Např. /pronajem nebo mailto:hello@tyrs.art",
                   type: "url",
                   validation: (rule) => rule.uri({ allowRelative: true, scheme: ["http", "https", "mailto"] }),
                 }),

@@ -56,7 +56,7 @@ const BBOX = `${toLat(extent.south + 80)},${toLon(extent.west - 80)},${toLat(ext
 /* ------------------------------------------------------------------ Data */
 
 const osmPath = join(here, "osm.json");
-const UA = { "User-Agent": "tyrs-web-map/1.0 (booking@tyrs.art)" };
+const UA = { "User-Agent": "tyrs-web-map/1.0 (hello@tyrs.art)" };
 
 async function loadOsm() {
   if (cached && existsSync(osmPath)) return JSON.parse(readFileSync(osmPath, "utf8"));

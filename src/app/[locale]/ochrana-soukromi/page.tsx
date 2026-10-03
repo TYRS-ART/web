@@ -16,7 +16,7 @@ export default async function PrivacyPage({ params }: PageProps<"/[locale]/ochra
   setRequestLocale(locale);
   const tr = await getTranslations("privacy");
   const { privacy } = (await getMessages()) as unknown as Messages;
-  const email = "booking@tyrs.art";
+  const email = "hello@tyrs.art";
 
   return (
     <article className="flex flex-col gap-8 px-5 pt-8 lg:gap-12 lg:px-16 lg:pt-12">

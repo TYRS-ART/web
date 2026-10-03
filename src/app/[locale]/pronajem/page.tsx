@@ -16,7 +16,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { RENTAL_QUERY } from "@/sanity/queries/rental";
 
 /** Confirmed booking address (BRIEF §11), used when Settings has no email. */
-const BOOKING_EMAIL = "booking@tyrs.art";
+const CONTACT_EMAIL = "hello@tyrs.art";
 
 const getData = () => sanityFetch({ query: RENTAL_QUERY, tags: ["rentalPage", "space", "settings"] });
 
@@ -37,7 +37,7 @@ export default async function RentalPage({ params, searchParams }: PageProps<"/[
   const [data, tr, query] = await Promise.all([getData(), getTranslations("rental"), searchParams]);
 
   const page = data.page;
-  const email = data.email || BOOKING_EMAIL;
+  const email = data.email || CONTACT_EMAIL;
   const headline = t(page?.headline, locale) ?? tr("title");
   const intro = t(page?.intro, locale);
   const formIntro = t(page?.formIntro, locale);
