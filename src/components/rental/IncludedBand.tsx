@@ -17,7 +17,7 @@ export function IncludedBand({ items, locale, label }: { items: Item[]; locale: 
   return (
     <section
       aria-labelledby="co-je-v-cene"
-      className={`mx-3 mt-2.5 flex flex-col rounded-[14px] bg-black px-6 py-2 text-white lg:mx-6 lg:mt-4 lg:grid lg:gap-y-10 lg:rounded-[20px] lg:px-8 lg:py-12 ${
+      className={`mx-3 mt-8 flex flex-col rounded-[14px] bg-black px-6 py-2 text-white lg:mx-6 lg:mt-16 lg:grid lg:gap-y-10 lg:rounded-[20px] lg:px-8 lg:py-12 ${
         columns[Math.min(rows.length, 4) - 1]
       }`}
     >
