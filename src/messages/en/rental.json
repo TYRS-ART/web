@@ -14,8 +14,8 @@
   "enquiry": {
     "form": "Rental enquiry",
     "name": "Full name",
-    "organisation": "Organisation (optional)",
-    "optional": "(optional)",
+    "organisation": "Organisation",
+    "requiredNote": "* required",
     "email": "Email",
     "phone": "Phone",
     "space": "Space",
