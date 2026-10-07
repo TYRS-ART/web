@@ -90,6 +90,9 @@ export function EnquiryForm({
       </p>
     ) : null;
 
+  // Required fields carry `required` for assistive tech; the asterisk is for sighted visitors.
+  const required = <span aria-hidden="true"> *</span>;
+
   const wrap = "flex flex-col gap-2 text-[15px] leading-5 font-medium lg:gap-2.5 lg:text-base lg:leading-5";
 
   return (
@@ -118,9 +121,7 @@ export function EnquiryForm({
       )}
 
       <div className={wrap}>
-        <label htmlFor="enquiry-name">
-          {tr("name")} {tr("optional")}
-        </label>
+        <label htmlFor="enquiry-name">{tr("name")}</label>
         <input {...field("name")} type="text" maxLength={200} autoComplete="name" defaultValue={values.name} className={control} />
         {errorText("name")}
       </div>
@@ -137,14 +138,15 @@ export function EnquiryForm({
         {errorText("organisation")}
       </div>
       <div className={wrap}>
-        <label htmlFor="enquiry-email">{tr("email")}</label>
+        <label htmlFor="enquiry-email">
+          {tr("email")}
+          {required}
+        </label>
         <input {...field("email")} type="email" required maxLength={254} autoComplete="email" defaultValue={values.email} className={control} />
         {errorText("email")}
       </div>
       <div className={wrap}>
-        <label htmlFor="enquiry-phone">
-          {tr("phone")} {tr("optional")}
-        </label>
+        <label htmlFor="enquiry-phone">{tr("phone")}</label>
         <input {...field("phone")} type="tel" maxLength={40} autoComplete="tel" defaultValue={values.phone} className={control} />
         {errorText("phone")}
       </div>
@@ -161,7 +163,10 @@ export function EnquiryForm({
         {errorText("space")}
       </div>
       <div className={wrap}>
-        <label htmlFor="enquiry-type">{tr("type")}</label>
+        <label htmlFor="enquiry-type">
+          {tr("type")}
+          {required}
+        </label>
         <Select key={`${defaultType}-${values.type}`} {...field("type")} required defaultValue={values.type ?? defaultType ?? EVENT_TYPES[0]}>
           {EVENT_TYPES.map((type) => (
             <option key={type} value={type}>
@@ -172,14 +177,15 @@ export function EnquiryForm({
         {errorText("type")}
       </div>
       <div className={wrap}>
-        <label htmlFor="enquiry-date">{tr("date")}</label>
+        <label htmlFor="enquiry-date">
+          {tr("date")}
+          {required}
+        </label>
         <input {...field("date")} type="date" required min={today} defaultValue={values.date} className={control} />
         {errorText("date")}
       </div>
       <div className={wrap}>
-        <label htmlFor="enquiry-people">
-          {tr("people")} {tr("optional")}
-        </label>
+        <label htmlFor="enquiry-people">{tr("people")}</label>
         <input
           {...field("people")}
           type="number"
@@ -192,9 +198,7 @@ export function EnquiryForm({
         {errorText("people")}
       </div>
       <div className={`${wrap} lg:col-span-2`}>
-        <label htmlFor="enquiry-message">
-          {tr("message")} {tr("optional")}
-        </label>
+        <label htmlFor="enquiry-message">{tr("message")}</label>
         <textarea
           {...field("message")}
           rows={4}
