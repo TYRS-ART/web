@@ -209,10 +209,6 @@ export function EnquiryForm({
         {errorText("message")}
       </div>
 
-      <p aria-hidden="true" className="m-0 text-sm leading-5 text-muted lg:col-span-2 lg:text-base lg:leading-6">
-        {tr("requiredNote")}
-      </p>
-
       <div className="flex flex-col gap-2 lg:col-span-2">
         <label className="flex items-start gap-3 text-sm leading-5 text-muted lg:text-base lg:leading-6">
           <input
