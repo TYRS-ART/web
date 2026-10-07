@@ -13,7 +13,7 @@ export type Enquiry = {
   type: EventType;
   /** YYYY-MM-DD */
   date: string;
-  people: number;
+  people?: number;
   message: string;
   locale: string;
 };
@@ -40,18 +40,18 @@ function czechDate(day: string) {
 /** The email the booking team receives. Always in Czech; the visitor's language is noted. */
 export function enquiryEmail(enquiry: Enquiry) {
   const rows: [string, string][] = [
-    [labels.name, enquiry.name],
+    [labels.name, enquiry.name || "—"],
     ["Organizace", enquiry.organisation || "—"],
     [labels.email, enquiry.email],
-    [labels.phone, enquiry.phone],
+    [labels.phone, enquiry.phone || "—"],
     [labels.space, enquiry.space],
     [labels.type, labels.types[enquiry.type]],
     [labels.date, czechDate(enquiry.date)],
-    [labels.people, String(enquiry.people)],
+    [labels.people, enquiry.people === undefined ? "—" : String(enquiry.people)],
     ["Jazyk webu", enquiry.locale === "en" ? "angličtina" : "čeština"],
   ];
 
-  const subject = `Poptávka pronájmu: ${enquiry.name}${enquiry.organisation ? ` (${enquiry.organisation})` : ""}, ${czechDate(enquiry.date)}`
+  const subject = `Poptávka pronájmu: ${enquiry.name || enquiry.email}${enquiry.organisation ? ` (${enquiry.organisation})` : ""}, ${czechDate(enquiry.date)}`
     .replace(/[\r\n]+/g, " ")
     .slice(0, 200);
 
@@ -61,7 +61,7 @@ export function enquiryEmail(enquiry: Enquiry) {
     ...rows.map(([label, value]) => `${label}: ${value}`),
     "",
     `${labels.message}`,
-    enquiry.message,
+    enquiry.message || "—",
     "",
     "Odpovědí na tento e-mail odpovíte přímo tazateli.",
   ].join("\n");
@@ -79,7 +79,7 @@ ${rows
   .join("\n")}
 </table>
 <p style="margin:24px 0 8px;font-size:14px;color:#5c5c5c">${escapeHtml(labels.message)}</p>
-<p style="margin:0;font-size:16px;line-height:24px;white-space:pre-wrap">${escapeHtml(enquiry.message)}</p>
+<p style="margin:0;font-size:16px;line-height:24px;white-space:pre-wrap">${escapeHtml(enquiry.message || "—")}</p>
 <p style="margin:24px 0 0;font-size:13px;color:#5c5c5c">Odpovědí na tento e-mail odpovíte přímo tazateli.</p>
 </div>
 </body></html>`;

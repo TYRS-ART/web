@@ -15,6 +15,7 @@
     "form": "Poptávka pronájmu",
     "name": "Jméno a příjmení",
     "organisation": "Organizace (nepovinné)",
+    "optional": "(nepovinné)",
     "email": "E-mail",
     "phone": "Telefon",
     "space": "Prostor",

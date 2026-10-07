@@ -118,8 +118,10 @@ export function EnquiryForm({
       )}
 
       <div className={wrap}>
-        <label htmlFor="enquiry-name">{tr("name")}</label>
-        <input {...field("name")} type="text" required maxLength={200} autoComplete="name" defaultValue={values.name} className={control} />
+        <label htmlFor="enquiry-name">
+          {tr("name")} {tr("optional")}
+        </label>
+        <input {...field("name")} type="text" maxLength={200} autoComplete="name" defaultValue={values.name} className={control} />
         {errorText("name")}
       </div>
       <div className={wrap}>
@@ -140,13 +142,15 @@ export function EnquiryForm({
         {errorText("email")}
       </div>
       <div className={wrap}>
-        <label htmlFor="enquiry-phone">{tr("phone")}</label>
-        <input {...field("phone")} type="tel" required maxLength={40} autoComplete="tel" defaultValue={values.phone} className={control} />
+        <label htmlFor="enquiry-phone">
+          {tr("phone")} {tr("optional")}
+        </label>
+        <input {...field("phone")} type="tel" maxLength={40} autoComplete="tel" defaultValue={values.phone} className={control} />
         {errorText("phone")}
       </div>
       <div className={wrap}>
         <label htmlFor="enquiry-space">{tr("space")}</label>
-        <Select key={`${defaultSpace}-${values.space}`} {...field("space")} required defaultValue={values.space ?? defaultSpace ?? spaces[0]?.key ?? SPACE_UNKNOWN}>
+        <Select key={`${defaultSpace}-${values.space}`} {...field("space")} defaultValue={values.space ?? defaultSpace ?? spaces[0]?.key ?? SPACE_UNKNOWN}>
           {spaces.map((space) => (
             <option key={space.key} value={space.key}>
               {space.name}
@@ -173,11 +177,12 @@ export function EnquiryForm({
         {errorText("date")}
       </div>
       <div className={wrap}>
-        <label htmlFor="enquiry-people">{tr("people")}</label>
+        <label htmlFor="enquiry-people">
+          {tr("people")} {tr("optional")}
+        </label>
         <input
           {...field("people")}
           type="number"
-          required
           min={1}
           step={1}
           inputMode="numeric"
@@ -187,10 +192,11 @@ export function EnquiryForm({
         {errorText("people")}
       </div>
       <div className={`${wrap} lg:col-span-2`}>
-        <label htmlFor="enquiry-message">{tr("message")}</label>
+        <label htmlFor="enquiry-message">
+          {tr("message")} {tr("optional")}
+        </label>
         <textarea
           {...field("message")}
-          required
           rows={4}
           maxLength={5000}
           defaultValue={values.message}

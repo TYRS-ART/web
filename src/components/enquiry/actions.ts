@@ -44,7 +44,7 @@ export async function sendEnquiry(_prev: EnquiryState, formData: FormData): Prom
   if (formData.get("website")) return { status: "success" };
 
   const errors: EnquiryState["errors"] = {};
-  for (const field of ["name", "email", "phone", "space", "type", "date", "people", "message"] as const) {
+  for (const field of ["email", "type", "date"] as const) {
     if (!values[field]) errors[field] = "required";
   }
   for (const [field, max] of Object.entries(MAX_LENGTH) as [EnquiryField, number][]) {
@@ -63,8 +63,8 @@ export async function sendEnquiry(_prev: EnquiryState, formData: FormData): Prom
     else if (values.date < today) errors.date = "past";
   }
 
-  const people = Number(values.people);
-  if (values.people && !(Number.isInteger(people) && people >= 1 && people <= 100_000)) errors.people = "people";
+  const people = values.people ? Number(values.people) : undefined;
+  if (people !== undefined && !(Number.isInteger(people) && people >= 1 && people <= 100_000)) errors.people = "people";
 
   if (values.type && !EVENT_TYPES.includes(values.type as EventType)) errors.type = "choice";
   if (values.consent !== "yes") errors.consent = "consent";
