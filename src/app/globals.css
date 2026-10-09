@@ -136,6 +136,14 @@
   background-image: linear-gradient(115deg, var(--cat-umeni-tint) 0%, var(--cat-umeni-shade) 45%, var(--cat-umeni-tint) 100%);
   animation-duration: 11s;
 }
+/* Homepage hero pills: same drift, a little more pronounced. Lighter tint,
+   deeper shade and a quicker cycle, so the cloud reads on the big pills. */
+.pill.cl { animation-duration: 7s; }
+.pill.cl-hudba { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-hudba-tint), white 35%) 0%, color-mix(in oklab, var(--cat-hudba-shade), black 8%) 45%, color-mix(in oklab, var(--cat-hudba-tint), white 35%) 100%); }
+.pill.cl-divadlo { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-divadlo-tint), white 35%) 0%, color-mix(in oklab, var(--cat-divadlo-shade), black 8%) 45%, color-mix(in oklab, var(--cat-divadlo-tint), white 35%) 100%); animation-duration: 8.5s; }
+.pill.cl-tanec { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-tanec-tint), white 35%) 0%, color-mix(in oklab, var(--cat-tanec-shade), black 8%) 45%, color-mix(in oklab, var(--cat-tanec-tint), white 35%) 100%); animation-duration: 6.5s; }
+.pill.cl-lekce { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-lekce-tint), white 35%) 0%, color-mix(in oklab, var(--cat-lekce-shade), black 8%) 45%, color-mix(in oklab, var(--cat-lekce-tint), white 35%) 100%); animation-duration: 9s; }
+.pill.cl-umeni { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-umeni-tint), white 35%) 0%, color-mix(in oklab, var(--cat-umeni-shade), black 8%) 45%, color-mix(in oklab, var(--cat-umeni-tint), white 35%) 100%); animation-duration: 8s; }
 @keyframes tyrs-drift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 30%; }
