@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/program"
 }
 
 const categoryChip =
-  "chip cl cat-edge inline-flex min-h-12 shrink-0 cursor-pointer items-center rounded-full px-[18px] text-base leading-5 font-medium whitespace-nowrap transition-opacity lg:min-h-14 lg:px-6 lg:text-lg lg:leading-6 aria-pressed:after:ml-2.5 aria-pressed:after:font-bold aria-pressed:after:content-['✓']";
+  "chip cl cat-edge wake inline-flex min-h-12 shrink-0 cursor-pointer items-center rounded-full px-[18px] text-base leading-5 font-medium whitespace-nowrap transition-opacity lg:min-h-14 lg:px-6 lg:text-lg lg:leading-6 aria-pressed:after:ml-2.5 aria-pressed:after:font-bold aria-pressed:after:content-['✓']";
 
 export default async function ProgramPage({ params, searchParams }: PageProps<"/[locale]/program">) {
   const locale = (await params).locale as Locale;

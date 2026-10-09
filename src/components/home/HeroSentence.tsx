@@ -8,7 +8,7 @@ import type { HOME_QUERY_RESULT } from "@/sanity/types";
 type Blocks = NonNullable<NonNullable<NonNullable<HOME_QUERY_RESULT["settings"]>["heroSentence"]>["cs"]>;
 
 const pill =
-  "pill cl cat-edge relative -top-[0.06em] mx-[3px] inline-flex items-center rounded-full border-2 px-4 py-[3px] align-middle text-[0.72em] leading-none no-underline lg:mx-1.5 lg:border-3 lg:px-8 lg:py-1.5";
+  "pill cl cat-edge wake relative -top-[0.06em] mx-[3px] inline-flex items-center rounded-full border-2 px-4 py-[3px] align-middle text-[0.72em] leading-none no-underline lg:mx-1.5 lg:border-3 lg:px-8 lg:py-1.5";
 
 const components: PortableTextComponents = {
   block: { normal: ({ children }) => <>{children} </> },
