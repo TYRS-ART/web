@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import NextLink from "@/components/ui/NextLink";
 
 import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";

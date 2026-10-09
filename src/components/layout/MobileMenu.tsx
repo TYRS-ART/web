@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import NextLink from "next/link";
+import NextLink from "@/components/ui/NextLink";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 

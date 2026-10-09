@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { CourseFilters } from "@/components/courses/CourseFilters";
@@ -15,7 +16,7 @@ import type { Locale } from "@/i18n/locales";
 import { getPathname, Link } from "@/i18n/navigation";
 import { addDays, formatMonthKey, pragueDay } from "@/lib/dates";
 import { t, tSlug } from "@/lib/localize";
-import { calendarDays, dayAnchor, shiftMonth } from "@/lib/program";
+import { calendarDays, dayAnchor, monthInRange, shiftMonth } from "@/lib/program";
 import {
   formatDay,
   lessonsBetween,
@@ -58,6 +59,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
   const view = parseView(query.zobrazeni);
   const monthKey = parseMonth(query.mesic, today);
   const filters = parseFilters(query.filtr);
+  if (!monthInRange(monthKey, today)) notFound();
   const gridDays = calendarDays(monthKey);
 
   const [courses, tr] = await Promise.all([
@@ -96,6 +98,10 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
     count: monthLessons.length,
   });
   const nextLabel = formatMonthKey(shiftMonth(monthKey, 1), locale);
+  const canShift = (delta: number) => monthInRange(shiftMonth(monthKey, delta), today);
+  const prevClass =
+    "inline-flex size-12 items-center justify-center rounded-full border-2 border-black bg-white text-xl no-underline lg:size-16 lg:text-2xl";
+  const nextClass = "inline-flex size-12 items-center justify-center rounded-full bg-black text-xl text-white no-underline lg:hidden";
   const words = { today: tr("common.today"), tomorrow: tr("common.tomorrow") };
   const lessonDays = new Set(monthLessons.map((l) => l.day));
   const circles: DayInfo[] = gridDays.map((day) => ({
@@ -120,25 +126,44 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
             <span className="text-xl leading-6 text-muted max-lg:hidden" aria-live="polite">
               {headLabel}
             </span>
-            <Link
-              href={hrefFor({ month: shiftMonth(monthKey, -1) })}
-              scroll={false}
-              aria-label={tr("courses.prevMonth")}
-              className="inline-flex size-12 items-center justify-center rounded-full border-2 border-black bg-white text-xl no-underline hover:bg-black hover:text-white lg:size-16 lg:text-2xl"
-            >
-              <span aria-hidden="true">←</span>
-            </Link>
-            <Link
-              href={hrefFor({ month: shiftMonth(monthKey, 1) })}
-              scroll={false}
-              aria-label={`${tr("courses.nextMonth")}: ${nextLabel}`}
-              className="inline-flex size-12 items-center justify-center rounded-full bg-black text-xl text-white no-underline hover:bg-green lg:hidden"
-            >
-              <span aria-hidden="true">→</span>
-            </Link>
-            <Link href={hrefFor({ month: shiftMonth(monthKey, 1) })} scroll={false} className={`${buttonClass("primary", "lg")} max-lg:hidden`}>
-              {nextLabel} →
-            </Link>
+            {canShift(-1) ? (
+              <Link
+                href={hrefFor({ month: shiftMonth(monthKey, -1) })}
+                scroll={false}
+                aria-label={tr("courses.prevMonth")}
+                className={`${prevClass} hover:bg-black hover:text-white`}
+              >
+                <span aria-hidden="true">←</span>
+              </Link>
+            ) : (
+              <span aria-hidden="true" className={`${prevClass} opacity-30`}>
+                ←
+              </span>
+            )}
+            {canShift(1) ? (
+              <>
+                <Link
+                  href={hrefFor({ month: shiftMonth(monthKey, 1) })}
+                  scroll={false}
+                  aria-label={`${tr("courses.nextMonth")}: ${nextLabel}`}
+                  className={`${nextClass} hover:bg-green`}
+                >
+                  <span aria-hidden="true">→</span>
+                </Link>
+                <Link href={hrefFor({ month: shiftMonth(monthKey, 1) })} scroll={false} className={`${buttonClass("primary", "lg")} max-lg:hidden`}>
+                  {nextLabel} →
+                </Link>
+              </>
+            ) : (
+              <>
+                <span aria-hidden="true" className={`${nextClass} opacity-30`}>
+                  →
+                </span>
+                <span aria-hidden="true" className={`${buttonClass("primary", "lg")} pointer-events-none opacity-30 max-lg:hidden`}>
+                  {nextLabel} →
+                </span>
+              </>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-5 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-6">

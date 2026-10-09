@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import NextLink from "next/link";
+import NextLink from "@/components/ui/NextLink";
+import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { EventRow } from "@/components/events/EventRow";
@@ -21,6 +22,7 @@ import {
   dayAnchor,
   isOver,
   matchesCategories,
+  monthInRange,
   monthRange,
   parseProgramState,
   programQuery,
@@ -58,6 +60,7 @@ export default async function ProgramPage({ params, searchParams }: PageProps<"/
   const { now, today } = roundedNow();
   const currentMonth = today.slice(0, 7);
   const monthKey = state.month ?? currentMonth;
+  if (!monthInRange(monthKey, today)) notFound();
   const isCurrentMonth = monthKey === currentMonth;
   const weekStart = startOfWeek(today);
 
@@ -117,6 +120,11 @@ export default async function ProgramPage({ params, searchParams }: PageProps<"/
 
   const summary = { month: monthLower, year, count: shown.length };
   const monthNavState = (delta: number): ProgramState => ({ ...state, month: shiftMonth(monthKey, delta) });
+  const canShift = (delta: number) => monthInRange(shiftMonth(monthKey, delta), today);
+  const prevClass =
+    "inline-flex size-12 items-center justify-center rounded-full border-2 border-black bg-white text-xl no-underline lg:size-16 lg:text-2xl";
+  const nextClass =
+    "inline-flex size-12 items-center justify-center rounded-full bg-black text-xl text-white no-underline lg:size-auto lg:min-h-16 lg:px-8 lg:text-xl lg:leading-6 lg:font-medium";
 
   return (
     <>
@@ -128,23 +136,27 @@ export default async function ProgramPage({ params, searchParams }: PageProps<"/
           </div>
           <nav aria-label={tr("program.monthNav")} className="flex items-center gap-1.5 pb-1.5 lg:gap-6 lg:pb-5">
             <span className="hidden text-xl leading-6 text-muted lg:inline">{tr("program.summary", summary)}</span>
-            <NextLink
-              href={href(monthNavState(-1))}
-              aria-label={tr("program.prevMonth")}
-              className="inline-flex size-12 items-center justify-center rounded-full border-2 border-black bg-white text-xl no-underline hover:bg-black hover:text-white lg:size-16 lg:text-2xl"
-            >
-              ←
-            </NextLink>
-            <NextLink
-              href={href(monthNavState(1))}
-              aria-label={`${tr("program.nextMonth")}: ${nextName}`}
-              className="inline-flex size-12 items-center justify-center rounded-full bg-black text-xl text-white no-underline hover:bg-green lg:size-auto lg:min-h-16 lg:px-8 lg:text-xl lg:leading-6 lg:font-medium"
-            >
-              <span aria-hidden="true" className="hidden lg:inline">
-                {nextName}&nbsp;
+            {canShift(-1) ? (
+              <NextLink href={href(monthNavState(-1))} aria-label={tr("program.prevMonth")} className={`${prevClass} hover:bg-black hover:text-white`}>
+                ←
+              </NextLink>
+            ) : (
+              <span aria-hidden="true" className={`${prevClass} opacity-30`}>
+                ←
               </span>
-              →
-            </NextLink>
+            )}
+            {canShift(1) ? (
+              <NextLink href={href(monthNavState(1))} aria-label={`${tr("program.nextMonth")}: ${nextName}`} className={`${nextClass} hover:bg-green`}>
+                <span aria-hidden="true" className="hidden lg:inline">
+                  {nextName}&nbsp;
+                </span>
+                →
+              </NextLink>
+            ) : (
+              <span aria-hidden="true" className={`${nextClass} opacity-30`}>
+                <span className="hidden lg:inline">{nextName}&nbsp;</span>→
+              </span>
+            )}
           </nav>
         </div>
 
