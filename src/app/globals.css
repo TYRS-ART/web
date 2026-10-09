@@ -149,13 +149,11 @@
   100% { background-position: 30% 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cl, .cat-edge::before { animation: none; }
+  .cl, .wake::before { animation: none; }
 }
 
 /* Selected: 3px border in the category's darker shade. */
 .cat-edge {
-  position: relative;
-  isolation: isolate;
   border: 3px solid transparent;
   transition: border-color 120ms linear;
 }
@@ -167,8 +165,13 @@
 
 /* Hover: the colour wakes up. A more vivid, faster-drifting copy of the
    chip's own gradient fades in behind the label (a fade, so the slow drift
-   never jumps). --edge-w matches the border so the copy covers it too. */
-.cat-edge::before {
+   never jumps). Used on every clickable category chip and filter. --edge-w
+   matches the chip's border so the copy covers it too. */
+.wake {
+  position: relative;
+  isolation: isolate;
+}
+.wake::before {
   content: "";
   position: absolute;
   inset: calc(-1 * var(--edge-w, 3px));
@@ -182,7 +185,7 @@
   transition: opacity 350ms ease;
   pointer-events: none;
 }
-:is(a, button).cat-edge:hover::before { opacity: 1; }
+.wake:hover::before { opacity: 1; }
 
 /* ------------------------------------------------------ Feathered photos */
 

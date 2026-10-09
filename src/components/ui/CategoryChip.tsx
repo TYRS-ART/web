@@ -49,7 +49,7 @@ export function CategoryChipLink({
   return (
     <Link
       href={href}
-      className={`chip cl cl-${category} cat-edge inline-flex items-center rounded-full font-medium whitespace-nowrap no-underline ${sizes[size]} ${className}`}
+      className={`chip cl cl-${category} cat-edge wake inline-flex items-center rounded-full font-medium whitespace-nowrap no-underline ${sizes[size]} ${className}`}
     >
       {categoryLabel(category, locale)}
     </Link>

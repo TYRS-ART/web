@@ -6,11 +6,11 @@ import { Link } from "@/i18n/navigation";
 import { audienceTags, courseFocuses } from "@/lib/taxonomy";
 import type { FilterId } from "@/lib/timetable";
 
-/** Category chip (drifting gradient; Pohyb is plain butter) + darker ring when selected. */
+/** Category chip (drifting gradient; Pohyb is plain butter) that wakes up on hover, + darker ring when selected. */
 const focusChip: Record<string, string> = {
-  tanec: "cl cl-tanec border-transparent! hover:shadow-[0_0_0_3px_var(--color-tanec-edge)] aria-[current]:shadow-[0_0_0_3px_var(--color-tanec-edge)]",
-  hudba: "cl cl-hudba border-transparent! hover:shadow-[0_0_0_3px_var(--color-hudba-edge)] aria-[current]:shadow-[0_0_0_3px_var(--color-hudba-edge)]",
-  pohyb: "bg-pohyb! border-pohyb! hover:shadow-[0_0_0_3px_#e0c23a] aria-[current]:shadow-[0_0_0_3px_#e0c23a]",
+  tanec: "cl cl-tanec wake [--edge-w:2px] border-transparent! aria-[current]:shadow-[0_0_0_3px_var(--color-tanec-edge)]",
+  hudba: "cl cl-hudba wake [--edge-w:2px] border-transparent! aria-[current]:shadow-[0_0_0_3px_var(--color-hudba-edge)]",
+  pohyb: "wake [--edge-w:2px] bg-pohyb! border-pohyb! aria-[current]:shadow-[0_0_0_3px_#e0c23a]",
 };
 
 /**
