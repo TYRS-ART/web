@@ -47,7 +47,7 @@ export async function CourseFilters({
             scroll={false}
             aria-current={on ? "true" : undefined}
             className={`${filterChipClass} ${focusChip[focus.id]} text-black! transition-[box-shadow,opacity] duration-150 ${
-              anyFocus && !on ? "opacity-45" : ""
+              anyFocus && !on ? "opacity-45 hover:opacity-100" : ""
             }`}
           >
             {focus[locale]}
