@@ -17,7 +17,7 @@ export async function Header({ data, newsletterHref }: { data: LAYOUT_QUERY_RESU
   ]);
   return (
     <header className="relative z-20 flex items-center justify-between gap-6 px-5 py-4 lg:px-16 lg:py-7">
-      <Link href="/" aria-label={tr("homeLabel")} className="inline-flex">
+      <Link href="/" aria-label={tr("homeLabel")} className="inline-flex shrink-0">
         <Image
           src="/logos/logo-primary.svg"
           alt="TYRŠ"
@@ -28,7 +28,7 @@ export async function Header({ data, newsletterHref }: { data: LAYOUT_QUERY_RESU
         />
       </Link>
 
-      <nav aria-label={tr("mainMenu")} className="hidden items-center gap-11 lg:flex">
+      <nav aria-label={tr("mainMenu")} className="hidden items-center gap-7 lg:flex xl:gap-11">
         <NavLink href="/program" label={tr("program")} match={["/program", "/kurzy"]} />
         <NavLink href="/venue" label={tr("venue")} />
         <NavLink href="/pronajem" label={tr("rental")} />

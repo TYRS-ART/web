@@ -155,7 +155,7 @@ export function NowPlaying({
             <span className="text-xs leading-[14px] text-muted">
               {tr("label", { month: `${month} ${playlist.month.slice(2, 4)}` })}
             </span>
-            <span className="max-w-56 truncate text-base leading-5 font-medium">{teaser}</span>
+            <span className="max-w-36 truncate text-base leading-5 font-medium xl:max-w-56">{teaser}</span>
           </button>
         </div>
       )}
