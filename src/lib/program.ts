@@ -59,6 +59,18 @@ export function shiftMonth(monthKey: string, delta: number): string {
   return `${Math.floor(index / 12)}-${String((index % 12) + 1).padStart(2, "0")}`;
 }
 
+/**
+ * How far the Program and Courses calendars page back and ahead. Without a limit every
+ * month links to another one, and crawlers followed them into thousands of server renders.
+ */
+const MONTH_SPAN = 12;
+
+/** True when a month is within MONTH_SPAN of today's month; others are a 404. */
+export function monthInRange(monthKey: string, today: string): boolean {
+  const current = today.slice(0, 7);
+  return monthKey >= shiftMonth(current, -MONTH_SPAN) && monthKey <= shiftMonth(current, MONTH_SPAN);
+}
+
 /** Prague-midnight bounds of a month as ISO strings, for GROQ ranges. */
 export function monthRange(monthKey: string) {
   return {
