@@ -130,13 +130,13 @@ export function NowPlaying({
             togglePlaylist();
             setOpen(true);
           }}
-          className="inline-flex cursor-pointer rounded-full border-0 bg-white p-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.12)]"
+          className="inline-flex cursor-pointer rounded-full border-2 border-black bg-transparent p-px"
         >
           <CoverDisc src={cover} size="size-[38px]" icon={10} playing={playing} />
         </button>
       ) : (
         // Desktop: the disc plays/pauses; the rest of the capsule opens the card.
-        <div className="inline-flex items-center gap-3 rounded-full bg-white py-1.5 pr-5 pl-1.5 text-black shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-shadow duration-200 hover:shadow-[0_4px_14px_rgba(0,0,0,0.12)]">
+        <div className="group inline-flex items-center gap-3 rounded-full border-2 border-black py-1 pr-[18px] pl-1 text-black transition-colors duration-150 hover:bg-black hover:text-white">
           <button
             type="button"
             aria-label={discLabel}
@@ -150,9 +150,9 @@ export function NowPlaying({
             aria-label={tr("open")}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex cursor-pointer flex-col border-0 bg-transparent p-0 text-left text-black"
+            className="flex cursor-pointer flex-col border-0 bg-transparent p-0 text-left text-black transition-colors duration-150 group-hover:text-white"
           >
-            <span className="text-xs leading-[14px] text-muted">
+            <span className="text-xs leading-[14px] text-muted transition-colors duration-150 group-hover:text-white/70">
               {tr("label", { month: `${month} ${playlist.month.slice(2, 4)}` })}
             </span>
             <span className="max-w-56 truncate text-base leading-5 font-medium">{teaser}</span>
