@@ -176,7 +176,7 @@
   border-radius: inherit;
   background: inherit;
   background-size: 300% 300%;
-  filter: saturate(1.6) brightness(1.02);
+  filter: saturate(1.4);
   opacity: 0;
   animation: tyrs-drift 2.5s ease-in-out infinite alternate;
   transition: opacity 350ms ease;
