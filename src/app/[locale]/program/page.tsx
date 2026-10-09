@@ -123,7 +123,7 @@ export default async function ProgramPage({ params, searchParams }: PageProps<"/
       <section className="flex flex-col gap-5 px-5 pt-8 lg:gap-8 lg:px-16 lg:pt-16">
         <div className="flex items-end justify-between gap-6">
           <div className="flex flex-col gap-1.5">
-            <h1 className="m-0 font-display text-[88px] leading-[84px] lg:text-[200px] lg:leading-[180px]">{monthName}</h1>
+            <h1 className="m-0 font-display text-[88px] leading-[84px] tracking-[-0.01em] lg:text-[200px] lg:leading-[180px]">{monthName}</h1>
             <span className="text-[15px] leading-5 text-muted lg:hidden">{tr("program.summaryShort", summary)}</span>
           </div>
           <nav aria-label={tr("program.monthNav")} className="flex items-center gap-1.5 pb-1.5 lg:gap-6 lg:pb-5">
