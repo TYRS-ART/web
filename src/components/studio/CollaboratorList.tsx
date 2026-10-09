@@ -17,7 +17,7 @@ const initials = (name: string) =>
 
 /**
  * Engineers and producers, one row each like the programme list: a small photo
- * (feathered, never cut into a shape), the name in the display face, who they've
+ * (feathered into the card like the homepage tiles, never cut into a shape), the name in the display face, who they've
  * worked with (no label, it reads as credits) and a link to their site. Without photos the column is left out.
  */
 export function CollaboratorList({
@@ -42,7 +42,12 @@ export function CollaboratorList({
         >
           <span className="flex items-center gap-4 lg:gap-6">
             {withPhotos && (
-              <span className="relative block h-[68px] w-14 shrink-0 overflow-hidden rounded-[10px] bg-sunken lg:h-[100px] lg:w-20 lg:rounded-[12px]">
+              // Like the homepage tiles, a photo melts straight into the white card; only the initials tile gets the grey ground.
+              <span
+                className={`relative block h-[68px] w-14 shrink-0 overflow-hidden rounded-[10px] lg:h-[100px] lg:w-20 lg:rounded-[12px] ${
+                  person.photo?.asset ? "" : "bg-sunken"
+                }`}
+              >
                 {person.photo?.asset ? (
                   <SanityImage
                     image={person.photo}
