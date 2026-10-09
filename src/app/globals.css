@@ -149,19 +149,40 @@
   100% { background-position: 30% 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cl { animation: none; }
+  .cl, .cat-edge::before { animation: none; }
 }
 
-/* Hover and selected: 3px border in the category's darker shade. */
+/* Selected: 3px border in the category's darker shade. */
 .cat-edge {
+  position: relative;
+  isolation: isolate;
   border: 3px solid transparent;
   transition: border-color 120ms linear;
 }
-:is(a, button).cat-edge.cl-hudba:is(:hover, [aria-pressed="true"]) { border-color: var(--color-hudba-edge); }
-:is(a, button).cat-edge.cl-divadlo:is(:hover, [aria-pressed="true"]) { border-color: var(--color-divadlo-edge); }
-:is(a, button).cat-edge.cl-tanec:is(:hover, [aria-pressed="true"]) { border-color: var(--color-tanec-edge); }
-:is(a, button).cat-edge.cl-lekce:is(:hover, [aria-pressed="true"]) { border-color: var(--color-lekce-edge); }
-:is(a, button).cat-edge.cl-umeni:is(:hover, [aria-pressed="true"]) { border-color: var(--color-umeni-edge); }
+:is(a, button).cat-edge.cl-hudba[aria-pressed="true"] { border-color: var(--color-hudba-edge); }
+:is(a, button).cat-edge.cl-divadlo[aria-pressed="true"] { border-color: var(--color-divadlo-edge); }
+:is(a, button).cat-edge.cl-tanec[aria-pressed="true"] { border-color: var(--color-tanec-edge); }
+:is(a, button).cat-edge.cl-lekce[aria-pressed="true"] { border-color: var(--color-lekce-edge); }
+:is(a, button).cat-edge.cl-umeni[aria-pressed="true"] { border-color: var(--color-umeni-edge); }
+
+/* Hover: the colour wakes up. A more vivid, faster-drifting copy of the
+   chip's own gradient fades in behind the label (a fade, so the slow drift
+   never jumps). --edge-w matches the border so the copy covers it too. */
+.cat-edge::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--edge-w, 3px));
+  z-index: -1;
+  border-radius: inherit;
+  background: inherit;
+  background-size: 300% 300%;
+  filter: saturate(1.6) brightness(1.02);
+  opacity: 0;
+  animation: tyrs-drift 2.5s ease-in-out infinite alternate;
+  transition: opacity 350ms ease;
+  pointer-events: none;
+}
+:is(a, button).cat-edge:hover::before { opacity: 1; }
 
 /* ------------------------------------------------------ Feathered photos */
 
