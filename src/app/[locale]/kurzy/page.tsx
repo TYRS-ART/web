@@ -163,19 +163,19 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-5 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-6">
-          <ProgramTabs active="courses" />
-          <div className="flex flex-col gap-3 lg:flex-row lg:flex-wrap lg:items-center lg:gap-6">
-            <CourseFilters locale={locale} filters={filters} hrefFor={(f) => hrefFor({ filters: f })} />
-            <nav aria-label={tr("courses.view")} className="flex gap-2">
-              <Link href={hrefFor({ view: "kalendar" })} scroll={false} className={filterChipClass} aria-current={view === "kalendar" ? "true" : undefined}>
-                {tr("courses.viewCalendar")}
-              </Link>
-              <Link href={hrefFor({ view: "seznam" })} scroll={false} className={filterChipClass} aria-current={view === "seznam" ? "true" : undefined}>
-                {tr("courses.viewList")}
-              </Link>
-            </nav>
-          </div>
+
+        <ProgramTabs active="courses" />
+
+        <div className="flex flex-col gap-3 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-6">
+          <CourseFilters locale={locale} filters={filters} hrefFor={(f) => hrefFor({ filters: f })} />
+          <nav aria-label={tr("courses.view")} className="flex gap-2">
+            <Link href={hrefFor({ view: "kalendar" })} scroll={false} className={filterChipClass} aria-current={view === "kalendar" ? "true" : undefined}>
+              {tr("courses.viewCalendar")}
+            </Link>
+            <Link href={hrefFor({ view: "seznam" })} scroll={false} className={filterChipClass} aria-current={view === "seznam" ? "true" : undefined}>
+              {tr("courses.viewList")}
+            </Link>
+          </nav>
         </div>
       </section>
 
