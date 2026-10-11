@@ -2,7 +2,7 @@ import type { Locale } from "@/i18n/locales";
 
 import { minutes, shortTime, weekdayShort, type Slot } from "./courses";
 import { addDays, formatTime, pragueDay } from "./dates";
-import { audienceTags, courseFocuses } from "./taxonomy";
+import { courseFocuses } from "./taxonomy";
 
 /* ------------------------------------------------------------------ Weeks */
 
@@ -66,25 +66,18 @@ export function parseMonth(value: string | string[] | undefined, today: string):
 
 /* ---------------------------------------------------------------- Filters */
 
-export const filterIds = [...courseFocuses.map((f) => f.id), "pro-deti", "zacatecnici"] as const;
+export const filterIds = courseFocuses.map((f) => f.id);
 export type FilterId = (typeof filterIds)[number];
 
-/** `?filtr=tanec,pro-deti` → ["tanec", "pro-deti"] (unknown values dropped, in canonical order). */
+/** `?filtr=tanec,hudba` → ["tanec", "hudba"] (unknown values dropped, in canonical order). */
 export function parseFilters(value: string | string[] | undefined): FilterId[] {
   const raw = (Array.isArray(value) ? value.join(",") : (value ?? "")).split(",");
   return filterIds.filter((id) => raw.includes(id));
 }
 
-const isFocus = (id: string) => courseFocuses.some((f) => f.id === id);
-const isAudience = (id: string) => audienceTags.some((a) => a.id === id);
-
-/** Focus filters are alternatives, audience filters too; the two groups narrow each other. */
-export function matchesFilters(course: { focus: string | null; audienceTags: string[] | null }, filters: FilterId[]) {
-  const focuses = filters.filter(isFocus);
-  const audiences = filters.filter(isAudience);
-  if (focuses.length > 0 && !focuses.includes(course.focus as FilterId)) return false;
-  if (audiences.length > 0 && !audiences.some((a) => course.audienceTags?.includes(a))) return false;
-  return true;
+/** Focus filters are alternatives: a course matches when its focus is one of them. */
+export function matchesFilters(course: { focus: string | null }, filters: FilterId[]) {
+  return filters.length === 0 || filters.includes(course.focus as FilterId);
 }
 
 /* ---------------------------------------------------------------- Lessons */

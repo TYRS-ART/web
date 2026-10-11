@@ -20,6 +20,6 @@ export async function ProgramTabs({ active }: { active: "events" | "courses" }) 
   );
 }
 
-/** Black/white outline filter chip ("Vše", "Kalendář", "Seznam", "Pro děti"…). */
+/** Black/white outline filter chip ("Vše", "Kalendář", "Seznam"). */
 export const filterChipClass =
   "inline-flex min-h-12 cursor-pointer items-center rounded-full border-2 border-black bg-white px-[18px] text-base leading-5 font-medium whitespace-nowrap text-black no-underline transition-opacity lg:min-h-14 lg:px-6 lg:text-lg lg:leading-6 aria-pressed:bg-black aria-pressed:text-white aria-[current]:bg-black aria-[current]:text-white";

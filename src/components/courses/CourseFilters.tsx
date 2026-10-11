@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { filterChipClass } from "@/components/program/ProgramTabs";
 import type { Locale } from "@/i18n/locales";
 import { Link } from "@/i18n/navigation";
-import { audienceTags, courseFocuses } from "@/lib/taxonomy";
+import { courseFocuses } from "@/lib/taxonomy";
 import type { FilterId } from "@/lib/timetable";
 
 /** Category chip (drifting gradient; Pohyb is plain butter) that wakes up on hover, + darker ring when selected. */
@@ -14,7 +14,7 @@ const focusChip: Record<string, string> = {
 };
 
 /**
- * Vše / Tanec / Hudba / Pohyb / Pro děti / Začátečníci. Plain links that toggle the
+ * Vše / Tanec / Hudba / Pohyb. Plain links that toggle the
  * `?filtr=` value, so filtered views are shareable and the back button works.
  */
 export async function CourseFilters({
@@ -59,19 +59,6 @@ export async function CourseFilters({
           </Link>
         );
       })}
-      {audienceTags
-        .filter((tag) => tag.id !== "pokrocili")
-        .map((tag) => (
-          <Link
-            key={tag.id}
-            href={hrefFor(toggle(tag.id))}
-            scroll={false}
-            className={filterChipClass}
-            aria-current={filters.includes(tag.id) ? "true" : undefined}
-          >
-            {tag[locale]}
-          </Link>
-        ))}
     </nav>
   );
 }
