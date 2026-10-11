@@ -135,7 +135,6 @@ export default async function ProgramPage({ params, searchParams }: PageProps<"/
             <span className="text-[15px] leading-5 text-muted lg:hidden">{tr("program.summaryShort", summary)}</span>
           </div>
           <nav aria-label={tr("program.monthNav")} className="flex items-center gap-1.5 pb-1.5 lg:gap-6 lg:pb-5">
-            <span className="hidden text-xl leading-6 text-muted lg:inline">{tr("program.summary", summary)}</span>
             {canShift(-1) ? (
               <NextLink href={href(monthNavState(-1))} aria-label={tr("program.prevMonth")} className={`${prevClass} hover:bg-black hover:text-white`}>
                 ←

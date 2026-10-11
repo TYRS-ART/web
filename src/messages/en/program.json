@@ -2,7 +2,6 @@
   "program": {
     "metaTitle": "Programme",
     "metaDescription": "Concerts, theatre, dance and classes at TYRŠ in Malá Strana, Prague. The whole month at a glance.",
-    "summary": "Programme · {month} {year} · {count, plural, one {# event} other {# events}}",
     "summaryShort": "Programme · {year} · {count, plural, one {# event} other {# events}}",
     "monthNav": "Months",
     "prevMonth": "Previous month",
