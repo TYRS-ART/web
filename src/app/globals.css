@@ -84,11 +84,11 @@
 
 /* -------------------------------------------------- Category colour + drift */
 
-/* From docs/design-system (components.css .tyrs-cat + tokens.json): each category
-   chip is a 115° tint → shade → tint gradient, three times its size, drifting
-   slowly so it reads as a soft cloud within one hue. Durations differ so the
-   chips never move in sync. Only background-position animates; the base colour
-   stays as the fallback and the text stays black. */
+/* Colours from docs/design-system (tokens.json). Each category chip is a soft
+   ripple within its own hue: tint and shade rings that spread slowly from the
+   centre to every edge, like a drop in water. Durations differ so the chips
+   never move in sync. Only the ring offset (--ripple) animates; the base
+   colour stays as the fallback and the text stays black. */
 :root {
   --cat-hudba: #8fa8ee;
   --cat-hudba-tint: #b6c6f5;
@@ -107,46 +107,61 @@
   --cat-umeni-tint: #dfcff7;
   --cat-umeni-shade: #b194e6;
 }
+@property --ripple {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
 .cl {
   color: var(--color-black);
-  background-size: 300% 300%;
-  animation: tyrs-drift 10s ease-in-out infinite alternate;
+  background-color: var(--cl-base);
+  animation: tyrs-ripple 10s linear infinite;
+}
+/* The hover copy (.wake::before) repeats the image so it runs its own --ripple. */
+.cl,
+.cl.wake::before {
+  --cl-ring: color-mix(in oklab, var(--cl-tint), white var(--cl-lift, 0%));
+  background-image: repeating-radial-gradient(
+    ellipse farthest-corner at 50% 50%,
+    var(--cl-shade) var(--ripple),
+    var(--cl-ring) calc(var(--ripple) + 50%),
+    var(--cl-shade) calc(var(--ripple) + 100%)
+  );
 }
 .cl-hudba {
-  background-color: var(--cat-hudba);
-  background-image: linear-gradient(115deg, var(--cat-hudba-tint) 0%, var(--cat-hudba-shade) 45%, var(--cat-hudba-tint) 100%);
+  --cl-base: var(--cat-hudba);
+  --cl-tint: var(--cat-hudba-tint);
+  --cl-shade: var(--cat-hudba-shade);
 }
 .cl-divadlo {
-  background-color: var(--cat-divadlo);
-  background-image: linear-gradient(115deg, var(--cat-divadlo-tint) 0%, var(--cat-divadlo-shade) 45%, var(--cat-divadlo-tint) 100%);
+  --cl-base: var(--cat-divadlo);
+  --cl-tint: var(--cat-divadlo-tint);
+  --cl-shade: var(--cat-divadlo-shade);
   animation-duration: 12s;
 }
 .cl-tanec {
-  background-color: var(--cat-tanec);
-  background-image: linear-gradient(115deg, var(--cat-tanec-tint) 0%, var(--cat-tanec-shade) 45%, var(--cat-tanec-tint) 100%);
+  --cl-base: var(--cat-tanec);
+  --cl-tint: var(--cat-tanec-tint);
+  --cl-shade: var(--cat-tanec-shade);
   animation-duration: 9s;
 }
 .cl-lekce {
-  background-color: var(--cat-lekce);
-  background-image: linear-gradient(115deg, var(--cat-lekce-tint) 0%, var(--cat-lekce-shade) 45%, var(--cat-lekce-tint) 100%);
+  --cl-base: var(--cat-lekce);
+  --cl-tint: var(--cat-lekce-tint);
+  --cl-shade: var(--cat-lekce-shade);
   animation-duration: 13s;
 }
 .cl-umeni {
-  background-color: var(--cat-umeni);
-  background-image: linear-gradient(115deg, var(--cat-umeni-tint) 0%, var(--cat-umeni-shade) 45%, var(--cat-umeni-tint) 100%);
+  --cl-base: var(--cat-umeni);
+  --cl-tint: var(--cat-umeni-tint);
+  --cl-shade: var(--cat-umeni-shade);
   animation-duration: 11s;
 }
-/* Homepage hero pills: same drift, a little more pronounced: a slightly
-   lighter tint, so the cloud reads on the big pills. */
-.pill.cl-hudba { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-hudba-tint), white 15%) 0%, var(--cat-hudba-shade) 45%, color-mix(in oklab, var(--cat-hudba-tint), white 15%) 100%); }
-.pill.cl-divadlo { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-divadlo-tint), white 15%) 0%, var(--cat-divadlo-shade) 45%, color-mix(in oklab, var(--cat-divadlo-tint), white 15%) 100%); }
-.pill.cl-tanec { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-tanec-tint), white 15%) 0%, var(--cat-tanec-shade) 45%, color-mix(in oklab, var(--cat-tanec-tint), white 15%) 100%); }
-.pill.cl-lekce { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-lekce-tint), white 15%) 0%, var(--cat-lekce-shade) 45%, color-mix(in oklab, var(--cat-lekce-tint), white 15%) 100%); }
-.pill.cl-umeni { background-image: linear-gradient(115deg, color-mix(in oklab, var(--cat-umeni-tint), white 15%) 0%, var(--cat-umeni-shade) 45%, color-mix(in oklab, var(--cat-umeni-tint), white 15%) 100%); }
-@keyframes tyrs-drift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 30%; }
-  100% { background-position: 30% 100%; }
+/* Homepage hero pills: same ripple, a little more pronounced: a slightly
+   lighter tint, so the rings read on the big pills. */
+.pill.cl { --cl-lift: 15%; }
+@keyframes tyrs-ripple {
+  to { --ripple: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cl, .wake::before { animation: none; }
@@ -163,8 +178,8 @@
 :is(a, button).cat-edge.cl-lekce[aria-pressed="true"] { border-color: var(--color-lekce-edge); }
 :is(a, button).cat-edge.cl-umeni[aria-pressed="true"] { border-color: var(--color-umeni-edge); }
 
-/* Hover: the colour wakes up. A more vivid, faster-drifting copy of the
-   chip's own gradient fades in behind the label (a fade, so the slow drift
+/* Hover: the colour wakes up. A more vivid, faster-rippling copy of the
+   chip's own gradient fades in behind the label (a fade, so the slow ripple
    never jumps). Used on every clickable category chip and filter. --edge-w
    matches the chip's border so the copy covers it too. */
 .wake {
@@ -178,10 +193,9 @@
   z-index: -1;
   border-radius: inherit;
   background: inherit;
-  background-size: 300% 300%;
   filter: saturate(1.4);
   opacity: 0;
-  animation: tyrs-drift 2.5s ease-in-out infinite alternate;
+  animation: tyrs-ripple 2.5s linear infinite;
   transition: opacity 350ms ease;
   pointer-events: none;
 }
