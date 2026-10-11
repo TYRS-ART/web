@@ -123,9 +123,6 @@ export default async function CoursesPage({ params, searchParams }: PageProps<"/
             <span className="text-[15px] leading-5 text-muted lg:hidden">{headLabel}</span>
           </div>
           <div className="flex items-center gap-1.5 pb-1.5 lg:gap-6 lg:pb-5">
-            <span className="text-xl leading-6 text-muted max-lg:hidden" aria-live="polite">
-              {headLabel}
-            </span>
             {canShift(-1) ? (
               <Link
                 href={hrefFor({ month: shiftMonth(monthKey, -1) })}

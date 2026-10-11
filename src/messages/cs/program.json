@@ -2,7 +2,6 @@
   "program": {
     "metaTitle": "Program",
     "metaDescription": "Koncerty, divadlo, tanec a lekce v TYRŠi na Malé Straně. Program na celý měsíc.",
-    "summary": "Program · {month} {year} · {count, plural, one {# akce} few {# akce} other {# akcí}}",
     "summaryShort": "Program · {year} · {count, plural, one {# akce} few {# akce} other {# akcí}}",
     "monthNav": "Měsíce",
     "prevMonth": "Předchozí měsíc",
