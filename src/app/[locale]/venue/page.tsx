@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MapSection } from "@/components/MapSection";
 import { QuoteBand } from "@/components/ui/QuoteBand";
 import { FounderTiles } from "@/components/venue/FounderTiles";
+import { HousePhotos } from "@/components/venue/HousePhotos";
 import { InfoCards } from "@/components/venue/InfoCards";
 import { SectionNav } from "@/components/venue/SectionNav";
 import { VenueIntro } from "@/components/venue/VenueIntro";
@@ -38,11 +39,14 @@ export default async function VenuePage({ params }: PageProps<"/[locale]/venue">
   const statement = t(page?.statement, locale);
   const intro = t(page?.intro, locale) as PortableTextBlock[] | undefined;
   const founders = (page?.founders ?? []).filter((f) => f?._id && f.name);
+  const photos = (page?.photos ?? [])
+    .filter((photo) => photo.asset)
+    .map((photo) => ({ ...photo, alt: t(photo.alt, locale) ?? "" }));
   const motto = t(page?.motto, locale);
   const cards = page?.infoCards ?? [];
   const address = data.settings?.address;
 
-  const hasWho = Boolean(statement || intro?.length || founders.length);
+  const hasWho = Boolean(statement || intro?.length || founders.length || photos.length);
   const hasWhere = Boolean(address?.street);
   const hasHow = cards.some((card) => t(card.headline, locale) || t(card.body, locale));
 
@@ -69,6 +73,18 @@ export default async function VenuePage({ params }: PageProps<"/[locale]/venue">
             )}
             {intro && intro.length > 0 && <VenueIntro value={intro} />}
             <FounderTiles founders={founders} locale={locale} label={tr("founders")} />
+            <HousePhotos
+              photos={photos}
+              labels={{
+                title: tr("photos"),
+                all: tr("photosAll", { count: photos.length }),
+                open: photos.slice(0, 4).map((_, i) => tr("photoOpen", { n: i + 1, count: photos.length })),
+                more: tr("photosMore", { count: Math.max(photos.length - 4, 0) }),
+                close: tr("photoClose"),
+                prev: tr("photoPrev"),
+                next: tr("photoNext"),
+              }}
+            />
           </div>
         </section>
       )}
