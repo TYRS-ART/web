@@ -1,6 +1,7 @@
 import { InfoOutlineIcon } from "@sanity/icons/InfoOutline";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
+import { photoMember } from "../objects/image";
 import { infoCardMember } from "../objects/infoCard";
 
 export const venuePage = defineType({
@@ -17,6 +18,15 @@ export const venuePage = defineType({
       type: "array",
       of: [defineArrayMember({ type: "reference", to: [{ type: "person" }] })],
       validation: (rule) => rule.unique(),
+    }),
+    defineField({
+      name: "photos",
+      title: "Fotky domu",
+      description:
+        "Fotky zvenku i zevnitř. Přetáhni jich sem víc najednou, pořadí změníš přetažením. Na stránce se ukážou první čtyři, ostatní po kliknutí.",
+      type: "array",
+      of: [photoMember],
+      options: { layout: "grid" },
     }),
     defineField({ name: "motto", title: "Motto (žlutý pruh)", type: "localeString" }),
     defineField({

@@ -6,6 +6,13 @@
     "where": "Where",
     "how": "How",
     "founders": "Founders",
+    "photos": "The house in photos",
+    "photosAll": "{count, plural, one {View photo →} other {All # photos →}}",
+    "photoOpen": "Photo {n} of {count}",
+    "photosMore": "{count, plural, one {and # more} other {and # more}}",
+    "photoClose": "Close",
+    "photoPrev": "Previous photo",
+    "photoNext": "Next photo",
     "motto": "Motto",
     "address": "Address"
   }

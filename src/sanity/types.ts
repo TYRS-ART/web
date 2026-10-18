@@ -222,6 +222,15 @@ export type VenuePage = {
       _key: string;
     } & PersonReference
   >;
+  photos?: Array<{
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: LocaleString;
+    _type: "image";
+    _key: string;
+  }>;
   motto?: LocaleString;
   infoCards?: Array<{
     title?: LocaleString;
@@ -1264,7 +1273,7 @@ export type STUDIO_QUERY_RESULT = {
 
 // Source: src/sanity/queries/venue.ts
 // Variable: VENUE_QUERY
-// Query: {  "page": *[_type == "venuePage" && _id == "venuePage"][0]{    statement, intro, motto,    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },    infoCards[]{ _key, title, headline, body, link, highlight }  },  "settings": *[_type == "settings" && _id == "settings"][0]{    address, email  }}
+// Query: {  "page": *[_type == "venuePage" && _id == "venuePage"][0]{    statement, intro, motto,    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },    photos[]{ _key, asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions },    infoCards[]{ _key, title, headline, body, link, highlight }  },  "settings": *[_type == "settings" && _id == "settings"][0]{    address, email  }}
 export type VENUE_QUERY_RESULT = {
   page: {
     statement: LocaleText | null;
@@ -1282,6 +1291,15 @@ export type VENUE_QUERY_RESULT = {
         lqip: string | null;
         dimensions: SanityImageDimensions | null;
       } | null;
+    }> | null;
+    photos: Array<{
+      _key: string;
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocaleString | null;
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
     }> | null;
     infoCards: Array<{
       _key: string;
@@ -1323,7 +1341,7 @@ declare global {
     '{\n  "page": *[_type == "rentalPage" && _id == "rentalPage"][0]{\n    headline, intro, formIntro, quote,\n    included[]{ _key, title, body }\n  },\n  "spaces": *[_type == "space" && rentable == true] | order(order asc, name.cs asc){\n  _id, name, capacity, area, features,\n  photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions }\n},\n  "email": *[_type == "settings" && _id == "settings"][0].email\n}': RENTAL_QUERY_RESULT;
     '{\n  "events": *[_type == "event" && defined(slug.cs.current)]{ slug, _updatedAt },\n  "courses": *[_type == "course" && defined(slug.cs.current)]{ slug, _updatedAt }\n}': SITEMAP_QUERY_RESULT;
     '{\n  "page": *[_type == "studioPage" && _id == "studioPage"][0]{\n    headline, intro, motto,\n    collaborators[]{ _key, name, credits, url, photoCredit, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    offerCards[]{ _key, title, headline, body, link, highlight }\n  }\n}': STUDIO_QUERY_RESULT;
-    '{\n  "page": *[_type == "venuePage" && _id == "venuePage"][0]{\n    statement, intro, motto,\n    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    infoCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "settings": *[_type == "settings" && _id == "settings"][0]{\n    address, email\n  }\n}': VENUE_QUERY_RESULT;
+    '{\n  "page": *[_type == "venuePage" && _id == "venuePage"][0]{\n    statement, intro, motto,\n    "founders": founders[]->{ _id, name, role, photo{ asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions } },\n    photos[]{ _key, asset, hotspot, crop, alt, "lqip": asset->metadata.lqip, "dimensions": asset->metadata.dimensions },\n    infoCards[]{ _key, title, headline, body, link, highlight }\n  },\n  "settings": *[_type == "settings" && _id == "settings"][0]{\n    address, email\n  }\n}': VENUE_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

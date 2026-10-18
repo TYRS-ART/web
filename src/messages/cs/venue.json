@@ -6,6 +6,13 @@
     "where": "Kde",
     "how": "Jak",
     "founders": "Zakladatelé",
+    "photos": "Fotky domu",
+    "photosAll": "{count, plural, one {Zobrazit fotku →} few {Všechny # fotky →} other {Všech # fotek →}}",
+    "photoOpen": "Fotka {n} z {count}",
+    "photosMore": "{count, plural, one {a ještě # další} few {a ještě # další} other {a ještě # dalších}}",
+    "photoClose": "Zavřít",
+    "photoPrev": "Předchozí fotka",
+    "photoNext": "Další fotka",
     "motto": "Motto",
     "address": "Adresa"
   }
