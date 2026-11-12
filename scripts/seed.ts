@@ -134,11 +134,11 @@ async function siteDocuments(): Promise<Doc[]> {
         ),
       },
       address: {
-        street: "Nosticova 634/2",
+        street: "Nosticova 2a",
         district: "Malá Strana",
         postalCode: "118 00",
         city: "Praha 1",
-        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nosticova+634%2F2%2C+118+00+Praha+1",
+        googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nosticova+2a%2C+118+00+Praha+1",
       },
       email: "hello@tyrs.art",
       openingHours: lt(

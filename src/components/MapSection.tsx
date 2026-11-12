@@ -18,7 +18,7 @@ type Address = {
 } | null;
 
 const variants = {
-  // Homepage: "Nosticova 634 / Malá Strana".
+  // Homepage: "Nosticova 2a / Malá Strana".
   home: {
     section: "h-[560px] lg:h-[640px]",
     address: "text-4xl leading-9 lg:text-[72px] lg:leading-[66px]",
@@ -59,7 +59,7 @@ export async function MapSection({
   const label = title ?? tr("findUs");
   const alt = tr("mapAlt");
   const full = variant === "venue";
-  // The homepage card shows the house number only ("Nosticova 634"); the footer has the full address.
+  // The homepage card shows the house number only ("Nosticova 2a"); the footer has the full address.
   const street = full ? address.street : address.street.replace(/\/\d+\w*$/, "");
   const secondLine = (full && [address.postalCode, address.city].filter(Boolean).join(" ")) || address.district;
   // Desktop: extra width is cropped from the left so the house stays clear of the card.

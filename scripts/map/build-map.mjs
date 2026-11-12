@@ -23,7 +23,7 @@ const cached = process.argv.includes("--cached");
 
 /* -------------------------------------------------------------- Geometry */
 
-// TYRŠ, Nosticova 634/2a. Everything is measured in metres from the house.
+// TYRŠ, Nosticova 2a. Everything is measured in metres from the house.
 const HOUSE = { lat: 50.0842796, lon: 14.4070477 };
 const M_PER_DEG = 111_320;
 const cosLat = Math.cos(HOUSE.lat * (Math.PI / 180));
