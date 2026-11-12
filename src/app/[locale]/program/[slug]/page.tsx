@@ -9,7 +9,6 @@ import { BackLink } from "@/components/detail/BackLink";
 import { Badge, DetailHero } from "@/components/detail/DetailHero";
 import { BandNote, bandCommitClass, bandOutlineClass, InfoBand, type InfoItem } from "@/components/detail/InfoBand";
 import { Lead, RichText } from "@/components/detail/RichText";
-import { ShareButtons } from "@/components/detail/ShareButtons";
 import { ButterCard, cardButtonClass, GoodToKnowCard, LinksCard, SpotifyIcon } from "@/components/detail/SideCards";
 import { StickyBar, stickyActionClass } from "@/components/detail/StickyBar";
 import { EventTile } from "@/components/events/EventTile";
@@ -262,12 +261,7 @@ export default async function EventPage({ params }: PageProps<"/[locale]/program
         )}
         <aside className="flex flex-col gap-5 lg:sticky lg:top-8 lg:col-span-4 lg:col-start-9 lg:gap-4 lg:self-start">
           <GoodToKnowCard title={tr("detail.goodToKnow")} items={goodToKnow} />
-          <LinksCard
-            groups={[
-              ...(listen.length > 0 ? [{ label: tr("detail.listen"), content: <>{listen}</> }] : []),
-              { label: tr("detail.share"), content: <ShareButtons title={title} /> },
-            ]}
-          />
+          {listen.length > 0 && <LinksCard groups={[{ label: tr("detail.listen"), content: <>{listen}</> }]} />}
           <div className="max-lg:hidden">
             <ButterCard href="/pronajem" kicker={tr("event.rentalKicker")} title={tr("event.rentalTitle")} />
           </div>
