@@ -26,7 +26,7 @@ import "../globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tyrs.art"),
   title: { default: "TYRŠ", template: "%s · TYRŠ" },
-  description: "Nosticova 634/2, Malá Strana, Praha 1",
+  description: "Nosticova 2a, Malá Strana, Praha 1",
 };
 
 export function generateStaticParams() {

@@ -1,6 +1,6 @@
 # TYRŠ web
 
-Website for TYRŠ, Nosticova 634/2, Praha 1. Next.js 16 + Tailwind CSS v4 + Sanity, deployed on Vercel.
+Website for TYRŠ, Nosticova 2a, Praha 1. Next.js 16 + Tailwind CSS v4 + Sanity, deployed on Vercel.
 
 - Brief: [`docs/BRIEF.md`](docs/BRIEF.md)
 - Design system: [`docs/design-system/`](docs/design-system/)
